@@ -1,1 +1,1 @@
-Just Add Movie - Group C
+Just Add Movies - Group C
