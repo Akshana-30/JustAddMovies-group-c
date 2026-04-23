@@ -1,0 +1,144 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Movie {
+  id String @id @default(cuid(2))
+
+  title       String
+  description String
+
+  // Add directors, actors, etc. 
+
+  price       Decimal  @db.Money
+  releaseDate DateTime @map("release_date")
+  imageUrl    String   @map("image_url")
+  stock       Int
+
+  runtime Int
+
+  orderItem OrderItem[]
+  genres    Genre[]
+
+  @@map("movies")
+}
+
+model Genre {
+  id String @id @default(cuid(2))
+
+  name        String
+  description String
+
+  movies Movie[]
+
+  @@map("genres")
+}
+
+model Order {
+  id String @id @default(cuid(2))
+
+  totalAmount Int      @map("total_amount")
+  status      String
+  orderDate   DateTime @map("order_date")
+
+  orderItem OrderItem[]
+
+  userId String
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id String @id @default(cuid(2))
+
+  quantity        Int
+  priceAtPurchase Decimal @db.Money @map("price_at_purchase")
+
+  movies Movie[]
+  orders Order[]
+
+  @@map("order_items")
+}
+
+model User {
+  id            String    @id
+  name          String
+  email         String
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+
+  orders Order[]
+
+  role       String?
+  banned     Boolean?  @default(false)
+  banReason  String?
+  banExpires DateTime?
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  impersonatedBy String?
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
