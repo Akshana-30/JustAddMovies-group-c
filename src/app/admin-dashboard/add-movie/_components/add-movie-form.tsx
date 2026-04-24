@@ -18,8 +18,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { addMovie } from "../_actions/movie-actions";
+import { useRouter } from "next/navigation";
 
 export default function AddMovieForm() {
+    const router = useRouter()
   const formSchema = z.object({
     title: z.string().min(1).max(128),
     description: z.string().min(1).max(500),
@@ -55,7 +57,13 @@ export default function AddMovieForm() {
       onSubmit: formSchema,
     },
     onSubmit: async ({ value }) => {
-      await addMovie(value);
+     const result = await addMovie(value);
+     if(result.error){
+        console.log(result.error)
+        return
+     }else{
+        router.push("/")
+     }
     },
   });
   return (

@@ -2,7 +2,6 @@
 
 import z from "zod";
 import prisma from "@/lib/prisma";
-import { redirect } from "next/navigation";
 
 const addMovieSchema = z.object({
   title: z.string().min(1).max(128),
@@ -28,29 +27,26 @@ type AddMovieValues = z.infer<typeof addMovieSchema>;
 
 export async function addMovie(values: AddMovieValues) {
   const data = addMovieSchema.parse(values);
-
-  const newMovie = await prisma.movie.create({
-    data: {
-      title: data.title,
-      description: data.description,
-      price: data.price,
-      releaseDate: new Date(data.releaseDate),
-      imageUrl: data.imageUrl,
-      stock: data.stock,
-      runtime: data.runtime,
-      genres: {
-         connectOrCreate: [
-        {
-          where: { name: data.genres},
-          create: { name: data.genres }
+  try {
+    const newMovie = await prisma.movie.create({
+      data: {
+        title: data.title,
+        description: data.description,
+        price: data.price,
+        releaseDate: new Date(data.releaseDate),
+        imageUrl: data.imageUrl,
+        stock: data.stock,
+        runtime: data.runtime,
+        genres: {
+          connectOrCreate: {
+            where: { name: data.genres },
+            create: { name: data.genres },
+          },
         },
-      ],
       },
-    },
-    include: {
-      genres: true,
-    },
-  });
-
-  return redirect(`/movies/${newMovie.id}`);
+    });
+    return { error: null, movieId: newMovie.id };
+  } catch {
+    return { error: "Uknown error occurred", movieId: null };
+  }
 }
