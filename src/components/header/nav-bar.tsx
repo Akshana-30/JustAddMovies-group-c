@@ -30,6 +30,12 @@ export const NavBar = () => (
                 </Button>
             </li>
 
+            <li>
+                <Button asChild variant="ghost" className="text-white" size="lg">
+                    <Link href="/admin-dashboard">Admin Dashboard</Link>
+                </Button>
+            </li>
+
             <li className="ml-auto flex items-center mr-2">
                 <InputGroup className="bg-secondary text-black rounded-2xl">
                     <InputGroupInput placeholder="Search..."/>
