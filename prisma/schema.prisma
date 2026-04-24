@@ -36,8 +36,8 @@ model Movie {
 model Genre {
   id String @id @default(cuid(2))
 
-  name        String
-  description String
+  name        String @unique
+  description String?
 
   movies Movie[]
 

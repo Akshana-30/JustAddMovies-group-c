@@ -24,24 +24,33 @@ const addMovieSchema = z.object({
   genres: z.string().min(3).max(20),
 });
 
-type AddMovieValues = z.infer<typeof addMovieSchema>
+type AddMovieValues = z.infer<typeof addMovieSchema>;
 
-export async function addMovie(values: AddMovieValues){
-    const data = addMovieSchema.parse(values)
+export async function addMovie(values: AddMovieValues) {
+  const data = addMovieSchema.parse(values);
 
-    const newMovie = await prisma.movie.create({
-        data: {
-            title: data.title,
-            description: data.description,
-            price: data.price,
-            releaseDate: new Date(data.releaseDate),
-            imageUrl: data.imageUrl,
-            stock: data.stock,
-            runtime: data.runtime,
-                
+  const newMovie = await prisma.movie.create({
+    data: {
+      title: data.title,
+      description: data.description,
+      price: data.price,
+      releaseDate: new Date(data.releaseDate),
+      imageUrl: data.imageUrl,
+      stock: data.stock,
+      runtime: data.runtime,
+      genres: {
+         connectOrCreate: [
+        {
+          where: { name: data.genres},
+          create: { name: data.genres }
         },
-        
-        
-    })
-    return redirect(`/movies/${newMovie.id}`)
+      ],
+      },
+    },
+    include: {
+      genres: true,
+    },
+  });
+
+  return redirect(`/movies/${newMovie.id}`);
 }

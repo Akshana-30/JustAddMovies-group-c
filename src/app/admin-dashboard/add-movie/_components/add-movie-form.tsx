@@ -55,7 +55,7 @@ export default function AddMovieForm() {
       onSubmit: formSchema,
     },
     onSubmit: async ({ value }) => {
-      const result = await addMovie(value)
+      await addMovie(value);
     },
   });
   return (
@@ -125,10 +125,11 @@ export default function AddMovieForm() {
                     <Input
                       id={field.name}
                       name={field.name}
-                      
                       value={field.state.value}
                       onBlur={field.handleBlur}
-                      onChange={(ev) => field.handleChange(Number(ev.target.value))}
+                      onChange={(ev) =>
+                        field.handleChange(Number(ev.target.value))
+                      }
                       aria-invalid={isInvalid}
                     />
                     {isInvalid && (
@@ -196,7 +197,9 @@ export default function AddMovieForm() {
                       type="number"
                       value={field.state.value}
                       onBlur={field.handleBlur}
-                      onChange={(ev) => field.handleChange(Number(ev.target.value))}
+                      onChange={(ev) =>
+                        field.handleChange(Number(ev.target.value))
+                      }
                       aria-invalid={isInvalid}
                     />
                     {isInvalid && (
@@ -221,7 +224,9 @@ export default function AddMovieForm() {
                       type="number"
                       value={field.state.value}
                       onBlur={field.handleBlur}
-                      onChange={(ev) => field.handleChange(Number(ev.target.value))}
+                      onChange={(ev) =>
+                        field.handleChange(Number(ev.target.value))
+                      }
                       aria-invalid={isInvalid}
                     />
                     {isInvalid && (
