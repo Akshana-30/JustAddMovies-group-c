@@ -20,7 +20,7 @@ model Movie {
 
   // Add directors, actors, etc. 
 
-  price       Decimal  @db.Money
+  price       Int
   releaseDate DateTime @map("release_date")
   imageUrl    String   @map("image_url")
   stock       Int
