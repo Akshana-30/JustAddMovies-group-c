@@ -2,6 +2,7 @@
 
 import z from "zod";
 import prisma from "@/lib/prisma";
+import { genres } from "@/lib/genres";
 
 const addMovieSchema = z.object({
   title: z.string().min(1).max(128),
@@ -20,7 +21,7 @@ const addMovieSchema = z.object({
     .number<number>()
     .int("Runtime must be an integer")
     .positive("Must be positive"),
-  genres: z.string().min(3).max(20),
+  genres: z.enum(genres).array().min(1),
 });
 
 type AddMovieValues = z.infer<typeof addMovieSchema>;
@@ -38,10 +39,10 @@ export async function addMovie(values: AddMovieValues) {
         stock: data.stock,
         runtime: data.runtime,
         genres: {
-          connectOrCreate: {
-            where: { name: data.genres },
-            create: { name: data.genres },
-          },
+          connectOrCreate: data.genres.map((genre) => ({
+            where: { name: genre },
+            create: { name: genre },
+          })),
         },
       },
     });
