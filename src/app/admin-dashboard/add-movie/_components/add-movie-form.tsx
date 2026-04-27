@@ -54,7 +54,7 @@ const formSchema = z.object({
   genres: z.enum(genres).array().min(1),
 });
 
-type FormValues = z.infer<typeof formSchema>;
+ type FormValues = z.infer<typeof formSchema>;
 
 export default function AddMovieForm() {
   const router = useRouter();

@@ -7,15 +7,23 @@ export default async function EditMoviePage(
 ) {
   const params = await props.params;
   const movie = await prisma.movie.findUnique({
-    where: { id: params.id },
-    
+    where: { id: params.movieId },
+    include: {
+      genres: { select: { name: true } },
+    },
   });
 
-  if(!movie){
+  if (!movie) {
     return notFound();
   }
-  return (<div>
-    <h1 className="text-4xl font-bold m-4">Edit movie</h1>
-    <EditMovieForm movie={movie}/>
-  </div>)
+  const testMovie = {
+    ...movie,
+    genres: movie.genres.map((g) => g.name),
+  };
+  return (
+    <div>
+      <h1 className="text-4xl font-bold m-4">Edit movie</h1>
+      <EditMovieForm movie={testMovie} />
+    </div>
+  );
 }
