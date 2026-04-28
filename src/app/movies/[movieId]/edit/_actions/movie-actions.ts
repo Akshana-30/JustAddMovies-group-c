@@ -20,8 +20,9 @@ const formSchema = z.object({
     .number<number>()
     .int("Runtime must be an integer")
     .positive("Must be positive"),
-  // genres: z.enum(genres).array().min(1),
   genres: z.array(z.string()),
+  directors: z.array(z.string()),
+  actors: z.array(z.string()),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -32,10 +33,28 @@ export async function editMovie(id: string, input: FormValues) {
     where: { id: id },
     include: { genres: true },
   });
+  const existingDir = await prisma.movie.findUnique({
+    where: { id },
+    include: { directors: true },
+  });
+  const existingAct = await prisma.movie.findUnique({
+    where: { id },
+    include: { actors: true },
+  });
+
   const existingGenres = existing?.genres.map((g) => g.name);
   const newGenres = data.genres;
-  const genresToAdd = newGenres.filter((g) => !existingGenres?.includes(g));
   const genresToRemove = existingGenres?.filter((g) => !newGenres.includes(g));
+
+  const existingDirectors = existingDir?.directors.map((d) => d.name);
+  const newDirectors = data.directors;
+  const directorsToRemove = existingDirectors?.filter(
+    (d) => !newDirectors.includes(d),
+  );
+
+  const existingActors = existingAct?.actors.map((a) => a.name);
+  const newActors = data.actors;
+  const actorsToRemove = existingActors?.filter((a) => !newActors.includes(a));
 
   const editedMovie = await prisma.movie.update({
     where: { id },
@@ -54,6 +73,24 @@ export async function editMovie(id: string, input: FormValues) {
         })),
         disconnect: genresToRemove?.map((genre) => ({
           name: genre,
+        })),
+      },
+      directors: {
+        connectOrCreate: data.directors.map((director) => ({
+          where: { name: director },
+          create: { name: director },
+        })),
+        disconnect: directorsToRemove?.map((director) => ({
+          name: director,
+        })),
+      },
+      actors: {
+        connectOrCreate: data.actors.map((actor) => ({
+          where: { name: actor },
+          create: { name: actor },
+        })),
+        disconnect: actorsToRemove?.map((actor) => ({
+          name: actor,
         })),
       },
     },

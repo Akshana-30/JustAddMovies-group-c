@@ -33,6 +33,8 @@ import { editMovie } from "../_actions/movie-actions";
 import { useRouter } from "next/navigation";
 import React from "react";
 import DeleteMovieButton from "@/components/admin-buttons/delete-button";
+import { actorList } from "@/lib/actors";
+import { directorList } from "@/lib/directors";
 
 type Props = {
   movie: {
@@ -44,8 +46,9 @@ type Props = {
     imageUrl: string;
     stock: number;
     runtime: number;
-    // genres: FormValues["genres"];
     genres: string[];
+    directors: string[];
+    actors: string[];
   };
 };
 const formSchema = z.object({
@@ -66,9 +69,9 @@ const formSchema = z.object({
     .int("Runtime must be an integer")
     .positive("Must be positive"),
   genres: z.array(z.string()),
+  directors: z.array(z.string()),
+  actors: z.array(z.string()),
 });
-
-
 
 export default function EditMovieForm({ movie }: Props) {
   const anchor = useComboboxAnchor();
@@ -83,6 +86,8 @@ export default function EditMovieForm({ movie }: Props) {
       stock: movie.stock,
       runtime: movie.runtime,
       genres: movie.genres,
+      directors: movie.directors,
+      actors: movie.actors,
     },
     validators: {
       onSubmit: formSchema,
@@ -96,7 +101,7 @@ export default function EditMovieForm({ movie }: Props) {
   return (
     <Card className="max-w-3xl mx-auto bg-secondary shadow">
       <CardHeader>
-        <CardDescription>Add movie</CardDescription>
+        <CardDescription>Edit movie</CardDescription>
       </CardHeader>
       <CardContent>
         <form
@@ -286,7 +291,7 @@ export default function EditMovieForm({ movie }: Props) {
                       value={field.state.value}
                       onValueChange={field.handleChange}
                     >
-                      <ComboboxChips ref={anchor} className="w-full max-w-xs">
+                      <ComboboxChips ref={anchor} className="w-full max-w-full">
                         <ComboboxValue>
                           {(values) => (
                             <React.Fragment>
@@ -316,10 +321,103 @@ export default function EditMovieForm({ movie }: Props) {
                 );
               }}
             </form.Field>
+            <form.Field name="directors">
+              {(field) => {
+                const isInvalid =
+                  field.state.meta.isTouched && !field.state.meta.isValid;
+                return (
+                  <Field data-invalid={isInvalid}>
+                    <FieldLabel htmlFor={field.name}>Director</FieldLabel>
+                    <Combobox
+                      multiple
+                      autoHighlight
+                      items={directorList}
+                      defaultValue={movie.directors}
+                      value={field.state.value}
+                      onValueChange={field.handleChange}
+                    >
+                      <ComboboxChips ref={anchor} className="w-full max-w-full">
+                        <ComboboxValue>
+                          {(values) => (
+                            <React.Fragment>
+                              {values.map((value: string) => (
+                                <ComboboxChip key={value}>{value}</ComboboxChip>
+                              ))}
+                              <ComboboxChipsInput />
+                            </React.Fragment>
+                          )}
+                        </ComboboxValue>
+                      </ComboboxChips>
+                      <ComboboxContent anchor={anchor}>
+                        <ComboboxEmpty>No director selected.</ComboboxEmpty>
+                        <ComboboxList>
+                          {(item) => (
+                            <ComboboxItem key={item} value={item}>
+                              {item}
+                            </ComboboxItem>
+                          )}
+                        </ComboboxList>
+                      </ComboboxContent>
+                    </Combobox>
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
+                  </Field>
+                );
+              }}
+            </form.Field>
+            <form.Field name="actors">
+              {(field) => {
+                const isInvalid =
+                  field.state.meta.isTouched && !field.state.meta.isValid;
+                return (
+                  <Field data-invalid={isInvalid}>
+                    <FieldLabel htmlFor={field.name}>Actors</FieldLabel>
+                    <Combobox
+                      multiple
+                      autoHighlight
+                      items={actorList}
+                      defaultValue={movie.actors}
+                      value={field.state.value}
+                      onValueChange={field.handleChange}
+                    >
+                      <ComboboxChips ref={anchor} className="w-full max-w-full">
+                        <ComboboxValue>
+                          {(values) => (
+                            <React.Fragment>
+                              {values.map((value: string) => (
+                                <ComboboxChip key={value}>{value}</ComboboxChip>
+                              ))}
+                              <ComboboxChipsInput />
+                            </React.Fragment>
+                          )}
+                        </ComboboxValue>
+                      </ComboboxChips>
+                      <ComboboxContent anchor={anchor}>
+                        <ComboboxEmpty>No director selected.</ComboboxEmpty>
+                        <ComboboxList>
+                          {(item) => (
+                            <ComboboxItem key={item} value={item}>
+                              {item}
+                            </ComboboxItem>
+                          )}
+                        </ComboboxList>
+                      </ComboboxContent>
+                    </Combobox>
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
+                  </Field>
+                );
+              }}
+            </form.Field>
 
             <Field orientation="horizontal">
-              <Button type="submit">Submit</Button>
+              <Button className="cursor-pointer" type="submit">
+                Submit
+              </Button>
               <Button
+                className="cursor-pointer"
                 type="reset"
                 variant="outline"
                 onClick={() => form.reset()}

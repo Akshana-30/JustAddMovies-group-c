@@ -10,20 +10,24 @@ export default async function EditMoviePage(
     where: { id: params.movieId },
     include: {
       genres: { select: { name: true } },
+      directors: { select: { name: true } },
+      actors: { select: { name: true } },
     },
   });
 
   if (!movie) {
     return notFound();
   }
-  const testMovie = {
+  const editMovie = {
     ...movie,
     genres: movie.genres.map((g) => g.name),
+    directors: movie.directors.map((d) => d.name),
+    actors: movie.actors.map((a) => a.name),
   };
   return (
     <div>
       <h1 className="text-4xl font-bold m-4">Edit movie</h1>
-      <EditMovieForm movie={testMovie} />
+      <EditMovieForm movie={editMovie} />
     </div>
   );
 }

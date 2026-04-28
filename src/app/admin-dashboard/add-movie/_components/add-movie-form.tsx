@@ -33,6 +33,8 @@ import {
 } from "@/components/ui/combobox";
 import React from "react";
 import { genreArray } from "@/lib/genres";
+import { directorList } from "@/lib/directors";
+import { actorList } from "@/lib/actors";
 
 const formSchema = z.object({
   title: z.string().min(1).max(128),
@@ -51,11 +53,12 @@ const formSchema = z.object({
     .number<number>()
     .int("Runtime must be an integer")
     .positive("Must be positive"),
-  // genres: z.enum(genres).array().min(1),
   genres: z.array(z.string()),
+  directors: z.array(z.string()),
+  actors: z.array(z.string()),
 });
 
- type FormValues = z.infer<typeof formSchema>;
+type FormValues = z.infer<typeof formSchema>;
 
 export default function AddMovieForm() {
   const router = useRouter();
@@ -71,6 +74,8 @@ export default function AddMovieForm() {
       stock: "" as unknown as number,
       runtime: "" as unknown as number,
       genres: [] as FormValues["genres"],
+      directors: [] as FormValues["directors"],
+      actors: [] as FormValues["actors"],
     },
     validators: {
       onSubmit: formSchema,
@@ -278,7 +283,7 @@ export default function AddMovieForm() {
                       value={field.state.value}
                       onValueChange={field.handleChange}
                     >
-                      <ComboboxChips ref={anchor} className="w-full max-w-xs">
+                      <ComboboxChips ref={anchor} className="w-full max-w-full">
                         <ComboboxValue>
                           {(values) => (
                             <React.Fragment>
@@ -308,10 +313,101 @@ export default function AddMovieForm() {
                 );
               }}
             </form.Field>
+            <form.Field name="directors">
+              {(field) => {
+                const isInvalid =
+                  field.state.meta.isTouched && !field.state.meta.isValid;
+                return (
+                  <Field data-invalid={isInvalid}>
+                    <FieldLabel htmlFor={field.name}>Director</FieldLabel>
+                    <Combobox
+                      multiple
+                      autoHighlight
+                      items={directorList}
+                      value={field.state.value}
+                      onValueChange={field.handleChange}
+                    >
+                      <ComboboxChips ref={anchor} className="w-full max-w-full">
+                        <ComboboxValue>
+                          {(values) => (
+                            <React.Fragment>
+                              {values.map((value: string) => (
+                                <ComboboxChip key={value}>{value}</ComboboxChip>
+                              ))}
+                              <ComboboxChipsInput />
+                            </React.Fragment>
+                          )}
+                        </ComboboxValue>
+                      </ComboboxChips>
+                      <ComboboxContent anchor={anchor}>
+                        <ComboboxEmpty>No director selected.</ComboboxEmpty>
+                        <ComboboxList>
+                          {(item) => (
+                            <ComboboxItem key={item} value={item}>
+                              {item}
+                            </ComboboxItem>
+                          )}
+                        </ComboboxList>
+                      </ComboboxContent>
+                    </Combobox>
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
+                  </Field>
+                );
+              }}
+            </form.Field>
+            <form.Field name="actors">
+              {(field) => {
+                const isInvalid =
+                  field.state.meta.isTouched && !field.state.meta.isValid;
+                return (
+                  <Field data-invalid={isInvalid}>
+                    <FieldLabel htmlFor={field.name}>Actors</FieldLabel>
+                    <Combobox
+                      multiple
+                      autoHighlight
+                      items={actorList}
+                      value={field.state.value}
+                      onValueChange={field.handleChange}
+                    >
+                      <ComboboxChips ref={anchor} className="w-full max-w-full">
+                        <ComboboxValue>
+                          {(values) => (
+                            <React.Fragment>
+                              {values.map((value: string) => (
+                                <ComboboxChip key={value}>{value}</ComboboxChip>
+                              ))}
+                              <ComboboxChipsInput />
+                            </React.Fragment>
+                          )}
+                        </ComboboxValue>
+                      </ComboboxChips>
+                      <ComboboxContent anchor={anchor}>
+                        <ComboboxEmpty>No director selected.</ComboboxEmpty>
+                        <ComboboxList>
+                          {(item) => (
+                            <ComboboxItem key={item} value={item}>
+                              {item}
+                            </ComboboxItem>
+                          )}
+                        </ComboboxList>
+                      </ComboboxContent>
+                    </Combobox>
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
+                  </Field>
+                );
+              }}
+            </form.Field>
 
             <Field orientation="horizontal">
-              <Button type="submit">Submit</Button>
+              <Button className="cursor-pointer" type="submit">
+                Submit
+              </Button>
               <Button
+                className="cursor-pointer"
                 type="reset"
                 variant="outline"
                 onClick={() => form.reset()}

@@ -20,8 +20,9 @@ const addMovieSchema = z.object({
     .number<number>()
     .int("Runtime must be an integer")
     .positive("Must be positive"),
-  // genres: z.enum(genres).array().min(1),
   genres: z.array(z.string()),
+  directors: z.array(z.string()),
+  actors: z.array(z.string()),
 });
 
 type AddMovieValues = z.infer<typeof addMovieSchema>;
@@ -42,6 +43,18 @@ export async function addMovie(values: AddMovieValues) {
           connectOrCreate: data.genres.map((genre) => ({
             where: { name: genre },
             create: { name: genre },
+          })),
+        },
+        directors: {
+          connectOrCreate: data.directors.map((director) => ({
+            where: { name: director },
+            create: { name: director },
+          })),
+        },
+        actors: {
+          connectOrCreate: data.actors.map((actor) => ({
+            where: { name: actor },
+            create: { name: actor },
           })),
         },
       },

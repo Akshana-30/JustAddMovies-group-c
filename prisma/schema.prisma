@@ -17,9 +17,6 @@ model Movie {
 
   title       String
   description String
-
-  // Add directors, actors, etc. 
-
   price       Int
   releaseDate DateTime @map("release_date")
   imageUrl    String   @map("image_url")
@@ -29,6 +26,8 @@ model Movie {
 
   orderItem OrderItem[]
   genres    Genre[]
+  directors Director[]
+  actors  Actor[]
 
   @@map("movies")
 }
@@ -42,6 +41,24 @@ model Genre {
   movies Movie[]
 
   @@map("genres")
+}
+
+model Director {
+  id String @id @default(cuid(2))
+  name String @unique
+
+  movies Movie[]
+
+  @@map("directors")
+}
+
+model Actor {
+  id String @id @default(cuid(2))
+  name String @unique
+
+  movies Movie[]
+
+  @@map("actors")
 }
 
 model Order {
