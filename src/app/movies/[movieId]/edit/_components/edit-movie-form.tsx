@@ -1,5 +1,5 @@
 "use client";
-import { genreArray} from "@/lib/genres";
+import { genreArray } from "@/lib/genres";
 import {
   Card,
   CardContent,
@@ -32,6 +32,7 @@ import {
 import { editMovie } from "../_actions/movie-actions";
 import { useRouter } from "next/navigation";
 import React from "react";
+import DeleteMovieButton from "@/components/admin-buttons/delete-button";
 
 type Props = {
   movie: {
@@ -67,7 +68,7 @@ const formSchema = z.object({
   genres: z.array(z.string()),
 });
 
-// type FormValues = z.infer<typeof formSchema>;
+
 
 export default function EditMovieForm({ movie }: Props) {
   const anchor = useComboboxAnchor();
@@ -88,7 +89,7 @@ export default function EditMovieForm({ movie }: Props) {
     },
     onSubmit: async ({ value }) => {
       await editMovie(movie.id, value);
-
+      // toast.success("Movie was successfully updated.", { position: "bottom-right" }); not implemented yet
       router.push(`/movies/${movie.id}`);
     },
   });
@@ -325,6 +326,7 @@ export default function EditMovieForm({ movie }: Props) {
               >
                 Reset
               </Button>
+              <DeleteMovieButton movieId={movie.id} />
             </Field>
           </FieldGroup>
         </form>

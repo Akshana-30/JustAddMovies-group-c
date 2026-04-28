@@ -2,7 +2,6 @@
 
 import z from "zod";
 import prisma from "@/lib/prisma";
-import { genres } from "@/lib/genres";
 
 const addMovieSchema = z.object({
   title: z.string().min(1).max(128),
@@ -21,7 +20,8 @@ const addMovieSchema = z.object({
     .number<number>()
     .int("Runtime must be an integer")
     .positive("Must be positive"),
-  genres: z.enum(genres).array().min(1),
+  // genres: z.enum(genres).array().min(1),
+  genres: z.array(z.string()),
 });
 
 type AddMovieValues = z.infer<typeof addMovieSchema>;

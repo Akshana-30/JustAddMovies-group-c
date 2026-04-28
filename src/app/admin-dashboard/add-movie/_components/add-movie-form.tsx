@@ -32,7 +32,7 @@ import {
   useComboboxAnchor,
 } from "@/components/ui/combobox";
 import React from "react";
-import { genres } from "@/lib/genres";
+import { genreArray } from "@/lib/genres";
 
 const formSchema = z.object({
   title: z.string().min(1).max(128),
@@ -51,7 +51,8 @@ const formSchema = z.object({
     .number<number>()
     .int("Runtime must be an integer")
     .positive("Must be positive"),
-  genres: z.enum(genres).array().min(1),
+  // genres: z.enum(genres).array().min(1),
+  genres: z.array(z.string()),
 });
 
  type FormValues = z.infer<typeof formSchema>;
@@ -80,6 +81,7 @@ export default function AddMovieForm() {
         console.log(result.error);
         return;
       } else {
+        // toast.success("Movie was added to the database.", { position: "bottom-right" }); not implemented yet
         router.push("/");
       }
     },
@@ -272,7 +274,7 @@ export default function AddMovieForm() {
                     <Combobox
                       multiple
                       autoHighlight
-                      items={genres}
+                      items={genreArray}
                       value={field.state.value}
                       onValueChange={field.handleChange}
                     >
