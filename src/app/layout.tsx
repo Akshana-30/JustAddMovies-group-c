@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins, Libre_Baskerville, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { NavBar } from "@/components/header/nav-bar";
+import { Toaster } from "@/components/ui/sonner";
 
 const fontSans = Poppins({
   subsets: ["latin"],
@@ -40,6 +41,7 @@ export default function RootLayout({
         </header>
 
         <main>{children}</main>
+        <Toaster />
       </body>
     </html>
   );
