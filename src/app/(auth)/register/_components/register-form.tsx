@@ -1,7 +1,6 @@
 "use client";
 
 import { z } from "zod";
-import { useRouter } from "next/navigation";
 import { useForm } from "@tanstack/react-form";
 import { authClient } from "@/lib/auth-client";
 import {
@@ -18,43 +17,54 @@ import {
 } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { formSchema } from "@/app/auth/_components/form-schema";
-import { ErrorAlert } from "@/app/auth/_components/error-alert";
+import { formSchema } from "@/app/(auth)/_helpers/form-schema";
 import { InputFields } from "../../_components/input-fields";
-
-const registerSchema = formSchema.extend({
-    name: z.string().min(1, "Name is required").max(32)
-})
+import { toast } from "sonner";
+import { Spinner } from "@/components/ui/spinner";
+import { useState } from "react";
 
 export function RegisterForm() {
-    const router = useRouter();
+    const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const form = useForm({
         defaultValues: {
             name: "",
             email: "",
             password: "",
-        },
+            confirmPassword: "",
+        } as z.input<typeof formSchema>,
 
         validators: {
-            onSubmit: registerSchema,
+            onSubmit: formSchema,
+            onChange: formSchema,
         },
 
         onSubmit: async ({ value }) => {
+            setLoading(true);
+
             const { error } = await authClient.signUp.email({
-                name: value.name,
-                email: value.email,
-                password: value.password,
+                name: value.name ?? "",
+                email: value.email ?? "",
+                password: value.password ?? "",
             });
 
-            if (error) {
-                <ErrorAlert error={error} />
+            setLoading(false);
 
+            if (error) {
+                toast.error(error.message || "An unknown error occurred", {
+                    position: "top-center",
+                });
+                
                 return;
             }
-
-            router.push("/");
-            router.refresh();
+            
+            toast.info("Check your email", {
+                description: `We sent a verification link to provided email.
+                The link will expire in 30 minutes.`,
+                duration: 10000,
+                position: "top-center",
+            });
         },
     });
 
@@ -71,7 +81,6 @@ export function RegisterForm() {
 
                 <CardContent>
                     <form
-                        id="register-form"
                         onSubmit={ev => {
                             ev.preventDefault();
                             form.handleSubmit(ev);
@@ -85,7 +94,6 @@ export function RegisterForm() {
                                         label="Name"
                                         type="text"
                                         autocomplete="name"
-                                        required
                                     />
                                 )}
                             </form.Field>
@@ -98,7 +106,6 @@ export function RegisterForm() {
                                         type="email"
                                         autocomplete="email"
                                         placeholder="email@example.com"
-                                        required
                                     />
                                 )}
                             </form.Field>
@@ -108,21 +115,47 @@ export function RegisterForm() {
                                     <InputFields
                                         field={field}
                                         label="Password"
-                                        type="password"
+                                        type={showPassword ? "text" : "password"}
+                                        isPassword={true}
+                                        onTogglePassword={() => setShowPassword(!showPassword)}
+                                        showPassword={showPassword}
                                         autocomplete="new-password"
-                                        required
+                                    />
+                                )}
+                            </form.Field>
+
+                            <form.Field name="confirmPassword">
+                                {field => (
+                                    <InputFields
+                                        field={field}
+                                        label="Confirm password"
+                                        type={showPassword ? "text" : "password"}
+                                        isPassword={true}
+                                        onTogglePassword={() => setShowPassword(!showPassword)}
+                                        showPassword={showPassword}
                                     />
                                 )}
                             </form.Field>
 
                             <Field>
-                                <Button className="w-full" form="register-form">
-                                    Register
+                                <Button 
+                                    className="w-full" 
+                                    disabled={loading}
+                                    type="submit"
+                                >
+                                    {loading ? (
+                                        <>
+                                            <Spinner data-icon="inline-start" />
+                                            Loading
+                                        </>
+                                    ) : (
+                                        "Register"
+                                    )}
                                 </Button>
 
                                 <FieldDescription className="text-center">
                                     Already have an account?{" "}
-                                    <Link href="/auth/sign-in">Sign In</Link>
+                                    <Link href="/sign-in">Sign In</Link>
                                 </FieldDescription>
                             </Field>
                         </FieldGroup>
