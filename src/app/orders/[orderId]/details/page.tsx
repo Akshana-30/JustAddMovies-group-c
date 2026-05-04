@@ -30,7 +30,11 @@ export default async function OrderDetailsPage(
   return (
     <div className="flex-row max-w-3xl mx-auto border rounded-2xl p-4">
       <Table>
-        <TableCaption>Order items</TableCaption>
+        <TableCaption>
+          <Button size="xs" asChild>
+            <Link href={`/orders/${order.id}`}>Back to order</Link>
+          </Button>
+        </TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className="w-25">Item ID</TableHead>
@@ -55,17 +59,7 @@ export default async function OrderDetailsPage(
             </TableRow>
           ))}
         </TableBody>
-        <TableFooter>
-          <TableCell>
-            <Button size="xs" asChild>
-              <Link href={`/orders/${order.id}`}>Back to order</Link>
-            </Button>
-          </TableCell>
-          <TableCell></TableCell> 
-          <TableCell></TableCell> 
-          <TableCell></TableCell> 
-          <TableCell></TableCell>
-        </TableFooter>
+        <TableFooter></TableFooter>
       </Table>
     </div>
   );

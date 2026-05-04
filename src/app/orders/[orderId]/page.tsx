@@ -47,15 +47,7 @@ export default async function OrderPage(props: PageProps<"/orders/[orderId]">) {
             <TableCell className="text-right">{order.totalAmount} SEK</TableCell>
           </TableRow>
         </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TableCell></TableCell>
-            <TableCell></TableCell> 
-            <TableCell></TableCell> 
-            <TableCell></TableCell> 
-            <TableCell></TableCell>
-          </TableRow>
-        </TableFooter>
+        <TableFooter></TableFooter>
       </Table>
     </div>
   );
