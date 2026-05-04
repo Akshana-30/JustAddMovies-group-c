@@ -11,7 +11,7 @@ export default function AdminDashboard(){
                     <Button><Link href="/admin-dashboard/add-movie">Add Movie</Link></Button>
                 </li>
                 <li>
-                    <Button><Link href="/admin-dashboard/add-movie">Change Movie</Link></Button>
+                    <Button><Link href="/admin-dashboard/orders">View all orders</Link></Button>
                 </li>
             </ul>
         </div>

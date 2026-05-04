@@ -15,9 +15,11 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import Link from "next/link";
 
 type Props = {
   data: Order[];
@@ -33,10 +35,40 @@ export default function OrderTable({ data }: Props) {
       {
         accessorKey: "orderId",
         header: "Order ID",
+        cell: (info) => {
+          const id = info.getValue<string>();
+          return (
+            <Link className="text-blue-400" href={`/orders/${id}`}>
+              {id}
+            </Link>
+          );
+        },
       },
       {
         accessorKey: "status",
         header: "Status",
+        cell: (info) => {
+          const status = info.getValue<string>();
+          return (
+            <span
+              style={{
+                fontSize: "11px",
+                padding: "2px 8px",
+                borderRadius: "20px",
+                background:
+                  info.getValue<string>() === "PAID"
+                    ? "rgba(34,197,94,0.15)"
+                    : "rgba(232,160,48,0.15)",
+                color:
+                  info.getValue<string>() === "PAID"
+                    ? "#4ade80"
+                    : "var(--gold)",
+              }}
+            >
+              {status}
+            </span>
+          );
+        },
       },
       {
         accessorKey: "orderDate",
@@ -56,8 +88,10 @@ export default function OrderTable({ data }: Props) {
         accessorKey: "totalAmount",
         header: "Total SEK",
       },
-      
-      
+      {
+        accessorKey: "userId",
+        header: "User ID",
+      },
     ],
     [],
   );
@@ -71,15 +105,14 @@ export default function OrderTable({ data }: Props) {
     getSortedRowModel: getSortedRowModel(),
   });
 
-  
   return (
-    <div className="flex-row max-w-3xl mx-auto border rounded-2xl p-4">
+    <div className="flex-row max-w-6xl mx-auto border rounded-2xl p-4">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <TableCell
+                <TableHead
                   key={header.id}
                   onClick={header.column.getToggleSortingHandler()}
                   style={{ cursor: "pointer" }}
@@ -93,7 +126,7 @@ export default function OrderTable({ data }: Props) {
                     asc: ` 🠉`,
                     desc: ` 🠋`,
                   }[header.column.getIsSorted() as string] ?? null}
-                </TableCell>
+                </TableHead>
               ))}
             </TableRow>
           ))}

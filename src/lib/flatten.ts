@@ -21,6 +21,7 @@ export const flattenOrders = (orders: Order[]): RowData[] => {
         movieTitle: movie.title,
         quantity: item.quantity,
         priceAtPurchase: item.priceAtPurchase,
+        userId: order.userId
       }))
     )
   );
