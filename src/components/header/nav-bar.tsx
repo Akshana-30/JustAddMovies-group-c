@@ -12,12 +12,11 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { HamburgerButton } from "./hamburger-button";
 import { SignOutButton } from "../auth/sign-out-button";
-//  
+//
 export async function NavBar() {
-
   const session = await auth.api.getSession({
     headers: await headers(),
-  })
+  });
 
   return (
     <nav className="bg-linear-to-b from-chart-3/40 h-25 flex items-center sticky top-0">
@@ -77,9 +76,7 @@ export async function NavBar() {
               <SignOutButton />
             </li>
           </>
-
         ) : (
-          
           <>
             <li>
               <Button
@@ -112,8 +109,7 @@ export async function NavBar() {
             className="text-white text-lg"
             size="icon-lg"
           >
-            <Link href="/" className="px-0 items-center">
-
+            <Link href="/cart" className="px-0 items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width={16}
@@ -139,7 +135,20 @@ export async function NavBar() {
               className="text-sidebar-accent-foreground text-2xl"
               size="lg"
             >
-              <Link href="/"> Home<svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill={"currentColor"} viewBox={"2 2 20 20"}>{/* Boxicons v3.0.8 https://boxicons.com | License  https://docs.boxicons.com/free */}<path d="M3 13h1v7c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-7h1c.4 0 .77-.24.92-.62.15-.37.07-.8-.22-1.09l-8.99-9a.996.996 0 0 0-1.41 0l-9.01 9c-.29.29-.37.72-.22 1.09s.52.62.92.62Zm9-8.59 6 6V20H6v-9.59z"></path></svg></Link>
+              <Link href="/">
+                {" "}
+                Home
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width={16}
+                  height={16}
+                  fill={"currentColor"}
+                  viewBox={"2 2 20 20"}
+                >
+                  {/* Boxicons v3.0.8 https://boxicons.com | License  https://docs.boxicons.com/free */}
+                  <path d="M3 13h1v7c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-7h1c.4 0 .77-.24.92-.62.15-.37.07-.8-.22-1.09l-8.99-9a.996.996 0 0 0-1.41 0l-9.01 9c-.29.29-.37.72-.22 1.09s.52.62.92.62Zm9-8.59 6 6V20H6v-9.59z"></path>
+                </svg>
+              </Link>
             </Button>
           </li>
         </ul>

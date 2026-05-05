@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { formatPrice } from "@/lib/format";
 
 export default async function OrderDetailsPage(
   props: PageProps<"/orders/[orderId]/details">,
@@ -49,7 +50,7 @@ export default async function OrderDetailsPage(
             <TableRow key={item.id}>
               <TableCell>{item.id}</TableCell>
               <TableCell>{item.movies.map((movie) => movie.title)}</TableCell>
-              <TableCell>{Number(item.priceAtPurchase)} SEK</TableCell>
+              <TableCell>{formatPrice(Number(item.priceAtPurchase))}</TableCell>
               <TableCell>{item.quantity}</TableCell>
               <TableCell className="text-right text-blue-400">
                 <Link href={`/movies/${item.movies.map((movie) => movie.id)}`}>
