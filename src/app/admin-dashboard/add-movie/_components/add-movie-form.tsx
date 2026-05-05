@@ -35,6 +35,7 @@ import React from "react";
 import { genreArray } from "@/lib/genres";
 import { directorList } from "@/lib/directors";
 import { actorList } from "@/lib/actors";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   title: z.string().min(1).max(128),
@@ -86,7 +87,7 @@ export default function AddMovieForm() {
         console.log(result.error);
         return;
       } else {
-        // toast.success("Movie was added to the database.", { position: "bottom-right" }); not implemented yet
+        toast.success("Movie was added to the database.", { position: "bottom-right" });
         router.push("/");
       }
     },

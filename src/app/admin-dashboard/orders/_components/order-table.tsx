@@ -38,7 +38,7 @@ export default function OrderTable({ data }: Props) {
         cell: (info) => {
           const id = info.getValue<string>();
           return (
-            <Link className="text-blue-400" href={`/orders/${id}`}>
+            <Link className="text-blue-400 text-xs" href={`/orders/${id}`}>
               {id}
             </Link>
           );
@@ -91,6 +91,12 @@ export default function OrderTable({ data }: Props) {
       {
         accessorKey: "userId",
         header: "User ID",
+        cell: (info) => {
+          const uId = info.getValue<string>();
+          return(
+            <span className="text-xs">{uId}</span>
+          )
+        }
       },
     ],
     [],
@@ -106,7 +112,7 @@ export default function OrderTable({ data }: Props) {
   });
 
   return (
-    <div className="flex-row max-w-6xl mx-auto border rounded-2xl p-4">
+    <div className="flex-row max-w-6xl mx-auto border rounded-2xl p-4 bg-secondary">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

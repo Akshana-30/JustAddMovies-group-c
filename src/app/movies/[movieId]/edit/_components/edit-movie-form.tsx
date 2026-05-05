@@ -35,6 +35,7 @@ import React from "react";
 import DeleteMovieButton from "@/components/admin-buttons/delete-button";
 import { actorList } from "@/lib/actors";
 import { directorList } from "@/lib/directors";
+import { toast } from "sonner";
 
 type Props = {
   movie: {
@@ -94,7 +95,7 @@ export default function EditMovieForm({ movie }: Props) {
     },
     onSubmit: async ({ value }) => {
       await editMovie(movie.id, value);
-      // toast.success("Movie was successfully updated.", { position: "bottom-right" }); not implemented yet
+      toast.success("Movie was successfully updated.", { position: "bottom-right" });
       router.push(`/movies/${movie.id}`);
     },
   });

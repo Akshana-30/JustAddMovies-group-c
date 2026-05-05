@@ -28,10 +28,10 @@ export default async function OrderDetailsPage(
     return notFound();
   }
   return (
-    <div className="flex-row max-w-3xl mx-auto border rounded-2xl p-4">
+    <div className="flex-row max-w-3xl mx-auto border rounded-2xl p-4 bg-secondary">
       <Table>
         <TableCaption>
-          <Button size="xs" asChild>
+          <Button variant="outline" size="xs" asChild>
             <Link href={`/orders/${order.id}`}>Back to order</Link>
           </Button>
         </TableCaption>

@@ -23,10 +23,10 @@ export default async function OrderPage(props: PageProps<"/orders/[orderId]">) {
     return notFound();
   }
   return (
-    <div className="flex-row max-w-3xl mx-auto border rounded-2xl p-4">
+    <div className="flex-row max-w-3xl mx-auto border rounded-2xl p-4 bg-secondary">
       <h1 className="text-4xl font-bold m-4">{`ID: ${order.id}`}</h1>
       <Table>
-        <TableCaption>Order details</TableCaption>
+        <TableCaption>{`ID: ${order.id}`}</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead>Status</TableHead>
@@ -38,13 +38,30 @@ export default async function OrderPage(props: PageProps<"/orders/[orderId]">) {
         </TableHeader>
         <TableBody>
           <TableRow>
-            <TableCell>{order.status}</TableCell>
+            <TableCell>
+              <span
+                style={{
+                  fontSize: "11px",
+                  padding: "2px 8px",
+                  borderRadius: "20px",
+                  background:
+                    order.status === "PAID"
+                      ? "rgba(34,197,94,0.15)"
+                      : "rgba(232,160,48,0.15)",
+                  color: order.status === "PAID" ? "#4ade80" : "var(--gold)",
+                }}
+              >
+                {order.status}
+              </span>
+            </TableCell>
             <TableCell>{order.orderDate.toDateString()}</TableCell>
             <TableCell className="text-blue-400">
               <Link href={`/orders/${order.id}/details`}>Order details</Link>
             </TableCell>
             <TableCell>{order.userId}</TableCell>
-            <TableCell className="text-right">{order.totalAmount} SEK</TableCell>
+            <TableCell className="text-right">
+              {order.totalAmount} SEK
+            </TableCell>
           </TableRow>
         </TableBody>
         <TableFooter></TableFooter>
