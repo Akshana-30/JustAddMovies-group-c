@@ -36,7 +36,7 @@ export default function RootLayout({
       className={`${fontSans.variable} ${fontSerif.variable} ${fontMono.variable} antialiased`}
     >
       <body className="dark sm:h-full flex flex-col">
-        <header>
+        <header className="sticky top-0 z-50">
           <NavBar />
         </header>
 

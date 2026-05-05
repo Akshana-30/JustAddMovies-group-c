@@ -15,7 +15,7 @@ export default function MovBanner({
 }: Props) {
   return (
     <Card
-      className={cn("max-w-full max-h-150 bg-cover bg-position-[0%_20%] w-auto h-auto bg-secondary/80 bg-blend-multiply", className)}
+      className={cn(" p-10  max-h-150 bg-cover bg-position-[0%_30%] w-auto h-auto", className)}
       style={{ backgroundImage: `url('${imageUrl}')` }}
       {...props}
     >{children}</Card>

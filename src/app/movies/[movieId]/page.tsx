@@ -20,7 +20,7 @@ async function MovieDetailsPage(props: PageProps<"/movies/[movieId]">) {
 
   return (
     <div className="pt-4">
-      <MovBanner imageUrl={movie.imageUrl} className="">
+      <MovBanner imageUrl={movie.imageUrl} className=" bg-black/50 bg-blend-multiply">
         <div className="lg:flex flex-column  xl:flex justify-evenly gap-2">
           <div className="max-w-2xl p-5 ">
             <Image

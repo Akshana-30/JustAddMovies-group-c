@@ -19,7 +19,7 @@ export async function NavBar() {
   });
 
   return (
-    <nav className="bg-linear-to-b from-chart-3/40 h-25 flex items-center sticky top-0">
+    <nav className="navbar flex items-center ">
       <Link href="/" className=" md:flex ">
         <Image
           src="/JAM.png"
