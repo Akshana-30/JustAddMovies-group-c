@@ -12,12 +12,18 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { HamburgerButton } from "./hamburger-button";
 import { SignOutButton } from "../auth/sign-out-button";
+import { getCart } from "@/lib/cart";
+import { getCartProducts } from "@/lib/cart-types";
 //
 export async function NavBar() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-
+  const cart = await getCart();
+  const products = await getCartProducts(cart);
+  const cartNumber = products.reduce((total, product) => {
+  return total + (product.quantity);
+}, 0);
   return (
     <nav className="navbar flex items-center ">
       <Link href="/" className=" md:flex ">
@@ -109,7 +115,7 @@ export async function NavBar() {
             className="text-white text-lg"
             size="icon-lg"
           >
-            <Link href="/cart" className="px-0 items-center">
+            <Link href="/cart" className="px-0 items-center relative">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width={16}
@@ -120,6 +126,8 @@ export async function NavBar() {
                 {/* Boxicons v3.0.8 https://boxicons.com | License  https://docs.boxicons.com/free */}
                 <path d="M21 6H7.05L5.94 2.68A1 1 0 0 0 4.99 2h-3v2h2.28l3.54 10.63A2 2 0 0 0 9.71 16h7.59a2 2 0 0 0 1.87-1.3l2.76-7.35c.11-.31.07-.65-.11-.92A1 1 0 0 0 21 6m-3.69 8H9.72l-2-6h11.84zM10 18a2 2 0 1 0 0 4 2 2 0 1 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 1 0 0-4"></path>
               </svg>
+              {cartNumber !== 0 ? <span className="text-sm text-yellow-400 mt-5 ml-5 absolute">{cartNumber}</span> : <span></span>}
+              
               {/* Add shopping cart component */}
             </Link>
           </Button>

@@ -1,16 +1,20 @@
-"use client";
+"use client"
 
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import handleCheckout from "./handleCheckout";
+
 
 type Props = React.ComponentProps<typeof Button>
 
-export default function Checkout({disabled}: Props) {
+export default function CheckoutButton({disabled}: Props) {
   const router = useRouter();
-  
+
  
-  function handleClick() {
-    router.push("/cart/checkout");
+  async function handleClick() {
+    await handleCheckout()
+   
+    router.push("/");
   }
 
   return (

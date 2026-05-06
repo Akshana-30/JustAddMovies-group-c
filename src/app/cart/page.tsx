@@ -13,8 +13,19 @@ import {
 import BackToStore from "./_components/back-to-store-btn";
 import { formatPrice } from "@/lib/format";
 import Checkout from "./_components/check-out-button";
+import Link from "next/link";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 export default async function CartPage() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  if (!session) {
+    redirect("/auth/sign-in");
+  }
+
   const cart = await getCart();
   const products = await getCartProducts(cart);
   const total = products.reduce((sum, p) => {
@@ -41,7 +52,7 @@ export default async function CartPage() {
                 <BackToStore />
               </TableCell>
               <TableCell>
-                <Checkout />
+                <Checkout disabled={true} />
               </TableCell>
             </TableRow>
           </TableFooter>
@@ -64,7 +75,9 @@ export default async function CartPage() {
         <TableBody>
           {products.map((product) => (
             <TableRow key={product.id}>
-              <TableCell>{product.title}</TableCell>
+              <TableCell>
+                <Link href={`/movies/${product.id}`}>{product.title}</Link>
+              </TableCell>
               <TableCell>{product.quantity}</TableCell>
               <TableCell>{formatPrice(product.price)}</TableCell>
               <TableCell>
@@ -79,10 +92,10 @@ export default async function CartPage() {
             <TableCell>
               <BackToStore />
             </TableCell>
+            <TableCell></TableCell>
             <TableCell>
-                
+              <Checkout disabled={false} />
             </TableCell>
-            <TableCell><Checkout/></TableCell>
           </TableRow>
         </TableFooter>
       </Table>

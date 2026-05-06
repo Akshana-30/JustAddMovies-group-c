@@ -1,4 +1,5 @@
 export const actorList = [
+  "Harold Perrineau",
   "Aamir Khan",
   "Aaron Taylor-Johnson",
   "Abigail Breslin",
