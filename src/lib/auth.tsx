@@ -7,8 +7,8 @@ import { pretty, render, toPlainText } from "react-email";
 import { ResetPasswordEmail } from "@/components/emails/reset-password-email";
 import { transport } from "./email";
 import VerifyEmail from "@/components/emails/verify-email";
-
-// See if the whole send mail process can be turned into a component
+import NewEmail from "@/components/emails/new-email";
+import ExistingUser from "@/components/emails/existing-user-email";
 
 const appName = process.env.NEXT_PUBLIC_APP_NAME;
 
@@ -62,7 +62,49 @@ export const auth = betterAuth({
                 html,
                 text,
             });
+        },
+
+        onExistingUserSignUp: async ({ user }) => {
+            const html = await pretty(
+                await render(<ExistingUser userName={user.name} />)
+            );
+
+            const text = toPlainText(html);
+
+            void transport.sendMail({
+                from: process.env.SMTP_USER,
+                to: `${user.name} <${user.email}>`,
+                subject: "Register attempt with your email",
+                html,
+                text,
+            });
         }
+    },
+
+    user: {
+        changeEmail: {
+            enabled: true,
+            updateEmailWithoutVerification: false,
+            redirectTo: "/",
+
+            sendChangeEmailConfirmation: async ({ user, newEmail }) => {
+                const manualUrl = `${process.env.BETTER_AUTH_URL}/?email_approval=success`;
+
+                const html = await pretty(
+                    await render(<NewEmail newEmailLink={manualUrl} newEmailName={newEmail} userName={user.name} />)
+                );
+
+                const text = toPlainText(html);
+
+                void transport.sendMail({
+                    from: process.env.SMTP_USER,
+                    to: `${user.name} <${user.email}>`,
+                    subject: "Approve email change",
+                    html,
+                    text,
+                });
+            } 
+        },
     },
 
     emailVerification: {

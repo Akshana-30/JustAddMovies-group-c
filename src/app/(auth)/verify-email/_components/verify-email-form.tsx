@@ -48,7 +48,12 @@ export function VerifyEmailForm() {
     }
 
     return (
-        <Button className="w-full" onClick={HandleClick} disabled={countdown > 0 || loading}>
+        <Button 
+            className="w-full" 
+            onClick={HandleClick} 
+            disabled={countdown > 0 || loading}
+            suppressHydrationWarning
+        >
             {loading ? (
                 <>
                     <Spinner data-icon="inline-start" />

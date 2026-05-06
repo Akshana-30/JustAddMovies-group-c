@@ -11,9 +11,8 @@ import {
 import { Field, FieldGroup } from "@/components/ui/field";
 import { authClient } from "@/lib/auth-client";
 import { useForm } from "@tanstack/react-form";
-import { formSchema } from "@/app/(auth)/_helpers/form-schema";
+import { resetEmailSchema } from "@/app/(auth)/_helpers/form-schema";
 import { InputFields } from "../../_components/input-fields";
-import z from "zod";
 import { setCooldown, useCooldown } from "../../_helpers/auth-action-cooldown";
 import { toast } from "sonner";
 import { useState } from "react";
@@ -26,17 +25,17 @@ export function ResetEmailForm() {
     const form = useForm({
         defaultValues: {
             email: "",
-        } as z.input<typeof formSchema>,
+        },
 
         validators: {
-            onSubmit: formSchema,
+            onSubmit: resetEmailSchema,
         },
 
         onSubmit: async ({ value }) => {
             setLoading(true);
 
             const { error } = await authClient.requestPasswordReset({
-                email: value.email ?? "",
+                email: value.email,
                 redirectTo: "/reset-password",
             });
 
@@ -46,7 +45,7 @@ export function ResetEmailForm() {
                 toast.error(error.message || "An unknown error occurred", {
                     position: "top-center",
                 });
-                
+
                 return;
             }
 
@@ -92,10 +91,11 @@ export function ResetEmailForm() {
                             </form.Field>
 
                             <Field>
-                                <Button 
-                                    className="w-full" 
-                                    type="submit" 
+                                <Button
+                                    className="w-full"
+                                    type="submit"
                                     disabled={countdown > 0 || loading}
+                                    suppressHydrationWarning
                                 >
                                     {loading ? (
                                         <>
