@@ -20,6 +20,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Link from "next/link";
+import { formatPrice } from "@/lib/format";
 
 type Props = {
   data: Order[];
@@ -87,16 +88,18 @@ export default function OrderTable({ data }: Props) {
       {
         accessorKey: "totalAmount",
         header: "Total SEK",
+        cell: (info) => {
+          const price = info.getValue<string>();
+          return <span>{formatPrice(Number(price))}</span>;
+        },
       },
       {
         accessorKey: "userId",
         header: "User ID",
         cell: (info) => {
           const uId = info.getValue<string>();
-          return(
-            <span className="text-xs">{uId}</span>
-          )
-        }
+          return <span className="text-xs">{uId}</span>;
+        },
       },
     ],
     [],

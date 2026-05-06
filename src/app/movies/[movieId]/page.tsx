@@ -3,6 +3,8 @@ import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import MovBanner from "@/components/body/banner-card";
+import AddToCartButton from "@/components/add-to-cart-button";
+import { formatPrice } from "@/lib/format";
 
 async function MovieDetailsPage(props: PageProps<"/movies/[movieId]">) {
   const params = await props.params;
@@ -18,7 +20,7 @@ async function MovieDetailsPage(props: PageProps<"/movies/[movieId]">) {
 
   return (
     <div className="pt-4">
-      <MovBanner imageUrl={movie.imageUrl} className="">
+      <MovBanner imageUrl={movie.imageUrl} className=" bg-black/50 bg-blend-multiply">
         <div className="lg:flex flex-column  xl:flex justify-evenly gap-2">
           <div className="max-w-2xl p-5 ">
             <Image
@@ -53,14 +55,16 @@ async function MovieDetailsPage(props: PageProps<"/movies/[movieId]">) {
               {movie.description}
             </p>
 
-            <p className="pt-10 whitespace-pre-line text-xl">{`${movie.price} SEK`}</p>
-
+            <p className="pt-10 whitespace-pre-line text-xl mb-2">{formatPrice(movie.price)}</p>
+              <AddToCartButton productId={movie.id} productTitle={movie.title}/>
             <div className="flex justify-start gap-5">
               <p className="pt-10 whitespace-pre-line text-xl">quantity</p>
               <p className="pt-10 whitespace-pre-line text-xl">cart</p>
+              
             </div>
           </div>
         </div>
+        
       </MovBanner>
     </div>
   );

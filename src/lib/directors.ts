@@ -1,4 +1,5 @@
 export const directorList = [
+  "John Griffin",
   "Nathan Greno",
   "Baltasar Kormákur",
   "Abbas Kiarostami",

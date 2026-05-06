@@ -11,6 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Link from "next/link";
+import { formatPrice } from "@/lib/format";
 
 export default async function OrderPage(props: PageProps<"/orders/[orderId]">) {
   const params = await props.params;
@@ -60,7 +61,7 @@ export default async function OrderPage(props: PageProps<"/orders/[orderId]">) {
             </TableCell>
             <TableCell>{order.userId}</TableCell>
             <TableCell className="text-right">
-              {order.totalAmount} SEK
+              {formatPrice(order.totalAmount)}
             </TableCell>
           </TableRow>
         </TableBody>
