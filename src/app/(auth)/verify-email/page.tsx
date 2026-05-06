@@ -7,7 +7,7 @@ import { auth } from "@/lib/auth";
 import { TriangleAlert } from "lucide-react";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { VerifyEmailClient } from "./_components/verify-email-client";
+import { VerifyEmailForm } from "./_components/verify-email-form";
 
 export default async function VerifyEmailPage() {
     const session = await auth.api.getSession({
@@ -28,7 +28,7 @@ export default async function VerifyEmailPage() {
                 </AlertDescription>
             </Alert>
 
-            <VerifyEmailClient />
+            <VerifyEmailForm />
         </div>
     );
 }

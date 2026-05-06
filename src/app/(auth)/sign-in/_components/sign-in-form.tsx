@@ -16,9 +16,7 @@ import { authClient } from "@/lib/auth-client";
 import { useForm } from "@tanstack/react-form";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { formSchema } from "@/app/(auth)/_helpers/form-schema";
 import { InputFields } from "../../_components/input-fields";
-import z from "zod";
 import { setEmail } from "../../_helpers/session-email-storage";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
@@ -33,14 +31,15 @@ export function SignInForm() {
         defaultValues: {
             email: "",
             password: "",
-        } as z.input<typeof formSchema>,
+        },
 
         onSubmit: async ({ value }) => {
             setLoading(true);
 
             const { error } = await authClient.signIn.email({
-                email: value.email ?? "",
-                password: value.password ?? "",
+                email: value.email,
+                password: value.password,
+                callbackURL: "/",
             });
 
             setLoading(false);
@@ -81,7 +80,7 @@ export function SignInForm() {
                 return;
             }
 
-            router.push("/");
+            //router.push("/");
             router.refresh();
         },
     });

@@ -1,7 +1,7 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { ResetEmailClient } from "./_components/reset-email-client";
+import { ResetEmailForm } from "./_components/reset-email-form";
 
 export default async function ResetPasswordPage() {
     const session = await auth.api.getSession({
@@ -12,7 +12,7 @@ export default async function ResetPasswordPage() {
 
     return (
         <div className="w-2/5 mt-5 mx-auto">
-            <ResetEmailClient />
+            <ResetEmailForm />
         </div>
     );
 }

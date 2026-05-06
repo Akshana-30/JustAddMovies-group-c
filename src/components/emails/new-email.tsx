@@ -5,6 +5,7 @@ import {
     Head,
     Html,
     Img,
+    Link,
     pixelBasedPreset,
     Preview,
     Row,
@@ -15,21 +16,21 @@ import {
 
 // Some of the components can be moved into their own tsx file
 
-interface VerifyEmailProps {
+interface NewEmailProps {
     userName: string;
-    websiteName: string;
-    verificationLink: string;
+    newEmailName?: string;
+    newEmailLink?: string;
 }
 
 const baseUrl = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
     : "";
 
-export const VerifyEmail = ({
+export const NewEmail = ({
     userName,
-    websiteName,
-    verificationLink,
-}: VerifyEmailProps) => (
+    newEmailName,
+    newEmailLink,
+}: NewEmailProps) => (
     <Tailwind
         config={{
             presets: [pixelBasedPreset],
@@ -39,7 +40,7 @@ export const VerifyEmail = ({
             <Head />
 
             <Body className="bg-[#f6f9fc] py-2.5 font-sans">
-                <Preview>Confirm your email address</Preview>
+                <Preview>Approve email change</Preview>
 
                 <Container className="bg-white border border-solid border-[#f0f0f0] p-11.25">
                     <Img
@@ -51,27 +52,31 @@ export const VerifyEmail = ({
 
                     <Section>
                         <Text className="text-base font-light text-[#404040] leading-6.5">
-                            Almost there
+                            Hi {userName},
                         </Text>
 
                         <Text className="text-base font-light text-[#404040] leading-6.5">
-                            Hi {userName}, thank you for signing up for {websiteName}
-                        </Text>
-
-                        <Text className="text-base font-light text-[#404040] leading-6.5">
-                            To verify your account, we just need to confirm your email
+                            Click the link to approve the change of email to {newEmailName}:
                         </Text>
 
                         <Button
                             className="bg-[#007ee6] rounded text-white text-[15px] no-underline text-center block w-52.5 py-3.5 px-1.75"
-                            href={verificationLink}
+                            href={newEmailLink}
                         >
-                            Verify email
+                            Change Email
                         </Button>
 
                         <Text className="text-base font-light text-[#404040] leading-6.5">
-                            If you didn&apos;t create an account, you can safely ignore
+                            If you didn&apos;t ask for an email change, you can safely ignore
                             this email.
+                        </Text>
+
+                        <Text className="text-base font-light text-[#404040] leading-6.5">
+                            To keep your account secure, please don&apos;t forward this
+                            email to anyone. See our Help Center for{' '}
+                            <Link className="underline" href="#">
+                                more security tips.
+                            </Link>
                         </Text>
 
                         <Text className="text-base font-light text-[#404040] leading-6.5">
@@ -93,10 +98,9 @@ export const VerifyEmail = ({
     </Tailwind>
 );
 
-VerifyEmail.PreviewProps = {
+NewEmail.PreviewProps = {
     userName: "Alan",
-    websiteName: "Just Add Movies",
-    verificationLink: "http://localhost:3000",
-} as VerifyEmailProps;
+    newEmailLink: "http://localhost:3000",
+} as NewEmailProps;
 
-export default VerifyEmail;
+export default NewEmail;

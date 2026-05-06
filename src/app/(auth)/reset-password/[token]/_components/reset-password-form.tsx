@@ -11,9 +11,8 @@ import { Field, FieldGroup } from "@/components/ui/field";
 import { authClient } from "@/lib/auth-client";
 import { useForm } from "@tanstack/react-form";
 import { useRouter } from "next/navigation";
-import { formSchema } from "@/app/(auth)/_helpers/form-schema";
+import { resetPasswordSchema } from "@/app/(auth)/_helpers/form-schema";
 import { InputFields } from "../../../_components/input-fields";
-import z from "zod";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useState } from "react";
@@ -28,18 +27,18 @@ export function ResetPasswordForm({ token }: { token: string }) {
         defaultValues: {
             password: "",
             confirmPassword: "",
-        } as z.input<typeof formSchema>,
+        },
 
         validators: {
-            onSubmit: formSchema,
-            onChange: formSchema,
+            onSubmit: resetPasswordSchema,
+            onChange: resetPasswordSchema,
         },
 
         onSubmit: async ({ value }) => {
             setLoading(true);
 
             const { error } = await authClient.resetPassword({
-                newPassword: value.password ?? "",
+                newPassword: value.password,
                 token,
             });
 
@@ -114,6 +113,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
                                 <Button
                                     disabled={loading}
                                     type="submit"
+                                    suppressHydrationWarning
                                 >
                                     {loading ? (
                                         <>
