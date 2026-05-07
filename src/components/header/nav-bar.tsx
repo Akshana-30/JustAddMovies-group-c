@@ -97,8 +97,6 @@ export async function NavBar() {
         )}
 
         <li>
-          <Button asChild variant="outline" className="text-lg" size="icon-lg">
-            <Link href="/cart" className="px-0 items-center">
           <Button
             asChild
             variant="outline"
