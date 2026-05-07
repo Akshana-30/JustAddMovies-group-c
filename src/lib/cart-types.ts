@@ -12,7 +12,9 @@ export type CartItem = z.infer<typeof movieItem>;
 export type Cart = CartItem[];
 
 export async function getCartProducts(cart: Cart) {
-  const productIds = cart.map((item) => item.id);
+  const productIds = cart
+		.map((item) => item.id)
+		.filter((id) => id !== undefined && id !== null);
   const products = await prisma.movie.findMany({
     where: { id: { in: productIds } },
   });
