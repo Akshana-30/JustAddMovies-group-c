@@ -20,8 +20,6 @@ ALTER TABLE "_OrderToOrderItem" DROP CONSTRAINT "_OrderToOrderItem_A_fkey";
 -- DropForeignKey
 ALTER TABLE "_OrderToOrderItem" DROP CONSTRAINT "_OrderToOrderItem_B_fkey";
 
--- AlterTable
-ALTER TABLE "movies" ADD COLUMN     "deleted_at" TIMESTAMP(3);
 
 -- AlterTable
 ALTER TABLE "order_items" ADD COLUMN     "movie_id" TEXT NOT NULL,
