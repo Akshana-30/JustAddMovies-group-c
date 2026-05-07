@@ -22,6 +22,7 @@ import Link from "next/link";
 import { formatPrice } from "@/lib/format";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
+import { useTransition } from "react";
 
 type OrderType = ({
   orderItem: ({
@@ -58,6 +59,8 @@ export type Props = {
 };
 
 export default function OrderTable({ data }: Props) {
+  const [isPending, startTransition] = useTransition();
+  
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
   const columns: ColumnDef<Order>[] = [
@@ -197,16 +200,25 @@ export default function OrderTable({ data }: Props) {
         <Button
           variant="outline"
           size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
+          onClick={() =>
+              startTransition(() =>
+                table.previousPage(),
+              )
+            }
+          
+          disabled={!table.getCanPreviousPage() || isPending}
         >
           Previous
         </Button>
         <Button
           variant="outline"
           size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
+          onClick={() =>
+              startTransition(() =>
+                table.nextPage(),
+              )
+            }
+          disabled={!table.getCanNextPage() || isPending}
         >
           Next
         </Button>

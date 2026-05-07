@@ -3,12 +3,14 @@
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import handleCheckout from "./handleCheckout";
+import { useTransition } from "react";
 
 
 type Props = React.ComponentProps<typeof Button>
 
 export default function CheckoutButton({disabled}: Props) {
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
  
   async function handleClick() {
@@ -19,10 +21,14 @@ export default function CheckoutButton({disabled}: Props) {
 
   return (
     <Button
-      disabled={disabled}
+      disabled={disabled || isPending}
       variant="outline"
       className="cursor-pointer"
-      onClick={() => handleClick()}
+      onClick={() =>
+              startTransition(() =>
+                handleClick(),
+              )
+            }
     >
       Checkout
     </Button>

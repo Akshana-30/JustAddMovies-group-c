@@ -23,7 +23,7 @@ export default async function CartPage() {
     headers: await headers(),
   });
   if (!session) {
-    redirect("/auth/sign-in");
+    redirect("/sign-in");
   }
 
   const cart = await getCart();
@@ -94,7 +94,7 @@ export default async function CartPage() {
             </TableCell>
             <TableCell></TableCell>
             <TableCell>
-              <Checkout disabled={false} />
+              <Checkout />
             </TableCell>
           </TableRow>
         </TableFooter>

@@ -44,4 +44,5 @@ export default async function handleCheckout() {
     products.map(p => removeFromCart(p.id))
   }
 await cleanCart()
+
 }
