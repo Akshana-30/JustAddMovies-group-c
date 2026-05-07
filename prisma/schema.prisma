@@ -21,6 +21,7 @@ model Movie {
   releaseDate DateTime @map("release_date")
   imageUrl    String   @map("image_url")
   stock       Int
+  deletedAt DateTime? @map("deleted_at")
 
   runtime Int
 
@@ -86,11 +87,10 @@ model OrderItem {
   quantity        Int
   priceAtPurchase Int @map("price_at_purchase")
 
-  movieId String
-  movie   Movie  @relation(fields: [movieId], references: [id])
-
-  orderId String
-  order   Order  @relation(fields: [orderId], references: [id])
+  movies Movie @relation(fields: [movieId], references: [id], onDelete:  Restrict)
+  movieId String @map("movie_id")
+  orders Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId String @map("order_id")
 
   @@map("order_items")
 }
