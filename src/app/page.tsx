@@ -84,54 +84,10 @@ async function LandingPage() {
                             .slice(0, 15)
                             .join(" ") + ".."}
                         </p>
-
-    <>
-      <Suspense>
-        <EmailApprovedToast />
-      </Suspense>
-
-      <div className="pt-2 overflow-hidden">
-        <div className="flex flex-row gap-10 p-4 sticky top-0 z-0">
-          <div className="">
-            {/* banner carousel */}
-            <Carousel className="w-304 max-w-7xl  border-amber-300/50 border rounded-2xl ">
-              <CarouselContent>
-                {latestMovie.map((latest) => (
-                  <CarouselItem key={latest.id}>
-                    <MovBanner
-                      imageUrl={latest.imageUrl}
-                      className=" relative p-0"
-                    >
-                      <div className=" p-0 bg-linear-to-r from-black via-black/10 to-transparent min-h-200 rounded-3xl">
-                        <div className=" pt-100 p-10 flex text-left flex-col w-100" >
-                          <h1 className="text-4xl font-bold z-10">
-                            {latest.title}
-                          </h1><br />
-                          <p>{latest.description.split(" ").slice(0, 15).join(" ") + ".."}</p>
-                        </div>
-
                       </div>
-                    </MovBanner>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious
-                variant="outline"
-                size="icon-lg"
-                className="absolute left-4 top-1/2 -translate-y-1/2 z-10"
-              />
-              <CarouselNext
-                size="icon-lg"
-                className="absolute right-4 top-1/2 -translate-y-1/2 z-10"
-              />
-            </Carousel>
-          </div>
-          <div className=" m-auto w-full ">
-            <Card className=" border-amber-300/50 border m-auto max-h-150 h-150 flex flex-wrap w-full bg-blue-600/10">
-              {genres.map((genre) => (
-                <Button variant="ghost" className="w-20" key={genre.id}>
-                  {genre.name}
-                </Button>
+                    </div>
+                  </MovBanner>
+                </CarouselItem>
               ))}
             </CarouselContent>
             <CarouselPrevious
@@ -157,9 +113,12 @@ async function LandingPage() {
               </Button>
             ))}
           </Card>
-            </Card>
-          </div>
         </div>
+      </div>
+      <Suspense>
+        <EmailApprovedToast />
+      </Suspense>
+
 
         {/* top ten newest */}
         <Carousel
@@ -326,7 +285,7 @@ async function LandingPage() {
           />
         </Carousel>
       </div>
-    </>
+    
   );
 }
 
