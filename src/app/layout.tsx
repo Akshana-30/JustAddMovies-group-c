@@ -35,6 +35,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${fontSans.variable} ${fontSerif.variable} ${fontMono.variable} antialiased`}
+      suppressHydrationWarning
     >
       <body className="sm:h-full flex flex-col">
         <ThemeProvider attribute="class"
@@ -52,3 +53,4 @@ export default function RootLayout({
     </html>
   );
 }
+
