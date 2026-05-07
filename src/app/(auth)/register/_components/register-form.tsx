@@ -1,5 +1,6 @@
 "use client";
 
+import { z } from "zod";
 import { useForm } from "@tanstack/react-form";
 import { authClient } from "@/lib/auth-client";
 import {
@@ -16,7 +17,7 @@ import {
 } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { registerSchema } from "@/app/(auth)/_helpers/form-schema";
+import { formSchema } from "@/app/(auth)/_helpers/form-schema";
 import { InputFields } from "../../_components/input-fields";
 import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
@@ -32,30 +33,32 @@ export function RegisterForm() {
             email: "",
             password: "",
             confirmPassword: "",
-        },
+        } as z.input<typeof formSchema>,
 
         validators: {
-            onSubmit: registerSchema,
-            onChange: registerSchema,
+            onSubmit: formSchema,
+            onChange: formSchema,
         },
 
         onSubmit: async ({ value }) => {
             setLoading(true);
 
             const { error } = await authClient.signUp.email({
-                name: value.name,
-                email: value.email,
-                password: value.password,
+                name: value.name ?? "",
+                email: value.email ?? "",
+                password: value.password ?? "",
             });
 
             setLoading(false);
 
             if (error) {
-                return toast.error(error.message || "An unknown error occurred", {
+                toast.error(error.message || "An unknown error occurred", {
                     position: "top-center",
                 });
+                
+                return;
             }
-
+            
             toast.info("Check your email", {
                 description: `We sent a verification link to provided email.
                 The link will expire in 30 minutes.`,
@@ -88,7 +91,7 @@ export function RegisterForm() {
                                 {field => (
                                     <InputFields
                                         field={field}
-                                        label="Full name"
+                                        label="Name"
                                         type="text"
                                         autocomplete="name"
                                     />
@@ -136,7 +139,7 @@ export function RegisterForm() {
 
                             <Field>
                                 <Button
-                                    className="w-full"
+                                    className="w-full bg-[var(--gold)] text-black hover:bg-[var(--gold)]/85 hover:text-black"
                                     disabled={loading}
                                     type="submit"
                                 >

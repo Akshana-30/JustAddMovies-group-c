@@ -1,19 +1,14 @@
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { redirect } from "next/navigation";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
+export default async function AdminDashboardRoot() {
+  const session = await auth.api.getSession({ headers: await headers() });
 
-export default function AdminDashboard(){
-    return(
-        <div>
-            <h1>Admin Dashboard</h1>
-            <ul>
-                <li>
-                    <Button><Link href="/admin-dashboard/add-movie">Add Movie</Link></Button>
-                </li>
-                <li>
-                    <Button><Link href="/admin-dashboard/orders">View all orders</Link></Button>
-                </li>
-            </ul>
-        </div>
-    )
+  if (!session) {
+    redirect("/auth/sign-in?callbackUrl=/admin-dashboard");
+  }
+
+  const isAdmin = (session.user as any)?.role === "ADMIN";
+  redirect(isAdmin ? "/admin-dashboard/admin" : "/admin-dashboard/dashboard");
 }

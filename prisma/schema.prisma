@@ -24,10 +24,14 @@ model Movie {
 
   runtime Int
 
-  orderItem OrderItem[]
-  genres    Genre[]
-  directors Director[]
-  actors  Actor[]
+  deletedAt DateTime? @map("deleted_at")
+
+  orderItem     OrderItem[]
+  wishlistItems WishlistItem[]
+  stockAlerts   StockAlert[]
+  genres        Genre[]
+  directors     Director[]
+  actors        Actor[]
 
   @@map("movies")
 }
@@ -80,10 +84,13 @@ model OrderItem {
   id String @id @default(cuid(2))
 
   quantity        Int
-  priceAtPurchase Decimal @db.Money @map("price_at_purchase")
+  priceAtPurchase Int @map("price_at_purchase")
 
-  movies Movie[]
-  orders Order[]
+  movieId String
+  movie   Movie  @relation(fields: [movieId], references: [id])
+
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id])
 
   @@map("order_items")
 }
@@ -99,7 +106,12 @@ model User {
   sessions      Session[]
   accounts      Account[]
 
-  orders Order[]
+  orders        Order[]
+  wishlistItems WishlistItem[]
+  stockAlerts   StockAlert[]
+
+  phone            String?
+  shippingAddress  String?
 
   role       String?
   banned     Boolean?  @default(false)
@@ -158,4 +170,28 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+model WishlistItem {
+  id        String   @id @default(cuid(2))
+  userId    String
+  movieId   String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  movie     Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, movieId])
+  @@map("wishlist_items")
+}
+
+model StockAlert {
+  id        String   @id @default(cuid(2))
+  userId    String
+  movieId   String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  movie     Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, movieId])
+  @@map("stock_alerts")
 }

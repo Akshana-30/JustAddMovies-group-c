@@ -221,6 +221,37 @@
   }
 }
 
+/* ── Admin/dashboard cinema theme variables ── */
+:root {
+  --gold:         #E8A030;
+  --gold-light:   #F5C46A;
+  --gold-dim:     #8A5E1A;
+  --red:          #C0392B;
+  --surface:      #111820;
+  --surface2:     #1A242F;
+  --surface3:     #222E3C;
+  --text:         #E8E0D0;
+  --text-muted:   #8A8070;
+  --text-dim:     #5A5548;
+  --font-display: 'Bebas Neue', sans-serif;
+}
+
+.back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--text-dim); font-size: 13px; text-decoration: none; cursor: pointer; margin-bottom: 1.5rem; transition: color 0.15s; }
+.back-link:hover { color: var(--gold); }
+
+.jam-btn-gold {
+  background: var(--gold);
+  color: #000;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  transition: opacity 0.15s;
+}
+.jam-btn-gold:hover { opacity: 0.85; }
+.jam-btn-gold:disabled { opacity: 0.45; cursor: not-allowed; }
+
 
 @keyframes solidify {
   from {

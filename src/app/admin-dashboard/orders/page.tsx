@@ -7,7 +7,7 @@ export default async function Page() {
     include: {
       orderItem: {
         include: {
-          movies: true,
+          movie: true,
         },
       },
     },

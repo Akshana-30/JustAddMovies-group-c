@@ -11,7 +11,7 @@ export default async function SignInPage() {
     if(session) redirect("/");
 
     return (
-        <div className="w-2/5 mt-5 mx-auto">
+        <div className="w-full max-w-md mt-10 mx-auto px-4">
             <SignInForm />
         </div>
     );

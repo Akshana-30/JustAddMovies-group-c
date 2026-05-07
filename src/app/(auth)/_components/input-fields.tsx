@@ -45,18 +45,7 @@ export function InputFields({
 
     return (
         <Field data-invalid={isInvalid}>
-            <div className="flex items-center">
-                <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
-
-                {resetPassword &&
-                    <Link
-                        href="/reset-password"
-                        className="ml-auto text-sm underline-offset-4 hover:underline text-foreground hover:text-foreground"
-                    >
-                        Forgot your password?
-                    </Link>
-                }
-            </div>
+            <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
 
             <div className="relative">
                 <Input
@@ -113,6 +102,15 @@ export function InputFields({
 
             {isInvalid && (
                 <FieldError errors={activeErrors} />
+            )}
+
+            {resetPassword && (
+                <Link
+                    href="/reset-password"
+                    className="text-sm underline-offset-4 hover:underline text-foreground hover:text-foreground block text-right"
+                >
+                    Forgot your password?
+                </Link>
             )}
         </Field>
     );

@@ -9,7 +9,7 @@ export const orderItemSchema = z.object({
   id: z.string(),
   quantity: z.coerce.number(),
   priceAtPurchase: z.coerce.number(),
-  movies: z.array(movieSchema),
+  movie: movieSchema,
 });
 
 export const orderSchema = z.object({

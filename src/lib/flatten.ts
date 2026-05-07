@@ -12,17 +12,15 @@ export type RowData = {
 
 export const flattenOrders = (orders: Order[]): RowData[] => {
   return orders.flatMap(order =>
-    order.orderItem.flatMap(item =>
-      item.movies.map(movie => ({
-        orderId: order.id,
-        status: order.status,
-        orderDate: order.orderDate,
-        totalAmount: order.totalAmount,
-        movieTitle: movie.title,
-        quantity: item.quantity,
-        priceAtPurchase: item.priceAtPurchase,
-        userId: order.userId
-      }))
-    )
+    order.orderItem.map(item => ({
+      orderId: order.id,
+      status: order.status,
+      orderDate: order.orderDate,
+      totalAmount: order.totalAmount,
+      movieTitle: item.movie.title,
+      quantity: item.quantity,
+      priceAtPurchase: item.priceAtPurchase,
+      userId: order.userId
+    }))
   );
 };

@@ -82,7 +82,7 @@ export default function AddMovieForm() {
       onSubmit: formSchema,
     },
     onSubmit: async ({ value }) => {
-      const result = await addMovie(value);
+      const result = await addMovie({ ...value, price: Math.round(value.price * 100) });
       if (result.error) {
         console.log(result.error);
         return;
@@ -155,7 +155,7 @@ export default function AddMovieForm() {
                   field.state.meta.isTouched && !field.state.meta.isValid;
                 return (
                   <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>Price</FieldLabel>
+                    <FieldLabel htmlFor={field.name}>Price (SEK)</FieldLabel>
                     <Input
                       id={field.name}
                       name={field.name}
