@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 import { formatPrice } from "@/lib/format";
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
 
 type OrderType = ({
@@ -51,15 +51,18 @@ type OrderType = ({
   userId: string;
 })[];
 
+type Order = OrderType[number];
+
 export type Props = {
   data: OrderType;
 };
 
-export default function OrderTable(data: Props) {
-   const [sorting, setSorting] = React.useState<SortingState>([])
-  const columns: ColumnDef<Props>[] = [
+export default function OrderTable({ data }: Props) {
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+
+  const columns: ColumnDef<Order>[] = [
     {
-      accessorKey: "orderId",
+      accessorKey: "id",
       header: "Order ID",
       cell: (info) => {
         const id = info.getValue<string>();
@@ -82,11 +85,10 @@ export default function OrderTable(data: Props) {
               padding: "2px 8px",
               borderRadius: "20px",
               background:
-                info.getValue<string>() === "PAID"
+                status === "PAID"
                   ? "rgba(34,197,94,0.15)"
                   : "rgba(232,160,48,0.15)",
-              color:
-                info.getValue<string>() === "PAID" ? "#4ade80" : "var(--gold)",
+              color: status === "PAID" ? "#4ade80" : "var(--gold)",
             }}
           >
             {status}
@@ -96,24 +98,26 @@ export default function OrderTable(data: Props) {
     },
     {
       accessorKey: "orderDate",
-      header: ({column}) => {
+      header: ({ column }) => {
         return (
           <Button
-          variant="ghost"
-          className="cursor-pointer"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Order Date
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-        )
+            variant="ghost"
+            className="cursor-pointer"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Order Date
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
       },
-      cell: (info) => info.getValue<Date>(),
-      sortingFn: 'datetime'
+      cell: (info) => info.getValue<Date>().toDateString(),
+      sortingFn: "datetime",
     },
     {
-      accessorKey: "quantity",
+      id: "quantity",
       header: "Qty",
+      accessorFn: (row) =>
+        row.orderItem.reduce((sum, oi) => sum + oi.quantity, 0),
     },
     {
       accessorKey: "userId",
@@ -132,11 +136,8 @@ export default function OrderTable(data: Props) {
       },
     },
   ];
-  // interface DataTableProps<TData, TValue>{
-  //   data: TData[]
-  // }
-  console.log(data)
-   const table = useReactTable({
+
+  const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
@@ -147,36 +148,52 @@ export default function OrderTable(data: Props) {
       sorting,
     },
   });
- 
+
   return (
     <div className="bg-secondary overflow-hidden rounded-md border max-w-6xl mx-auto">
       <Table>
-        <TableHeader>{table.getHeaderGroups().map((headerGroup) => (
-          <TableRow key={headerGroup.id}>
-            {headerGroup.headers.map((header) => {
-              return (
-                <TableHead key={header.id}>
-                  {flexRender(
-                    header.column.columnDef.header,header.getContext()
-                  )}
-                </TableHead>
-              )
-            })}
-          </TableRow>
-        ))}</TableHeader>
-        <TableBody>
-          {table.getRowModel().rows.map((row) => (
-            <TableRow key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
-              ))}
+        <TableHeader>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => {
+                return (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                  </TableHead>
+                );
+              })}
             </TableRow>
           ))}
+        </TableHeader>
+        <TableBody>
+          {table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map((row) => (
+              <TableRow key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell
+                colSpan={columns.length}
+                className="h-24 text-center"
+              >
+                No results.
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
-       <div className="flex items-center justify-end space-x-2 py-4 mr-4">
+      <div className="flex items-center justify-end space-x-2 py-4 mr-4">
         <Button
           variant="outline"
           size="sm"
@@ -193,7 +210,7 @@ export default function OrderTable(data: Props) {
         >
           Next
         </Button>
-      </div>     
+      </div>
     </div>
   );
 }

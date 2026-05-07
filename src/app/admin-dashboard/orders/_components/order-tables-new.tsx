@@ -110,7 +110,7 @@ export default function OrderTable({ data }: Props) {
           </Button>
         );
       },
-      cell: (info) => info.getValue<Date>(),
+      cell: (info) => info.getValue<Date>().toDateString(),
       sortingFn: "datetime",
     },
     {

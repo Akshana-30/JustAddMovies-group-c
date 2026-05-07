@@ -1,4 +1,3 @@
-import { ordersSchema } from "@/lib/schemasDELETE";
 import OrderTable from "./_components/order-table";
 import prisma from "@/lib/prisma";
 
@@ -12,7 +11,6 @@ export default async function Page() {
       },
     },
   });
- 
 
   return (
     <div>
