@@ -8,9 +8,8 @@ import {
   ColumnDef,
   SortingState,
   flexRender,
+  getPaginationRowModel,
 } from "@tanstack/react-table";
-import type { Order } from "@/lib/schemas";
-import { flattenOrders, RowData } from "@/lib/flatten";
 import {
   Table,
   TableBody,
@@ -21,126 +20,150 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 import { formatPrice } from "@/lib/format";
+import { Button } from "@/components/ui/button"
+import { ArrowUpDown } from "lucide-react";
 
-type Props = {
-  data: Order[];
+type OrderType = ({
+  orderItem: ({
+    movies: {
+      id: string;
+      title: string;
+      description: string;
+      price: number;
+      releaseDate: Date;
+      imageUrl: string;
+      stock: number;
+      deletedAt: Date | null;
+      runtime: number;
+    };
+  } & {
+    id: string;
+    quantity: number;
+    priceAtPurchase: number;
+    movieId: string;
+    orderId: string;
+  })[];
+} & {
+  id: string;
+  totalAmount: number;
+  status: string;
+  orderDate: Date;
+  userId: string;
+})[];
+
+export type Props = {
+  data: OrderType;
 };
 
-export default function OrderTable({ data }: Props) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-
-  const tableData = React.useMemo(() => flattenOrders(data), [data]);
-
-  const columns = React.useMemo<ColumnDef<RowData>[]>(
-    () => [
-      {
-        accessorKey: "orderId",
-        header: "Order ID",
-        cell: (info) => {
-          const id = info.getValue<string>();
-          return (
-            <Link className="text-blue-400 text-xs" href={`/orders/${id}`}>
-              {id}
-            </Link>
-          );
-        },
+export default function OrderTable(data: Props) {
+   const [sorting, setSorting] = React.useState<SortingState>([])
+  const columns: ColumnDef<Props>[] = [
+    {
+      accessorKey: "orderId",
+      header: "Order ID",
+      cell: (info) => {
+        const id = info.getValue<string>();
+        return (
+          <Link className="text-blue-400 text-xs" href={`/orders/${id}`}>
+            {id}
+          </Link>
+        );
       },
-      {
-        accessorKey: "status",
-        header: "Status",
-        cell: (info) => {
-          const status = info.getValue<string>();
-          return (
-            <span
-              style={{
-                fontSize: "11px",
-                padding: "2px 8px",
-                borderRadius: "20px",
-                background:
-                  info.getValue<string>() === "PAID"
-                    ? "rgba(34,197,94,0.15)"
-                    : "rgba(232,160,48,0.15)",
-                color:
-                  info.getValue<string>() === "PAID"
-                    ? "#4ade80"
-                    : "var(--gold)",
-              }}
-            >
-              {status}
-            </span>
-          );
-        },
+    },
+    {
+      accessorKey: "status",
+      header: "Status",
+      cell: (info) => {
+        const status = info.getValue<string>();
+        return (
+          <span
+            style={{
+              fontSize: "11px",
+              padding: "2px 8px",
+              borderRadius: "20px",
+              background:
+                info.getValue<string>() === "PAID"
+                  ? "rgba(34,197,94,0.15)"
+                  : "rgba(232,160,48,0.15)",
+              color:
+                info.getValue<string>() === "PAID" ? "#4ade80" : "var(--gold)",
+            }}
+          >
+            {status}
+          </span>
+        );
       },
-      {
-        accessorKey: "orderDate",
-        header: "Date",
-        cell: (info) => info.getValue<Date>().toDateString(),
-        sortingFn: "datetime",
+    },
+    {
+      accessorKey: "orderDate",
+      header: ({column}) => {
+        return (
+          <Button
+          variant="ghost"
+          className="cursor-pointer"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Order Date
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+        )
       },
-      {
-        accessorKey: "quantity",
-        header: "Qty",
+      cell: (info) => info.getValue<Date>(),
+      sortingFn: 'datetime'
+    },
+    {
+      accessorKey: "quantity",
+      header: "Qty",
+    },
+    {
+      accessorKey: "userId",
+      header: "User ID",
+      cell: (info) => {
+        const uId = info.getValue<string>();
+        return <span className="text-xs">{uId}</span>;
       },
-      {
-        accessorKey: "movieTitle",
-        header: "Movie",
+    },
+    {
+      accessorKey: "totalAmount",
+      header: "Total SEK",
+      cell: (info) => {
+        const price = info.getValue<number>();
+        return <span className="text-right">{formatPrice(price)}</span>;
       },
-      {
-        accessorKey: "totalAmount",
-        header: "Total SEK",
-        cell: (info) => {
-          const price = info.getValue<string>();
-          return <span>{formatPrice(Number(price))}</span>;
-        },
-      },
-      {
-        accessorKey: "userId",
-        header: "User ID",
-        cell: (info) => {
-          const uId = info.getValue<string>();
-          return <span className="text-xs">{uId}</span>;
-        },
-      },
-    ],
-    [],
-  );
-
-  const table = useReactTable<RowData>({
-    data: tableData,
+    },
+  ];
+  // interface DataTableProps<TData, TValue>{
+  //   data: TData[]
+  // }
+  console.log(data)
+   const table = useReactTable({
+    data,
     columns,
-    state: { sorting },
-    onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting,
+    },
   });
-
+ 
   return (
-    <div className="flex-row max-w-6xl mx-auto border rounded-2xl p-4 bg-secondary">
+    <div className="bg-secondary overflow-hidden rounded-md border max-w-6xl mx-auto">
       <Table>
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <TableHead
-                  key={header.id}
-                  onClick={header.column.getToggleSortingHandler()}
-                  style={{ cursor: "pointer" }}
-                >
+        <TableHeader>{table.getHeaderGroups().map((headerGroup) => (
+          <TableRow key={headerGroup.id}>
+            {headerGroup.headers.map((header) => {
+              return (
+                <TableHead key={header.id}>
                   {flexRender(
-                    header.column.columnDef.header,
-                    header.getContext(),
+                    header.column.columnDef.header,header.getContext()
                   )}
-
-                  {{
-                    asc: ` 🠉`,
-                    desc: ` 🠋`,
-                  }[header.column.getIsSorted() as string] ?? null}
                 </TableHead>
-              ))}
-            </TableRow>
-          ))}
-        </TableHeader>
-
+              )
+            })}
+          </TableRow>
+        ))}</TableHeader>
         <TableBody>
           {table.getRowModel().rows.map((row) => (
             <TableRow key={row.id}>
@@ -153,6 +176,24 @@ export default function OrderTable({ data }: Props) {
           ))}
         </TableBody>
       </Table>
+       <div className="flex items-center justify-end space-x-2 py-4 mr-4">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          Previous
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          Next
+        </Button>
+      </div>     
     </div>
   );
 }

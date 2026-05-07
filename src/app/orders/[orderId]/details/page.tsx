@@ -49,12 +49,12 @@ export default async function OrderDetailsPage(
           {order.orderItem.map((item) => (
             <TableRow key={item.id}>
               <TableCell>{item.id}</TableCell>
-              <TableCell>{item.movies.map((movie) => movie.title)}</TableCell>
-              <TableCell>{formatPrice(Number(item.priceAtPurchase))}</TableCell>
+              <TableCell>{item.movies.title}</TableCell>
+              <TableCell>{formatPrice(item.priceAtPurchase)}</TableCell>
               <TableCell>{item.quantity}</TableCell>
               <TableCell className="text-right text-blue-400">
-                <Link href={`/movies/${item.movies.map((movie) => movie.id)}`}>
-                  {item.movies.map((movie) => movie.id)}
+                <Link href={`/movies/${item.movies.id}`}>
+                  {item.movies.id}
                 </Link>
               </TableCell>
             </TableRow>
