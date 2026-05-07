@@ -49,7 +49,7 @@
 }
 
 :root {
-  --background: oklch(1.0000 0 0);
+  --background: oklch(87.917% 0.0184 78.169);
   --foreground: oklch(0.2686 0 0);
   --card: oklch(1.0000 0 0);
   --card-foreground: oklch(0.2686 0 0);
@@ -224,12 +224,12 @@
 
 @keyframes solidify {
   from {
-    background: linear-gradient(to bottom,oklch(61.881% 0.12729 82.625 / 0.315), var(--background));
+    background: linear-gradient(to bottom, oklch(61.881% 0.12729 82.625 / 0.315), var(--background));
     backdrop-filter: blur(0px);
     box-shadow: none;
   }
   to {
-    background: oklch(from var(--background) lch / 0.95);
+    background: var(--background);
     backdrop-filter: blur(8px);
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3);
   }
@@ -238,7 +238,7 @@
 @supports (animation-timeline: scroll()) {
   .navbar {
     animation: solidify linear both;
-    animation-timeline: scroll(root);
+    animation-timeline: scroll();
     animation-range: 0px 80px;
   }
 }

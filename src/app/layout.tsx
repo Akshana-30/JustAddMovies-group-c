@@ -3,6 +3,7 @@ import { Poppins, Libre_Baskerville, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { NavBar } from "@/components/header/nav-bar";
 import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/components/header/theme-provider";
 
 const fontSans = Poppins({
   subsets: ["latin"],
@@ -35,13 +36,18 @@ export default function RootLayout({
       lang="en"
       className={`${fontSans.variable} ${fontSerif.variable} ${fontMono.variable} antialiased`}
     >
-      <body className="dark sm:h-full flex flex-col">
+      <body className="sm:h-full flex flex-col">
+        <ThemeProvider attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange>
         <header className="sticky top-0 z-50">
           <NavBar />
         </header>
 
         <main>{children}</main>
         <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );

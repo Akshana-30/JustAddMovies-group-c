@@ -8,7 +8,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import MovieCard from "@/components/body/movie-card";
+import MovieCard from "@/components/body/movie-card-with-hover";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Suspense } from "react";
@@ -61,6 +61,30 @@ async function LandingPage() {
   }
 
   return (
+    <div className="pt-2 overflow-hidden p-8">
+      <div className=" flex justify-between gap-4 w-full max-md:flex-col ">
+        <div className="lg:w-[85%] max-lg: w-full">
+          <Carousel className="w-full border-amber-300/50 border rounded-2xl">
+            <CarouselContent>
+              {latestMovie.map((latest) => (
+                <CarouselItem key={latest.id}>
+                  <MovBanner
+                    imageUrl={latest.imageUrl}
+                    className="relative p-0"
+                  >
+                    <div className="bg-linear-to-r from-white via-white/10 to-transparent dark:bg-linear-to-r dark:from-black dark:via-black/10 darkto-transparent rounded-3xl h-150">
+                      <div className="pt-100 p-10 flex text-left flex-col max-w-150">
+                        <h1 className="text-4xl text-foreground font-bold z-10">
+                          {latest.title}
+                        </h1>
+                        <br />
+                        <p>
+                          {latest.description
+                            .split(" ")
+                            .slice(0, 15)
+                            .join(" ") + ".."}
+                        </p>
+
     <>
       <Suspense>
         <EmailApprovedToast />
@@ -85,6 +109,7 @@ async function LandingPage() {
                           </h1><br />
                           <p>{latest.description.split(" ").slice(0, 15).join(" ") + ".."}</p>
                         </div>
+
                       </div>
                     </MovBanner>
                   </CarouselItem>
@@ -108,6 +133,30 @@ async function LandingPage() {
                   {genre.name}
                 </Button>
               ))}
+            </CarouselContent>
+            <CarouselPrevious
+              variant="outline"
+              size="icon-lg"
+              className="absolute left-4 top-1/2 -translate-y-1/2 z-10"
+            />
+            <CarouselNext
+              size="icon-lg"
+              className="absolute right-4 top-1/2 -translate-y-1/2 z-10"
+            />
+          </Carousel>
+        </div>
+
+        <div className="lg:w-[40%] max-lg: w-full ">
+          <Card className="border-amber-300/50 border flex-row! flex-wrap content-start gap-2 p-2 overflow-y-auto bg-background/10 h-150 max-md:h-25">
+            {genres.map((genre) => (
+              <Button
+                className="w-fit bg-amber-300/60 hover:bg-amber-300/70"
+                key={genre.id}
+              >
+                {genre.name}
+              </Button>
+            ))}
+          </Card>
             </Card>
           </div>
         </div>

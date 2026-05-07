@@ -12,6 +12,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { HamburgerButton } from "./hamburger-button";
 import { SignOutButton } from "../auth/sign-out-button";
+import { ModeToggle } from "./mode-togggle";
 import { getCart } from "@/lib/cart";
 import { getCartProducts } from "@/lib/cart-types";
 //
@@ -25,43 +26,40 @@ export async function NavBar() {
   return total + (product.quantity);
 }, 0);
   return (
-    <nav className="navbar flex items-center ">
-      <Link href="/" className=" md:flex ">
+    <nav className="navbar py-2 flex items-center md-20">
+      <Link href="/" className="relative md:flex ml-5">
+        <Image
+          src="/JAM-li.png"
+          width={80}
+          height={80}
+          alt="logo"
+          className="transition-all duration-300 dark:opacity-0 dark:scale-0"
+        />
         <Image
           src="/JAM.png"
           width={80}
           height={80}
           alt="logo"
-          className="ml-5"
+          className="absolute top-0 left-0 transition-all duration-300 opacity-0 scale-0 dark:opacity-100 dark:scale-100"
         />
       </Link>
 
       <ul className="hidden xl:flex gap-2 w-full px-8 ">
         <li>
-          <Button
-            asChild
-            variant="ghost"
-            className="text-white text-lg"
-            size="lg"
-          >
+          <Button asChild variant="ghost" className=" text-lg" size="lg">
             <Link href="/">Home</Link>
           </Button>
         </li>
 
         <li>
-          <Button asChild variant="ghost" className="text-white" size="lg">
+          <Button asChild variant="ghost" className="text-lg" size="lg">
             <Link href="/admin-dashboard">Admin Dashboard</Link>
           </Button>
         </li>
 
         <li>
-          <Button
-            asChild
-            variant="ghost"
-            className="text-white text-lg"
-            size="lg"
-          >
-            <Link href="/">Store</Link>
+          <Button asChild variant="ghost" className="text-lg" size="lg">
+            <Link href="/movies">Store</Link>
             {/* Add store link */}
           </Button>
         </li>
@@ -85,23 +83,13 @@ export async function NavBar() {
         ) : (
           <>
             <li>
-              <Button
-                asChild
-                variant="ghost"
-                className="text-white text-lg"
-                size="lg"
-              >
+              <Button asChild variant="ghost" className="text-lg" size="lg">
                 <Link href="/sign-in">Sign In</Link>
               </Button>
             </li>
 
             <li>
-              <Button
-                asChild
-                variant="ghost"
-                className="text-white text-lg"
-                size="lg"
-              >
+              <Button asChild variant="ghost" className=" text-lg" size="lg">
                 <Link href="/register">Register</Link>
               </Button>
             </li>
@@ -109,6 +97,8 @@ export async function NavBar() {
         )}
 
         <li>
+          <Button asChild variant="outline" className="text-lg" size="icon-lg">
+            <Link href="/cart" className="px-0 items-center">
           <Button
             asChild
             variant="outline"
@@ -123,7 +113,6 @@ export async function NavBar() {
                 fill={"currentColor"}
                 viewBox={"2 2 20 20"}
               >
-                {/* Boxicons v3.0.8 https://boxicons.com | License  https://docs.boxicons.com/free */}
                 <path d="M21 6H7.05L5.94 2.68A1 1 0 0 0 4.99 2h-3v2h2.28l3.54 10.63A2 2 0 0 0 9.71 16h7.59a2 2 0 0 0 1.87-1.3l2.76-7.35c.11-.31.07-.65-.11-.92A1 1 0 0 0 21 6m-3.69 8H9.72l-2-6h11.84zM10 18a2 2 0 1 0 0 4 2 2 0 1 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 1 0 0-4"></path>
               </svg>
               {cartNumber !== 0 ? <span className="text-sm text-yellow-400 mt-5 ml-5 absolute">{cartNumber}</span> : <span></span>}
@@ -131,6 +120,9 @@ export async function NavBar() {
               {/* Add shopping cart component */}
             </Link>
           </Button>
+        </li>
+        <li>
+          <ModeToggle />
         </li>
       </ul>
 
