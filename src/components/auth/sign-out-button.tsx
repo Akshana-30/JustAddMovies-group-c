@@ -7,7 +7,13 @@ import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { Spinner } from "../ui/spinner";
 
-export function SignOutButton() {
+type Props = React.ComponentProps<typeof Button>;
+
+export function SignOutButton({
+    children,
+    disabled,
+    ...props
+}: Props) {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
 
@@ -19,11 +25,9 @@ export function SignOutButton() {
         setLoading(false);
 
         if(error) {
-            toast.error(error.message || "An unknown error occurred", {
+            return toast.error(error.message || "An unknown error occurred", {
                 position: "top-center",
             });
-
-            return;
         }
 
         router.push("/");
@@ -32,10 +36,9 @@ export function SignOutButton() {
 
     return (
         <Button
-            variant="ghost"
-            size="lg"
-            disabled={loading}
+            disabled={loading || disabled}
             onClick={handleClick}
+            {...props}
         >
             {loading ? (
                 <>
@@ -43,7 +46,7 @@ export function SignOutButton() {
                     Loading
                 </>
             ) : (
-                "Sign Out"
+                children || "Logout"
             )}
         </Button>
     );
