@@ -108,8 +108,6 @@ model User {
   wishlistItems WishlistItem[]
   stockAlerts   StockAlert[]
 
-  phone            String?
-  shippingAddress  String?
 
   role       String?
   banned     Boolean?  @default(false)
