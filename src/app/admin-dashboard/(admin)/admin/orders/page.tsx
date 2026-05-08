@@ -2,7 +2,6 @@
 import type { Metadata } from "next";
 import prisma from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
-import Link from "next/link";
 
 export const metadata: Metadata = { title: "All Orders" };
 
@@ -11,7 +10,7 @@ export default async function AdminOrdersPage() {
     orderBy: { orderDate: "desc" },
     include: {
       user:       { select: { name: true, email: true } },
-      orderItem: { include: { movie: { select: { title: true } } } },
+      orderItem: { include: { movies: { select: { title: true } } } },
     },
   });
 
@@ -46,7 +45,7 @@ export default async function AdminOrdersPage() {
                   <div style={{ display:"flex", flexDirection:"column", gap:"2px" }}>
                     {order.orderItem.slice(0, 2).map((item) => (
                       <span key={item.id} style={{ fontSize:"12px", color:"var(--text-muted)" }}>
-                        {item.movie.title} ×{item.quantity}
+                        {item.movies.title} ×{item.quantity}
                       </span>
                     ))}
                     {order.orderItem.length > 2 && (
