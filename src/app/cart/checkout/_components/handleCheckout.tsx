@@ -1,10 +1,18 @@
-"use server"
+"use server";
 import { auth } from "@/lib/auth";
-import { getCart } from "@/lib/cart";
-import { removeFromCart } from "@/lib/cart-actions";
+import { cartCookie, getCart } from "@/lib/cart";
 import { getCartProducts } from "@/lib/cart-types";
 import prisma from "@/lib/prisma";
-import { headers } from "next/headers";
+import { revalidatePath } from "next/cache";
+import { cookies, headers } from "next/headers";
+
+async function clearCart() {
+  const store = await cookies();
+
+  store.delete(cartCookie);
+
+  revalidatePath("/cart");
+}
 
 export default async function handleCheckout() {
   const session = await auth.api.getSession({
@@ -24,25 +32,22 @@ export default async function handleCheckout() {
       totalAmount: total,
       user: {
         connect: {
-            id: session?.user.id
-        }
+          id: session?.user.id,
+        },
       },
       orderItem: {
-        create: products.map(p => ({
-            priceAtPurchase: p.price,
-            quantity: p.quantity,
-            movies: {
-                connect: {
-                    id: p.id
-                }
-            }
-        }))
-      }
-    }
+        create: products.map((p) => ({
+          priceAtPurchase: p.price,
+          quantity: p.quantity,
+          movies: {
+            connect: {
+              id: p.id,
+            },
+          },
+        })),
+      },
+    },
   });
-  const cleanCart = () => {
-    products.map(p => removeFromCart(p.id))
-  }
-await cleanCart()
 
+  await clearCart();
 }

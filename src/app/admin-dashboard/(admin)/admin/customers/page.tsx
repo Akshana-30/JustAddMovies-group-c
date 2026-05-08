@@ -11,7 +11,7 @@ export default async function AdminCustomersPage() {
     orderBy: { createdAt: "desc" },
     select: {
       id: true, name: true, email: true,
-      phone: true, shippingAddress: true,
+      // phone: true, shippingAddress: true,
       role: true, createdAt: true,
       _count: { select: { orders: true } },
       orders: {
@@ -66,12 +66,12 @@ export default async function AdminCustomersPage() {
                   <div>
                     <p style={{ fontSize: "14px", fontWeight: 500, color: "var(--text)" }}>{user.name}</p>
                     <p style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "2px" }}>{user.email}</p>
-                    {user.phone && (
+                    {/* {user.phone && (
                       <p style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "2px" }}>📞 {user.phone}</p>
                     )}
                     {user.shippingAddress && (
                       <p style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "2px" }}>📦 {user.shippingAddress}</p>
-                    )}
+                    )} */}
                     <p style={{ fontSize: "11px", color: "var(--text-dim)", marginTop: "4px" }}>
                       Member since {formatDate(user.createdAt)} · {user._count.orders} order{user._count.orders !== 1 ? "s" : ""}
                     </p>

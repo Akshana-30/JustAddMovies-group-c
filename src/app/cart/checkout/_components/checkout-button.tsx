@@ -30,7 +30,7 @@ export default function CheckoutButton({disabled}: Props) {
               )
             }
     >
-      Checkout
+      {isPending ? "Validating payment.." : "Checkout"}
     </Button>
   );
 }
