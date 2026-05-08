@@ -26,7 +26,7 @@ export default async function DashboardPage() {
     orderBy: { orderDate: "desc" },
     include: {
       orderItem: {
-        include: { movie: true },
+        include: { movies: true },
       },
     },
   });
@@ -86,9 +86,9 @@ export default async function DashboardPage() {
                   {order.orderItem.map((item) => (
                     <div key={item.id} className="flex items-center gap-3">
                       <Package size={13} className="shrink-0 text-muted-foreground" />
-                      <Link href={`/movies/${item.movie.id}`}
+                      <Link href={`/movies/${item.movies.id}`}
                         className="flex-1 truncate text-sm text-muted-foreground hover:text-primary">
-                        {item.movie.title}
+                        {item.movies.title}
                       </Link>
                       <span className="text-xs text-muted-foreground">×{item.quantity}</span>
                       <span className="text-xs font-medium">
