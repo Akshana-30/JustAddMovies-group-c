@@ -6,7 +6,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "../ui/input-group";
-import { SearchIcon } from "lucide-react";
+import { SearchIcon, ShoppingCart } from "lucide-react";
 import React from "react";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
@@ -100,19 +100,11 @@ export async function NavBar() {
           <Button
             asChild
             variant="outline"
-            className="text-white text-lg"
+            className=" text-lg"
             size="icon-lg"
           >
             <Link href="/cart" className="px-0 items-center relative">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width={16}
-                height={16}
-                fill={"currentColor"}
-                viewBox={"2 2 20 20"}
-              >
-                <path d="M21 6H7.05L5.94 2.68A1 1 0 0 0 4.99 2h-3v2h2.28l3.54 10.63A2 2 0 0 0 9.71 16h7.59a2 2 0 0 0 1.87-1.3l2.76-7.35c.11-.31.07-.65-.11-.92A1 1 0 0 0 21 6m-3.69 8H9.72l-2-6h11.84zM10 18a2 2 0 1 0 0 4 2 2 0 1 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 1 0 0-4"></path>
-              </svg>
+              <ShoppingCart strokeWidth={2.25} />
               {cartNumber !== 0 ? <span className="text-sm text-yellow-400 mt-5 ml-5 absolute">{cartNumber}</span> : <span></span>}
               
               {/* Add shopping cart component */}

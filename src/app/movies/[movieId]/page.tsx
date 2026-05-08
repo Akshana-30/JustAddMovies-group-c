@@ -20,7 +20,10 @@ async function MovieDetailsPage(props: PageProps<"/movies/[movieId]">) {
 
   return (
     <div className="pt-4">
-      <MovBanner imageUrl={movie.imageUrl} className=" bg-black/50 bg-blend-multiply">
+      <MovBanner
+        imageUrl={movie.imageUrl}
+        className=" bg-black/50 bg-blend-multiply"
+      >
         <div className="lg:flex flex-column  xl:flex justify-evenly gap-2">
           <div className="max-w-2xl p-5 ">
             <Image
@@ -39,6 +42,10 @@ async function MovieDetailsPage(props: PageProps<"/movies/[movieId]">) {
               <p>{movie.runtime} mins</p>
             </div>
 
+            <h4 className="text-xl pt-5">Synopsis:</h4>
+            <p className="text-foreground  font-medium pt-5">
+              {movie.description}
+            </p>
             <div className="flex gap-2 flex-wrap pt-5">
               {movie.genres.map((genre) => (
                 <div
@@ -48,23 +55,15 @@ async function MovieDetailsPage(props: PageProps<"/movies/[movieId]">) {
                   {genre.name}
                 </div>
               ))}
+              <br />
             </div>
-            <h4 className="text-xl">Synopsis:</h4>
-            <p className="text-foreground  font-medium pt-10">
-              
-              {movie.description}
-            </p>
 
-            <p className="pt-10 whitespace-pre-line text-xl mb-2">{formatPrice(movie.price)}</p>
-              <AddToCartButton productId={movie.id} productTitle={movie.title}/>
-            <div className="flex justify-start gap-5">
-              <p className="pt-10 whitespace-pre-line text-xl">quantity</p>
-              <p className="pt-10 whitespace-pre-line text-xl">cart</p>
-              
-            </div>
+            <p className="pt-10 whitespace-pre-line text-xl mb-2">
+              {formatPrice(movie.price)}
+            </p><br />
+            <AddToCartButton productId={movie.id} productTitle={movie.title} />
           </div>
         </div>
-        
       </MovBanner>
     </div>
   );

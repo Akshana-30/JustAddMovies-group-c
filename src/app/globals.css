@@ -49,13 +49,13 @@
 }
 
 :root {
-  --background: oklch(87.917% 0.0184 78.169);
+  --background: #e9e4d9;
   --foreground: oklch(0.2686 0 0);
-  --card: oklch(1.0000 0 0);
+  --card: oklch(79.159% 0.03422 107.205);
   --card-foreground: oklch(0.2686 0 0);
   --popover: oklch(1.0000 0 0);
   --popover-foreground: oklch(0.2686 0 0);
-  --primary: oklch(0.7686 0.1647 70.0804);
+  --primary: rgb(217, 162, 66);
   --primary-foreground: oklch(0 0 0);
   --secondary: oklch(0.9670 0.0029 264.5419);
   --secondary-foreground: oklch(0.4461 0.0263 256.8018);
@@ -110,7 +110,7 @@
   --card-foreground: oklch(0.9219 0 0);
   --popover: oklch(0.2686 0 0);
   --popover-foreground: oklch(0.9219 0 0);
-  --primary: oklch(61.881% 0.12729 82.625)
+  --primary: #E8A030
   --primary-foreground: oklch(91.406% 0.02654 17.434);
   --secondary: oklch(0.2686 0 0);
   --secondary-foreground: oklch(0.9219 0 0);
@@ -125,7 +125,7 @@
   --ring: oklch(0.8946 0.0071 88.6470);
   --chart-1: oklch(0.8369 0.1644 84.4286);
   --chart-2: oklch(0.6658 0.1574 58.3183);
-  --chart-3: oklch(0.4732 0.1247 46.2007);
+  --chart-3: #E8A030
   --chart-4: oklch(0.5553 0.1455 48.9975);
   --chart-5: oklch(0.4732 0.1247 46.2007);
   --sidebar: oklch(0.1684 0 0);
@@ -255,12 +255,13 @@
 
 @keyframes solidify {
   from {
-    background: linear-gradient(to bottom, oklch(61.881% 0.12729 82.625 / 0.315), var(--background));
+    background: linear-gradient(to bottom, oklch(65.586% 0.11841 88.071 / 0.441), var(--background));
     backdrop-filter: blur(0px);
     box-shadow: none;
   }
   to {
-    background: var(--background);
+    background:  oklch(from var(--background) lch / 0.95);
+    /* opacity: 0.7; */
     backdrop-filter: blur(8px);
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3);
   }

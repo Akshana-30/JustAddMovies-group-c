@@ -16,7 +16,7 @@ type Props = React.ComponentProps<typeof Card> & {
   className?: string;
 };
 
-export default function MovieCard({ imageUrl, title, genres, description, id, className, ...props }: Props) {
+export default function MovieCardWithHover({ imageUrl, title, genres, description, id, className, ...props }: Props) {
   const [hovered, setHovered] = useState(false);
   const [click, setClick] = useState(false)
 
@@ -52,7 +52,7 @@ export default function MovieCard({ imageUrl, title, genres, description, id, cl
           {genres.map((g) => (
             <span
               key={g.name}
-              className={cn("text-xs text-card-background/10 ")}
+              className={cn("text-xs text-white/70 ")}
             >
               {g.name + ' |'}
             </span>

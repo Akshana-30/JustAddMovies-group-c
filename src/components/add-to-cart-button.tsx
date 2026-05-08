@@ -14,7 +14,7 @@ export default function AddToCartButton({ productId, productTitle }: Props) {
   return (
     <Button
       variant="outline"
-      className="cursor-pointer"
+      className="cursor-pointer bg-[var(--gold)]/87! hover:bg-[var(--gold)]! text-background hover:text-background"
       onClick={() =>
         startTransition(() =>
           addToCart({ id: productId, quantity: 1, title: productTitle }),
