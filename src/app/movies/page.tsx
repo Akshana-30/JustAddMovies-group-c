@@ -1,6 +1,8 @@
+
+import FilterButton from "@/components/body/filter-button";
 import MovieCard from "@/components/body/movie-card";
 import prisma from "@/lib/prisma";
-import { PrismaClientRustPanicError } from "@prisma/client/runtime/client";
+
 
 export default async function MoviesPage({
   searchParams,
@@ -8,7 +10,8 @@ export default async function MoviesPage({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const { title } = await searchParams;
-   const { genre } = await searchParams;
+  const { genre } = await searchParams;
+  const {filter} = await searchParams;
   const movies =
     typeof genre === "string"
       ? await prisma.movie.findMany({
@@ -33,12 +36,19 @@ export default async function MoviesPage({
           },
           include: { genres: { select: { name: true, id: true } } },
         })
-      : await prisma.movie.findMany({
+      : typeof filter === "string" 
+      ?await prisma.movie.findMany({
           include: { genres: { select: { name: true, id: true } } },
-        });
+        })
+        :await prisma.movie.findMany({
+          include: { genres: { select: { name: true, id: true } } },
+        })
   return (
-    <div>
-      <div className=" max-w-[90%] rounded-4xl m-auto grid grid-cols-5 pt-15 p-15 gap-8 bg-secondary-foreground/10">
+    <div className=" max-w-[90%] p-8 rounded-4xl m-auto bg-secondary-foreground/10">
+      
+      <div className="flex justify-end pb-15"><FilterButton></FilterButton></div>
+      <div className="grid grid-cols-5 gap-8 ">
+      
         {movies.map((movie) => (
           <div className="pb-10" key={movie.id}>
             <MovieCard

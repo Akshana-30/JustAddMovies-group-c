@@ -13,8 +13,8 @@ export default function AddToCartButton({ productId, productTitle }: Props) {
   const [isPending, startTransition] = useTransition();
   return (
     <Button
-      variant="outline"
-      className="cursor-pointer bg-[var(--gold)]/87! hover:bg-[var(--gold)]! text-background hover:text-background"
+      variant="default"
+      className="cursor-pointer "
       onClick={() =>
         startTransition(() =>
           addToCart({ id: productId, quantity: 1, title: productTitle }),
