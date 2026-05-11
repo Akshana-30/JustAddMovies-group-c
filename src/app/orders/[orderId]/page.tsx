@@ -24,7 +24,7 @@ export default async function OrderPage(props: PageProps<"/orders/[orderId]">) {
     return notFound();
   }
   return (
-    <div className="flex-row max-w-3xl mx-auto border rounded-2xl p-4 bg-secondary">
+    <div className="flex-row max-w-3xl mx-auto border rounded-2xl p-4 bg-secondary mt-10">
       <h1 className="text-4xl font-bold m-4">{`ID: ${order.id}`}</h1>
       <Table>
         <TableCaption>{`ID: ${order.id}`}</TableCaption>

@@ -272,7 +272,7 @@ export default function EditOrderForm({ data }: Props) {
           </form.Field>
 
           <Field orientation="horizontal">
-            <Button className="cursor-pointer bg-[var(--gold)] hover:bg-[var(--gold)]/85" type="submit">
+            <Button className="cursor-pointer bg(--gold)] hover:bg-(--gold)]/85" type="submit">
               Submit
             </Button>
             <Button

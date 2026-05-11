@@ -23,7 +23,7 @@ export default function CheckoutButton({disabled}: Props) {
     <Button
       disabled={disabled || isPending}
       variant="outline"
-      className="cursor-pointer"
+      className="cursor-pointer w-full mt-5"
       onClick={() =>
               startTransition(() =>
                 handleClick(),

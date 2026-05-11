@@ -29,7 +29,7 @@ export default async function OrderDetailsPage(
     return notFound();
   }
   return (
-    <div className="flex-row max-w-3xl mx-auto border rounded-2xl p-4 bg-secondary">
+    <div className="flex-row max-w-3xl mx-auto border rounded-2xl p-4 bg-secondary mt-10">
       <Table>
         <TableCaption>
           <Button variant="outline" size="xs" asChild>
