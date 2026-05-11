@@ -13,7 +13,7 @@ import { revalidatePath } from "next/cache";
 
 async function requireAdmin() {
   const session = await auth.api.getSession({ headers: await headers() });
-  return (session?.user as any)?.role === "ADMIN" ? session : null;
+  return session?.user?.role === "ADMIN" ? session : null;
 }
 
 // ── Search by title ───────────────────────────────────────────────
@@ -23,7 +23,15 @@ export async function searchMovies(query: string) {
   try {
     const results = await searchTmdb(query);
     return actionSuccess(results.slice(0, 20));
-  } catch (err: any) { return actionError(err.message); }
+  } catch (err: unknown) { 
+      if(err instanceof(Error)) {
+        return actionError(err.message); 
+      }
+
+      else {
+        return actionError(`Unknown err: ${err}`);
+      }
+    }
 }
 
 // ── Search by actor name ──────────────────────────────────────────
@@ -31,9 +39,15 @@ export async function searchByActor(name: string) {
   if (!await requireAdmin()) return actionError("Unauthorized");
   if (!name.trim())          return actionError("Enter an actor name");
   try {
-    const results = await searchByPerson(name, "actor");
-    return actionSuccess(results);
-  } catch (err: any) { return actionError(err.message); }
+		const results = await searchByPerson(name, 'actor');
+		return actionSuccess(results);
+	} catch (err: unknown) {
+		if (err instanceof Error) {
+			return actionError(err.message);
+		} else {
+			return actionError(`Unknown err: ${err}`);
+		}
+	}
 }
 
 // ── Search by director name ───────────────────────────────────────
@@ -41,9 +55,15 @@ export async function searchByDirector(name: string) {
   if (!await requireAdmin()) return actionError("Unauthorized");
   if (!name.trim())          return actionError("Enter a director name");
   try {
-    const results = await searchByPerson(name, "director");
-    return actionSuccess(results);
-  } catch (err: any) { return actionError(err.message); }
+		const results = await searchByPerson(name, 'director');
+		return actionSuccess(results);
+	} catch (err: unknown) {
+		if (err instanceof Error) {
+			return actionError(err.message);
+		} else {
+			return actionError(`Unknown err: ${err}`);
+		}
+	}
 }
 
 // ── Discover with filters ─────────────────────────────────────────
@@ -56,18 +76,30 @@ export async function discoverMovies(filters: {
 }) {
   if (!await requireAdmin()) return actionError("Unauthorized");
   try {
-    const results = await discoverTmdb(filters);
-    return actionSuccess(results.slice(0, 20));
-  } catch (err: any) { return actionError(err.message); }
+		const results = await discoverTmdb(filters);
+		return actionSuccess(results.slice(0, 20));
+	} catch (err: unknown) {
+		if (err instanceof Error) {
+			return actionError(err.message);
+		} else {
+			return actionError(`Unknown err: ${err}`);
+		}
+	}
 }
 
 // ── Preview a single movie ────────────────────────────────────────
 export async function previewTmdbMovie(tmdbId: number) {
   if (!await requireAdmin()) return actionError("Unauthorized");
   try {
-    const movie = await getTmdbMovie(tmdbId);
-    return actionSuccess(tmdbToMovie(movie));
-  } catch (err: any) { return actionError(err.message); }
+		const movie = await getTmdbMovie(tmdbId);
+		return actionSuccess(tmdbToMovie(movie));
+	} catch (err: unknown) {
+		if (err instanceof Error) {
+			return actionError(err.message);
+		} else {
+			return actionError(`Unknown err: ${err}`);
+		}
+	}
 }
 
 // ── Import a single movie ─────────────────────────────────────────
@@ -130,10 +162,16 @@ export async function importFromTmdb(tmdbId: number, priceOre: number, force = f
     revalidatePath("/movies");
     revalidatePath("/");
     return actionSuccess({ id: created.id, title: created.title });
-  } catch (err: any) {
-    console.error("Import error:", err);
-    return actionError(err.message ?? "Import failed");
-  }
+  } catch (err: unknown) { 
+      if(err instanceof(Error)) {
+        console.error("Import error:", err);
+        return actionError(err.message ?? "Import failed");
+      }
+
+      else {
+        return actionError(`Unknown err: ${err}`);
+      }
+    } 
 }
 
 // ── Bulk import selected movies ───────────────────────────────────
@@ -148,10 +186,10 @@ export async function bulkImportFromTmdb(
 
   for (const tmdbId of tmdbIds) {
     const result = await importFromTmdb(tmdbId, priceOre);
-    if ((result as any).success) {
-      results.push({ tmdbId, title: (result as any).data.title, ok: true });
+    if (result?.success) {
+      results.push({ tmdbId, title: result?.data.title, ok: true });
     } else {
-      results.push({ tmdbId, title: `ID ${tmdbId}`, ok: false, error: (result as any).error });
+      results.push({ tmdbId, title: `ID ${tmdbId}`, ok: false, error: result?.error });
     }
     await new Promise((r) => setTimeout(r, 300)); // rate limit safety
   }

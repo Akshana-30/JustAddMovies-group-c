@@ -38,7 +38,7 @@ export default function TmdbImportPage() {
           </pre>
           <p style={{ fontSize: "12px", color: "var(--text-dim)", marginTop: "10px" }}>
             Get a free API key at{" "}
-            <a href="https://www.themoviedb.org/settings/api" target="_blank" rel="noreferrer"
+            <a href="https://www.themoviedb.org/settings/api" target="_blank" rel="noreferrer noopener"
               style={{ color: "var(--gold)" }}>
               themoviedb.org/settings/api
             </a>

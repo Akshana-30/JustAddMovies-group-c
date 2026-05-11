@@ -18,7 +18,7 @@ export default async function AdminPeoplePage() {
       <p className="mb-6 font-serif italic" style={{ color: "var(--text-muted)" }}>
         {directors.length} directors · {actors.length} actors
       </p>
-      <AdminPeopleTable directors={directors as any} actors={actors as any} />
+      <AdminPeopleTable directors={directors} actors={actors} />
     </div>
   );
 }

@@ -5,20 +5,22 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import prisma from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
-import { AccountEditForm } from "./AccountEditForm";
+import { SettingsFields } from "@/app/(auth)/(user)/settings/_components/settings-fields";
+// import { AccountEditForm } from "./AccountEditForm";
 
 export const metadata: Metadata = { title: "My Account" };
 
 export default async function AccountPage() {
   const session = await auth.api.getSession({ headers: await headers() });
-  if (!session) redirect("/auth/sign-in");
+  if (!session) redirect("/sign-in");
 
   // Fetch full user including custom fields
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
-    select: { id: true, name: true, email: true, role: true, createdAt: true, phone: true, shippingAddress: true },
+    select: { id: true, name: true, email: true, role: true, createdAt: true },
+    // select: { id: true, name: true, email: true, role: true, createdAt: true, phone: true, shippingAddress: true },
   });
-  if (!user) redirect("/auth/sign-in");
+  if (!user) redirect("/sign-in");
 
   const role = user.role ?? "CUSTOMER";
 
@@ -52,8 +54,8 @@ export default async function AccountPage() {
           <div className="grid gap-3">
             {[
               { label: "Email",            value: user.email },
-              { label: "Phone",            value: user.phone ?? "Not set" },
-              { label: "Shipping Address", value: user.shippingAddress ?? "Not set" },
+              // { label: "Phone",            value: user.phone ?? "Not set" },
+              // { label: "Shipping Address", value: user.shippingAddress ?? "Not set" },
             ].map((f) => (
               <div key={f.label} className="flex gap-3">
                 <span className="w-36 shrink-0 text-xs uppercase tracking-wide mt-0.5" style={{ color: "var(--text-dim)" }}>
@@ -67,12 +69,13 @@ export default async function AccountPage() {
       </div>
 
       {/* Edit form */}
-      <AccountEditForm
+      <SettingsFields />
+      {/* <AccountEditForm
         userId={user.id}
-        initialPhone={user.phone ?? ""}
-        initialAddress={user.shippingAddress ?? ""}
+        // initialPhone={user.phone ?? ""}
+        // initialAddress={user.shippingAddress ?? ""}
         initialName={user.name}
-      />
+      /> */}
     </div>
   );
 }

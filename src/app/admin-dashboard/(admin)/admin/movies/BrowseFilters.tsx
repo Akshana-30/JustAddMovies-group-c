@@ -3,7 +3,7 @@
 
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
-import { Search, SlidersHorizontal, X, Star } from "lucide-react";
+import { Search, SlidersHorizontal, X } from "lucide-react";
 
 interface Genre    { id: string; name: string }
 interface Director { id: string; name: string }
@@ -53,6 +53,11 @@ export function BrowseFilters({ genres, directors, actors, maxPrice, maxRuntime 
   const hasFilters = ["q","genreId","directorId","actorId","ratingMin","yearMin","yearMax","runtimeMax","priceMax"]
     .some((k) => searchParams.has(k));
 
+  interface ChipProps {
+    key: string;
+    label: string | undefined;
+  }
+
   return (
     <div style={{ marginBottom: "24px" }}>
 
@@ -68,20 +73,20 @@ export function BrowseFilters({ genres, directors, actors, maxPrice, maxRuntime 
         </div>
 
         {/* Genre */}
-        <select value={get("genreId")} onChange={(e) => update({ genreId: e.target.value })}
+        <select title="All genres" value={get("genreId")} onChange={(e) => update({ genreId: e.target.value })}
           style={{ ...IS, minWidth:"130px" }}>
           <option value="">All Genres</option>
           {genres.map((g) => <option key={g.id} value={g.id}>{g.name}</option>)}
         </select>
 
         {/* Rating */}
-        <select value={get("ratingMin")} onChange={(e) => update({ ratingMin: e.target.value })}
+        <select title="rating" value={get("ratingMin")} onChange={(e) => update({ ratingMin: e.target.value })}
           style={{ ...IS, minWidth:"130px" }}>
           {RATINGS.map((r) => <option key={r.value} value={r.value}>{r.label}</option>)}
         </select>
 
         {/* Sort */}
-        <select value={get("sort") || "title"} onChange={(e) => update({ sort: e.target.value })}
+        <select title="sort" value={get("sort") || "title"} onChange={(e) => update({ sort: e.target.value })}
           style={{ ...IS, minWidth:"160px" }}>
           <option value="title">Sort: A–Z</option>
           <option value="year-desc">Newest First</option>
@@ -118,14 +123,14 @@ export function BrowseFilters({ genres, directors, actors, maxPrice, maxRuntime 
         <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(200px, 1fr))", gap:"12px", padding:"16px", background:"var(--surface)", border:"1px solid var(--border)", borderRadius:"8px", marginTop:"4px" }}>
           <div>
             <label style={{ display:"block", fontSize:"11px", textTransform:"uppercase", letterSpacing:"0.06em", color:"var(--text-muted)", marginBottom:"5px" }}>Director</label>
-            <select value={get("directorId")} onChange={(e) => update({ directorId: e.target.value })} style={{ ...IS, width:"100%" }}>
+            <select title="director" value={get("directorId")} onChange={(e) => update({ directorId: e.target.value })} style={{ ...IS, width:"100%" }}>
               <option value="">Any Director</option>
               {directors.map((d) => <option key={d.id} value={d.id}>{d.name}</option>)}
             </select>
           </div>
           <div>
             <label style={{ display:"block", fontSize:"11px", textTransform:"uppercase", letterSpacing:"0.06em", color:"var(--text-muted)", marginBottom:"5px" }}>Actor</label>
-            <select value={get("actorId")} onChange={(e) => update({ actorId: e.target.value })} style={{ ...IS, width:"100%" }}>
+            <select title="actor" value={get("actorId")} onChange={(e) => update({ actorId: e.target.value })} style={{ ...IS, width:"100%" }}>
               <option value="">Any Actor</option>
               {actors.map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}
             </select>
@@ -145,7 +150,7 @@ export function BrowseFilters({ genres, directors, actors, maxPrice, maxRuntime 
             <label style={{ display:"block", fontSize:"11px", textTransform:"uppercase", letterSpacing:"0.06em", color:"var(--text-muted)", marginBottom:"5px" }}>
               Max runtime: {get("runtimeMax") ? `${get("runtimeMax")} min` : "Any"}
             </label>
-            <input type="range" min={30} max={maxRuntime} step={10}
+            <input title="m-runtime" type="range" min={30} max={maxRuntime} step={10}
               value={get("runtimeMax") || maxRuntime}
               onChange={(e) => update({ runtimeMax: e.target.value === String(maxRuntime) ? "" : e.target.value })}
               style={{ width:"100%", accentColor:"var(--gold)" }} />
@@ -157,7 +162,7 @@ export function BrowseFilters({ genres, directors, actors, maxPrice, maxRuntime 
             <label style={{ display:"block", fontSize:"11px", textTransform:"uppercase", letterSpacing:"0.06em", color:"var(--text-muted)", marginBottom:"5px" }}>
               Max price: {get("priceMax") ? `${get("priceMax")} kr` : "Any"}
             </label>
-            <input type="range" min={0} max={maxPrice} step={5}
+            <input title="m-price" type="range" min={0} max={maxPrice} step={5}
               value={get("priceMax") || maxPrice}
               onChange={(e) => update({ priceMax: e.target.value === String(maxPrice) ? "" : e.target.value })}
               style={{ width:"100%", accentColor:"var(--gold)" }} />
@@ -181,7 +186,7 @@ export function BrowseFilters({ genres, directors, actors, maxPrice, maxRuntime 
             get("yearMax")    && { key:"yearMax",      label:`To ${get("yearMax")}` },
             get("runtimeMax") && { key:"runtimeMax",   label:`≤${get("runtimeMax")} min` },
             get("priceMax")   && { key:"priceMax",     label:`≤${get("priceMax")} kr` },
-          ].filter(Boolean).map((chip: any) => (
+          ].filter((chip): chip is ChipProps => Boolean(chip)).map(chip => (
             <button key={chip.key} onClick={() => update({ [chip.key]: "" })}
               style={{ display:"inline-flex", alignItems:"center", gap:"4px", padding:"3px 10px", borderRadius:"20px", fontSize:"11px", border:"1px solid rgba(232,160,48,0.4)", background:"rgba(232,160,48,0.08)", color:"var(--gold)", cursor:"pointer" }}>
               {chip.label} <X size={10}/>

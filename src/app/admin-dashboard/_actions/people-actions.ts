@@ -9,7 +9,7 @@ import { headers } from "next/headers";
 
 async function requireAdmin() {
   const session = await auth.api.getSession({ headers: await headers() });
-  return (session?.user as any)?.role === "ADMIN" ? session : null;
+  return session?.user?.role === "ADMIN" ? session : null;
 }
 
 export async function createDirector(name: string) {
