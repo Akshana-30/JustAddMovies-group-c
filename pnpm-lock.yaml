@@ -80,6 +80,9 @@ importers:
       react-email:
         specifier: ^6.0.0
         version: 6.0.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      react-hook-form:
+        specifier: ^7.75.0
+        version: 7.75.0(react@19.2.4)
       react-resizable-panels:
         specifier: ^4.10.0
         version: 4.10.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -4539,6 +4542,12 @@ packages:
     resolution: {integrity: sha512-DZkFbOiSPjXz76GOuNj/9odFxO3zPd5eyNes+MTbya/8rpzmWFYjoF02d9wxbUV/y+TE96/Nc9IBPWYsht9KGQ==}
     engines: {node: '>=20.0.0'}
     hasBin: true
+
+  react-hook-form@7.75.0:
+    resolution: {integrity: sha512-Ovv94H+0p3sJ7B9B5QxPuCP1u8V/cHuVGyH55cSwodYDtoJwK+fqk3vjfIgSX59I2U/bU4z0nRJ9HMLpNiWEmw==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18 || ^19
 
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
@@ -9670,6 +9679,10 @@ snapshots:
       - react-dom
       - supports-color
       - utf-8-validate
+
+  react-hook-form@7.75.0(react@19.2.4):
+    dependencies:
+      react: 19.2.4
 
   react-is@16.13.1: {}
 

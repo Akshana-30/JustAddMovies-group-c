@@ -70,9 +70,13 @@ export default function OrderTable({ data }: Props) {
       cell: (info) => {
         const id = info.getValue<string>();
         return (
-          <Link className="text-blue-400 text-xs" href={`/orders/${id}`}>
+          <span><Button variant="outline" size="xs" asChild>
+              <Link href={`/orders/${id}/edit/`}>Edit</Link>
+            </Button>
+          <Link className="text-blue-400 text-xs pl-2" href={`/orders/${id}`}>
             {id}
-          </Link>
+          </Link></span>
+          
         );
       },
     },
