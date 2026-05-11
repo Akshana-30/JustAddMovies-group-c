@@ -27,7 +27,7 @@ export function AdminGenresTable({ genres }: { genres: Genre[] }) {
       const result = editing
         ? await updateGenre(editing.id, { name, description })
         : await createGenre({ name, description });
-      if (!(result as any).success) { setError((result as any).error ?? "Error"); return; }
+      if (!result.success) { setError(result.error ?? "Error"); return; }
       setShowForm(false);
       window.location.reload();
     });
@@ -84,7 +84,7 @@ export function AdminGenresTable({ genres }: { genres: Genre[] }) {
               <h2 style={{ fontFamily:"var(--font-display)", fontSize:"1.2rem", letterSpacing:"0.08em", color:"var(--gold)" }}>
                 {editing ? "EDIT GENRE" : "ADD GENRE"}
               </h2>
-              <button onClick={() => setShowForm(false)} style={{ background:"transparent", border:"none", color:"var(--text-muted)", cursor:"pointer" }}><X size={18}/></button>
+              <button type="button" onClick={() => setShowForm(false)} style={{ background:"transparent", border:"none", color:"var(--text-muted)", cursor:"pointer" }}>{<X size={18}/>}</button>
             </div>
             {error && <div style={{ background:"rgba(248,113,113,0.1)", border:"1px solid rgba(248,113,113,0.3)", borderRadius:"6px", padding:"8px 12px", marginBottom:"14px", fontSize:"13px", color:"#f87171" }}>{error}</div>}
             <div style={{ display:"grid", gap:"12px" }}>

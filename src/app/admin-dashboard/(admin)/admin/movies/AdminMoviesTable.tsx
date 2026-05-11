@@ -80,7 +80,13 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
   function toggleOne(id: string) {
     setSelected((prev) => {
       const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
+      
+      if (next.has(id))
+         next.delete(id)
+
+      else  
+        next.add(id);
+
       return next;
     });
   }
@@ -125,7 +131,7 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
       const result = editing
         ? await updateMovie(editing.id, data)
         : await createMovie(data);
-      if (!(result as any).success) { setError((result as any).error ?? "Something went wrong"); return; }
+      if (!result.success) { setError(result.error ?? "Something went wrong"); return; }
       setShowForm(false);
       window.location.reload();
     });
@@ -155,7 +161,7 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
     if (!confirm(`Set price to ${priceSek} kr for ${selected.size} movie(s)?`)) return;
     startTransition(async () => {
       const result = await bulkUpdatePrice(Array.from(selected), priceOre);
-      if (!(result as any).success) { setBulkError((result as any).error ?? "Failed"); return; }
+      if (!result.success) { setBulkError(result.error ?? "Failed"); return; }
       setBulkSuccess(`Updated ${selected.size} movie(s) to ${priceSek} kr`);
       setBulkPrice("");
       setSelected(new Set());
@@ -289,6 +295,7 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
               {/* Select-all checkbox */}
               <th style={{ padding: "10px 12px", width: "36px" }}>
                 <input
+                  title="checkbox"
                   type="checkbox"
                   checked={allChecked}
                   onChange={toggleAll}
@@ -304,7 +311,7 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
           </thead>
           <tbody>
             {visible.length === 0 && (
-              <tr><td colSpan={7} style={{ padding: "32px", textAlign: "center", color: "var(--text-dim)", fontSize: "13px", fontStyle: "italic" }}>No movies match "{search}"</td></tr>
+              <tr><td colSpan={7} style={{ padding: "32px", textAlign: "center", color: "var(--text-dim)", fontSize: "13px", fontStyle: "italic" }}>No movies match &quot;{search}&quot;</td></tr>
             )}
             {visible.map((movie) => {
               const isChecked = selected.has(movie.id);
@@ -312,6 +319,7 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
                 <tr key={movie.id} style={{ borderBottom: `1px solid var(--border)`, background: isChecked ? "rgba(232,160,48,0.04)" : undefined }}>
                   <td style={{ padding: "10px 12px" }}>
                     <input
+                      title="checkbox"
                       type="checkbox"
                       checked={isChecked}
                       onChange={() => toggleOne(movie.id)}
@@ -384,7 +392,7 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
                 {editing ? "EDIT MOVIE" : "ADD MOVIE"}
               </h2>
               <button onClick={() => setShowForm(false)} style={{ background: "transparent", border: "none", color: "var(--text-muted)", cursor: "pointer" }}>
-                <X size={20} />
+                {<X size={20} />}
               </button>
             </div>
 

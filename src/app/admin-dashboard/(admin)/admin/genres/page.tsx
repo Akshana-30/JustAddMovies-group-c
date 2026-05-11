@@ -18,7 +18,7 @@ export default async function AdminGenresPage() {
       <p className="mb-6 font-serif italic" style={{ color: "var(--text-muted)" }}>
         {genres.length} genres
       </p>
-      <AdminGenresTable genres={genres as any} />
+      <AdminGenresTable genres={genres} />
     </div>
   );
 }

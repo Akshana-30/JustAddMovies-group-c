@@ -14,7 +14,7 @@ import { z } from "zod";
 async function requireAdmin() {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) return null;
-  if ((session.user as any).role !== "ADMIN") return null;
+  if (session?.user?.role !== "ADMIN") return null;
   return session;
 }
 

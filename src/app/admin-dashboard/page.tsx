@@ -6,9 +6,9 @@ export default async function AdminDashboardRoot() {
   const session = await auth.api.getSession({ headers: await headers() });
 
   if (!session) {
-    redirect("/auth/sign-in?callbackUrl=/admin-dashboard");
+    redirect("/sign-in?callbackUrl=/admin-dashboard");
   }
 
-  const isAdmin = (session.user as any)?.role === "ADMIN";
+  const isAdmin = session?.user.role === "ADMIN";
   redirect(isAdmin ? "/admin-dashboard/admin" : "/admin-dashboard/dashboard");
 }

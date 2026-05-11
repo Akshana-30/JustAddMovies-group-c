@@ -22,7 +22,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) redirect("/auth/sign-in?callbackUrl=/admin-dashboard/admin");
 
-  const role = (session.user as any).role;
+  const role = session?.user.role;
   if (role !== "ADMIN") redirect("/");
 
   const counts = await getAdminCounts();

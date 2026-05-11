@@ -97,16 +97,22 @@ export function TmdbImportClient() {
 
   function resetFeedback() { setError(""); setMessage(null); setBulkLog([]); setDupWarning(new Map()); }
 
-  async function runSearch(fn: () => Promise<any>) {
+  type SearchProps = {
+    success: boolean;
+    data?: SearchResult[];
+    error?: string;
+  }
+
+  async function runSearch(fn: () => Promise<SearchProps>) {
     resetFeedback(); setResults([]); setSelected(new Set()); setPreview(null);
     startTransition(async () => {
       const result = await fn();
-      if ((result as any).success) {
-        const data = (result as any).data as SearchResult[];
+      if (result?.success) {
+        const data = result?.data as SearchResult[];
         setResults(data);
         if (data.length === 0) setError("No results found");
       } else {
-        setError((result as any).error);
+        setError(result?.error ?? "Unknown error");
       }
     });
   }
@@ -130,10 +136,10 @@ export function TmdbImportClient() {
     startTransition(async () => {
       const result = await previewTmdbMovie(tmdbId);
       setLoadingPreview(null);
-      if ((result as any).success) {
-        setPreview({ tmdbId, data: (result as any).data });
+      if (result?.success) {
+        setPreview({ tmdbId, data: result?.data });
       } else {
-        setError((result as any).error);
+        setError(result?.error);
       }
     });
   }
@@ -149,15 +155,15 @@ export function TmdbImportClient() {
     if (!force) resetFeedback();
     startTransition(async () => {
       const result = await importFromTmdb(tmdbId, price * 100, force);
-      if ((result as any).success) {
+      if (result?.success) {
         setImported((prev) => new Set([...prev, tmdbId]));
         setDupWarning((prev) => { const m = new Map(prev); m.delete(tmdbId); return m; });
-        setMessage({ ok: true, text: `✓ "${(result as any).data.title}" imported!` });
+        setMessage({ ok: true, text: `✓ "${result?.data.title}" imported!` });
         if (preview?.tmdbId === tmdbId) setPreview(null);
-      } else if ((result as any).isDuplicate) {
-        setDupWarning((prev) => new Map(prev).set(tmdbId, (result as any).error));
+      } else if ("isDuplicate" in result && result.isDuplicate) {
+        setDupWarning((prev) => new Map(prev).set(tmdbId, result?.error));
       } else {
-        setMessage({ ok: false, text: (result as any).error });
+        setMessage({ ok: false, text: result?.error });
       }
     });
   }
@@ -168,14 +174,14 @@ export function TmdbImportClient() {
     resetFeedback(); setPreview(null);
     startTransition(async () => {
       const result = await bulkImportFromTmdb(ids, price * 100);
-      if ((result as any).success) {
-        const log = (result as any).data as { tmdbId: number; title: string; ok: boolean; error?: string }[];
+      if (result?.success) {
+        const log = result?.data as { tmdbId: number; title: string; ok: boolean; error?: string }[];
         setBulkLog(log);
         setImported((prev) => new Set([...prev, ...log.filter((l) => l.ok).map((l) => l.tmdbId)]));
         setSelected(new Set());
         setMessage({ ok: true, text: `Imported ${log.filter((l) => l.ok).length} of ${log.length} movies` });
       } else {
-        setError((result as any).error);
+        setError(result?.error);
       }
     });
   }
@@ -201,15 +207,17 @@ export function TmdbImportClient() {
           {tabItems.map((t) => {
             const active = tab === t.id;
             return (
-                <button key={t.id} onClick={() => { setTab(t.id); setResults([]); setPreview(null); setError(""); }}
+                <button type="button" key={t.id} onClick={() => { setTab(t.id); setResults([]); setPreview(null); setError(""); }}
                         style={{ display:"inline-flex", alignItems:"center", gap:"6px", padding:"7px 16px", borderRadius:"6px", fontSize:"13px", cursor:"pointer", fontWeight: active ? 500 : 400, background: active ? "var(--gold)" : "var(--surface)", border:`1px solid ${active ? "var(--gold)" : "var(--border)"}`, color: active ? "var(--black)" : "var(--text-muted)", transition:"all 0.15s", boxShadow: active ? "0 0 12px rgba(232,160,48,0.35)" : "none" }}>
                   {t.icon} {t.label}
                 </button>
             );
           })}
           <div style={{ marginLeft:"auto", display:"flex", alignItems:"center", gap:"8px" }}>
-            <label style={{ fontSize:"12px", color:"var(--text-muted)", whiteSpace:"nowrap" }}>Price (kr)</label>
-            <input type="number" value={price} min={1} max={999}
+            <label htmlFor="price" style={{ fontSize:"12px", color:"var(--text-muted)", whiteSpace:"nowrap" }}>Price (kr)</label>
+            <input 
+                  id="price"
+                  type="number" value={price} min={1} max={999}
                    onChange={(e) => setPrice(Number(e.target.value))}
                    style={{ ...IS, width:"72px" }} />
           </div>
@@ -249,21 +257,21 @@ export function TmdbImportClient() {
                   <input style={IS} type="number" min={1900} max={2025} value={yearTo} onChange={(e) => setYearTo(e.target.value)} placeholder="2024" />
                 </div>
                 <div>
-                  <label style={{ display:"block", fontSize:"11px", color:"var(--text-muted)", marginBottom:"4px", textTransform:"uppercase", letterSpacing:"0.06em" }}>Genre</label>
-                  <select style={IS} value={genreName} onChange={(e) => setGenreName(e.target.value)}>
+                  <label htmlFor="genre" style={{ display:"block", fontSize:"11px", color:"var(--text-muted)", marginBottom:"4px", textTransform:"uppercase", letterSpacing:"0.06em" }}>Genre</label>
+                  <select id="genre" style={IS} value={genreName} onChange={(e) => setGenreName(e.target.value)}>
                     <option value="">Any genre</option>
                     {TMDB_GENRES.map((g) => <option key={g} value={g}>{g}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label style={{ display:"block", fontSize:"11px", color:"var(--text-muted)", marginBottom:"4px", textTransform:"uppercase", letterSpacing:"0.06em" }}>Min rating ★</label>
-                  <select style={IS} value={ratingMin} onChange={(e) => setRatingMin(Number(e.target.value))}>
+                  <label htmlFor="min-rating" style={{ display:"block", fontSize:"11px", color:"var(--text-muted)", marginBottom:"4px", textTransform:"uppercase", letterSpacing:"0.06em" }}>Min rating ★</label>
+                  <select id="min-rating" style={IS} value={ratingMin} onChange={(e) => setRatingMin(Number(e.target.value))}>
                     {RATINGS.map((r) => <option key={r.value} value={r.value}>{r.label}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label style={{ display:"block", fontSize:"11px", color:"var(--text-muted)", marginBottom:"4px", textTransform:"uppercase", letterSpacing:"0.06em" }}>Sort by</label>
-                  <select style={IS} value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+                  <label htmlFor="sort-by" style={{ display:"block", fontSize:"11px", color:"var(--text-muted)", marginBottom:"4px", textTransform:"uppercase", letterSpacing:"0.06em" }}>Sort by</label>
+                  <select id="sort-by" style={IS} value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
                     {SORT_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
                   </select>
                 </div>
@@ -305,8 +313,8 @@ export function TmdbImportClient() {
                 <h3 style={{ fontFamily:"var(--font-display)", fontSize:"1rem", letterSpacing:"0.08em", color:"var(--gold)" }}>
                   PREVIEW: {preview.data.title}
                 </h3>
-                <button onClick={() => setPreview(null)} style={{ background:"transparent", border:"none", color:"var(--text-muted)", cursor:"pointer" }}>
-                  <X size={16}/>
+                <button type="button" onClick={() => setPreview(null)} style={{ background:"transparent", border:"none", color:"var(--text-muted)", cursor:"pointer" }}>
+                  {<X size={16}/>}
                 </button>
               </div>
               <div style={{ padding:"16px 18px", display:"flex", gap:"16px" }}>
@@ -467,10 +475,10 @@ export function TmdbImportClient() {
                             Import anyway
                           </button>
                           <button
-                            onClick={(e) => { e.stopPropagation(); setDupWarning((prev) => { const m = new Map(prev); m.delete(movie.id); return m; }); }}
+                            type="button" onClick={(e) => { e.stopPropagation(); setDupWarning((prev) => { const m = new Map(prev); m.delete(movie.id); return m; }); }}
                             style={{ padding:"4px 8px", borderRadius:"4px", border:"none", background:"transparent", color:"var(--text-dim)", fontSize:"12px", cursor:"pointer" }}
                           >
-                            <X size={12}/>
+                            {<X size={12}/>}
                           </button>
                         </div>
                       )}

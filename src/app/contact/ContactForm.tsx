@@ -51,7 +51,7 @@ export function ContactForm() {
             Message Sent!
           </p>
           <p className="mt-2 text-sm" style={{ color: "var(--text-muted)" }}>
-            We'll get back to you within 1–2 business days.
+            We&apos;ll get back to you within 1–2 business days.
           </p>
           <button
             onClick={() => setSent(false)}
