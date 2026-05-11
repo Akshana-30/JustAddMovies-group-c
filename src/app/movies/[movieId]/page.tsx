@@ -1,4 +1,3 @@
-import { Card } from "@/components/ui/card";
 import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Image from "next/image";
@@ -22,7 +21,7 @@ async function MovieDetailsPage(props: PageProps<"/movies/[movieId]">) {
     <div className="pt-4">
       <MovBanner
         imageUrl={movie.imageUrl}
-        className=" bg-black/50 bg-blend-multiply"
+        className="text-white dark:bg-black/50 bg-blend-multiply"
       >
         <div className="lg:flex flex-column  xl:flex justify-evenly gap-2">
           <div className="max-w-2xl p-5 ">
@@ -36,14 +35,14 @@ async function MovieDetailsPage(props: PageProps<"/movies/[movieId]">) {
           </div>
           <div className="max-w-2xl ">
             <h1 className=" text-4xl font-bold py-5 ">{movie.title}</h1>
-            <div className="flex justify-start gap-5 text-secondary-foreground/50">
+            <div className="flex justify-start gap-5 text-white/70">
               <p>{movie.releaseDate.toString().slice(11, 15)}</p>
               <p>|</p>
               <p>{movie.runtime} mins</p>
             </div>
 
             <h4 className="text-xl pt-5">Synopsis:</h4>
-            <p className="text-foreground  font-medium pt-5">
+            <p className="  font-medium pt-5">
               {movie.description}
             </p>
             <div className="flex gap-2 flex-wrap pt-5">
@@ -60,7 +59,8 @@ async function MovieDetailsPage(props: PageProps<"/movies/[movieId]">) {
 
             <p className="pt-10 whitespace-pre-line text-xl mb-2">
               {formatPrice(movie.price)}
-            </p><br />
+            </p>
+            <br />
             <AddToCartButton productId={movie.id} productTitle={movie.title} />
           </div>
         </div>

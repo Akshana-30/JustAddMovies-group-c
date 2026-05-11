@@ -15,7 +15,9 @@ import { SignOutButton } from "../auth/sign-out-button";
 import { ModeToggle } from "./mode-togggle";
 import { getCart } from "@/lib/cart";
 import { getCartProducts } from "@/lib/cart-types";
+import { SearchBar } from "./search-bar";
 import { Separator } from "../ui/separator";
+
 //
 export async function NavBar() {
   const session = await auth.api.getSession({
@@ -65,13 +67,7 @@ export async function NavBar() {
         </li>
 
         <li className="ml-auto flex items-center mr-2">
-          <InputGroup className="bg-secondary text-black rounded-2xl">
-            <InputGroupInput placeholder="Search..." />
-
-            <InputGroupAddon>
-              <SearchIcon />
-            </InputGroupAddon>
-          </InputGroup>
+        <SearchBar/>
         </li>
 
         {session ? (

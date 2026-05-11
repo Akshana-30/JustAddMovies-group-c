@@ -46,7 +46,7 @@ export default function MovieCardWithHover({ imageUrl, title, genres, descriptio
           hovered ? "opacity-100" : "opacity-0"
         )}
       >
-        <h2 className={cn("text-white font-bold text-sm mb-1")}></h2>
+        <h2 className={cn("text-white font-bold text-sm mb-1")}>{title}</h2>
 
         <div className={cn("flex flex-wrap gap-1 mb-2")}>
           {genres.map((g) => (

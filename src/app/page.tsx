@@ -8,21 +8,30 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import MovieCard from "@/components/body/movie-card-with-hover";
-import Image from "next/image";
-import { Card, CardContent } from "@/components/ui/card";
+
 import { Suspense } from "react";
 import { EmailApprovedToast } from "@/components/auth/email-approved-toast";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 
-async function LandingPage() {
+import MovieCardWithHover from "@/components/body/movie-card-with-hover";
+import { GenreCard } from "@/components/body/genre-card";
+import { Card } from "@/components/ui/card";
+
+async function LandingPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
   const latestMovie = await prisma.movie.findMany({
     take: 10,
     orderBy: { releaseDate: "desc" },
-    include: { genres: { select: { name: true } } },
+    include: {
+      genres: { select: { name: true } },
+      actors: { select: { name: true } },
+      directors: { select: { name: true } },
+    },
   });
 
+ 
   const mostPurchased = await prisma.movie.findMany({
     take: 10,
     orderBy: {
@@ -62,7 +71,7 @@ async function LandingPage() {
 
   return (
     <div className="pt-2 overflow-hidden p-8">
-      <div className=" flex justify-between gap-4 w-full max-md:flex-col ">
+      <div className=" flex justify-between gap-4 w-full max-md:flex-col pb-5">
         <div className="lg:w-[85%] max-lg: w-full">
           <Carousel className="w-full border-amber-300/50 border rounded-2xl">
             <CarouselContent>
@@ -72,13 +81,13 @@ async function LandingPage() {
                     imageUrl={latest.imageUrl}
                     className="relative p-0"
                   >
-                    <div className="bg-linear-to-r from-white via-white/10 to-transparent dark:bg-linear-to-r dark:from-black dark:via-black/10 darkto-transparent rounded-3xl h-150">
+                    <div className=" bg-linear-to-r from-black via-black/10 to-transparent rounded-3xl h-150">
                       <div className="pt-100 p-10 flex text-left flex-col max-w-150">
-                        <h1 className="text-4xl text-foreground font-bold z-10">
+                        <h1 className="text-4xl text-white font-bold z-10">
                           {latest.title}
                         </h1>
                         <br />
-                        <p>
+                        <p className="text-white/70">
                           {latest.description
                             .split(" ")
                             .slice(0, 15)
@@ -102,48 +111,49 @@ async function LandingPage() {
           </Carousel>
         </div>
 
+               
+        
         <div className="lg:w-[40%] max-lg: w-full ">
-          <Card className="border-amber-300/50 border flex-row! flex-wrap content-start gap-2 p-2 overflow-y-auto bg-background/10 h-150 max-md:h-25">
-            {genres.map((genre) => (
-              <Button
-                className="w-fit bg-amber-300/60 hover:bg-amber-300/70"
-                key={genre.id}
-              >
-                {genre.name}
-              </Button>
-            ))}
-          </Card>
+          
+            <Card  className="border-amber-300/50 border flex-row! flex-wrap content-start gap-2 p-2 overflow-y-auto bg-primary/20 h-150 max-md:h-25">
+{genres.map((genre)=>( 
+ <GenreCard key= {genre.id} name = {genre.name}></GenreCard>
+ ))}
+ </Card>
+
         </div>
+        
       </div>
       <Suspense>
         <EmailApprovedToast />
       </Suspense>
 
+      {/* top ten newest */}
+      <div className="max-w-[98%] rounded-4xl m-auto  p-5 gap-4 bg-secondary-foreground/7">
 
-        {/* top ten newest */}
         <Carousel
           opts={{
             align: "start",
             loop: true,
           }}
-          className="max-w-full px-15 "
+          className="max-w-full px-15"
         >
           <h1 className="px-5 pt-2 text-2xl">New Releases </h1>
-          <CarouselContent className="h-90">
+          <CarouselContent className="h-90 ">
             {latestMovie.map((movies) => (
               <CarouselItem
                 key={movies.id}
-                className="my-auto basis-3/5 lg:basis-1/6 "
+                className="my-auto basis-3/5 lg:basis-1/5 "
               >
                 <div className="p-0">
                   <div key={movies.id} className="flex justify-evenly gap-0">
-                    <MovieCard
+                    <MovieCardWithHover
                       imageUrl={movies.imageUrl}
                       description={movies.description}
                       genres={movies.genres}
                       title={movies.title}
                       id={movies.id}
-                    ></MovieCard>
+                    ></MovieCardWithHover>
                   </div>
                 </div>
               </CarouselItem>
@@ -152,15 +162,14 @@ async function LandingPage() {
           <CarouselPrevious
             variant="outline"
             size="icon-lg"
-            className="absolute left-4 top-1/2 z-10"
+            className="absolute left-4 top-55 z-10"
           />
           <CarouselNext
             size="icon-lg"
             className="absolute right-5
-           top-1/2 "
+           top-55 "
           />
         </Carousel>
-
         {/* most bought */}
         <Carousel
           opts={{
@@ -178,13 +187,13 @@ async function LandingPage() {
               >
                 <div className="p-0">
                   <div key={movies.id} className="flex justify-evenly gap-0">
-                    <MovieCard
+                    <MovieCardWithHover
                       imageUrl={movies.imageUrl}
                       description={movies.description}
                       genres={movies.genres}
                       title={movies.title}
                       id={movies.id}
-                    ></MovieCard>
+                    ></MovieCardWithHover>
                   </div>
                 </div>
               </CarouselItem>
@@ -193,15 +202,14 @@ async function LandingPage() {
           <CarouselPrevious
             variant="outline"
             size="icon-lg"
-            className="absolute left-4 top-1/2 z-10"
+            className="absolute left-4 top-55  z-10"
           />
           <CarouselNext
             size="icon-lg"
             className="absolute right-5
-           top-1/2 "
+           top-55  "
           />
         </Carousel>
-
         {/* old movies */}
         <Carousel
           opts={{
@@ -215,17 +223,17 @@ async function LandingPage() {
             {oldMovies.map((movies) => (
               <CarouselItem
                 key={movies.id}
-                className="my-auto basis-1/2 lg:basis-1/6 "
+                className="my-auto basis-1/2 lg:basis-1/5 "
               >
                 <div className="p-0">
                   <div key={movies.id} className="flex justify-evenly gap-0">
-                    <MovieCard
+                    <MovieCardWithHover
                       imageUrl={movies.imageUrl}
                       description={movies.description}
                       genres={movies.genres}
                       title={movies.title}
                       id={movies.id}
-                    ></MovieCard>
+                    ></MovieCardWithHover>
                   </div>
                 </div>
               </CarouselItem>
@@ -234,17 +242,15 @@ async function LandingPage() {
           <CarouselPrevious
             variant="outline"
             size="icon-lg"
-            className="absolute left-4 top-1/2 z-10"
+            className="absolute left-4 top-55 z-10"
           />
           <CarouselNext
             size="icon-lg"
             className="absolute right-5
-           top-1/2 "
+           top-55  "
           />
         </Carousel>
-
         {/* lowest price */}
-
         <Carousel
           opts={{
             align: "start",
@@ -261,13 +267,13 @@ async function LandingPage() {
               >
                 <div className="p-0">
                   <div key={movies.id} className="flex justify-evenly gap-0">
-                    <MovieCard
+                    <MovieCardWithHover
                       imageUrl={movies.imageUrl}
                       description={movies.description}
                       genres={movies.genres}
                       title={movies.title}
                       id={movies.id}
-                    ></MovieCard>
+                    ></MovieCardWithHover>
                   </div>
                 </div>
               </CarouselItem>
@@ -276,16 +282,16 @@ async function LandingPage() {
           <CarouselPrevious
             variant="outline"
             size="icon-lg"
-            className="absolute left-4 top-1/2 z-10"
+            className="absolute left-4 top-55  z-10"
           />
           <CarouselNext
             size="icon-lg"
             className="absolute right-5
-           top-1/2 "
+           top-55 "
           />
         </Carousel>
       </div>
-    
+    </div>
   );
 }
 

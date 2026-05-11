@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import React, { useState } from "react";
 import Image from "next/image";
@@ -28,17 +28,17 @@ export default function MovieCard({
 }: Props) {
   return (
     <Link href={`/movies/${id}`}>
-      <Card className="bg-background border-amber-300/50 border" size="default" {...props}>
+      <Card className="bg-background h-full border-amber-300/50 border" size="default" {...props}>
         <CardHeader className="">
           <Image
             src={imageUrl}
-            width={150}
-            height={150}
+            width={190}
+            height={190}
             alt={title}
             className="m-auto"
           />
         </CardHeader>
-        <CardContent>
+        <CardFooter className="h-full">
           <div className="pl-2">
             <h2 className={cn("text-card-foreground font-bold text-lg mb-1")}>{title}</h2>
             <div className={cn("flex flex-wrap gap-1 mb-2")}>
@@ -53,13 +53,13 @@ export default function MovieCard({
             </div>
             <div className=" m-auto">
               <p className="text-card-foreground text-[20px] leading-snug">
-                {price}kr
-              </p>
+                {price} kr
+              </p> <br />
               <p className="my-auto">In stock: {stock}</p>
             </div>
-          </div> <br />
-          <div><AddToCartButton productId={id} productTitle={title}></AddToCartButton></div>
-        </CardContent>
+          </div> 
+        </CardFooter >
+
       </Card>
     </Link>
   );

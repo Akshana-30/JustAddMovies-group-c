@@ -4,6 +4,7 @@ import "./globals.css";
 import { NavBar } from "@/components/header/nav-bar";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/header/theme-provider";
+import Footer from "@/components/footer";
 
 const fontSans = Poppins({
   subsets: ["latin"],
@@ -37,7 +38,7 @@ export default function RootLayout({
       className={`${fontSans.variable} ${fontSerif.variable} ${fontMono.variable} antialiased`}
       suppressHydrationWarning
     >
-      <body className="sm:h-full flex flex-col">
+      <body className="min-h-screen sm:h-full flex flex-col">
         <ThemeProvider attribute="class"
             defaultTheme="system"
             enableSystem
@@ -46,10 +47,12 @@ export default function RootLayout({
           <NavBar />
         </header>
 
-        <main>{children}</main>
+        <main className="flex-1">{children}</main>
         <Toaster />
+        <Footer/>
         </ThemeProvider>
       </body>
+      
     </html>
   );
 }

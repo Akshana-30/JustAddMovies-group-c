@@ -255,7 +255,7 @@
 
 @keyframes solidify {
   from {
-    background: linear-gradient(to bottom, oklch(65.586% 0.11841 88.071 / 0.441), var(--background));
+    background: linear-gradient(to bottom, oklch(52.277% 0.09152 90.292 / 0.318), var(--background));
     backdrop-filter: blur(0px);
     box-shadow: none;
   }
