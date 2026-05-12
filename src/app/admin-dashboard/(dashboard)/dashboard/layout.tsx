@@ -22,7 +22,7 @@ async function getDashboardCounts(userId: string) {
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const session = await auth.api.getSession({ headers: await headers() });
-  if (!session) redirect("/auth/sign-in?callbackUrl=/admin-dashboard/dashboard");
+  if (!session) redirect("/sign-in?callbackUrl=/admin-dashboard/dashboard");
 
   const counts = await getDashboardCounts(session.user.id);
 

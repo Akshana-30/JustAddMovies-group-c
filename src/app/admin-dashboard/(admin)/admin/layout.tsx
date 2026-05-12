@@ -20,7 +20,7 @@ async function getAdminCounts() {
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await auth.api.getSession({ headers: await headers() });
-  if (!session) redirect("/auth/sign-in?callbackUrl=/admin-dashboard/admin");
+  if (!session) redirect("/sign-in?callbackUrl=/admin-dashboard/admin");
 
   const role = session?.user.role;
   if (role !== "ADMIN") redirect("/");

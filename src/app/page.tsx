@@ -35,7 +35,7 @@ async function LandingPage({
   const mostPurchased = await prisma.movie.findMany({
     take: 10,
     orderBy: {
-      orderItem: {
+      order_items: {
         _count: "desc",
       },
     },
