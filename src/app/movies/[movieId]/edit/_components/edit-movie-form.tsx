@@ -32,8 +32,8 @@ import {
 import { editMovie } from "../_actions/movie-actions";
 import { fromOre, toOre } from "@/lib/format";
 import { useRouter } from "next/navigation";
-import React from "react";
-import DeleteMovieButton from "@/components/admin-buttons/delete-button";
+import React, { useState } from "react";
+import DeleteMovieButton, { RestoreMovieButton } from "@/components/admin-buttons/delete-button";
 import { actorList } from "@/lib/actors";
 import { directorList } from "@/lib/directors";
 import { toast } from "sonner";
@@ -51,6 +51,7 @@ type Props = {
     genres: string[];
     directors: string[];
     actors: string[];
+    deletedAt: Date | null
   };
 };
 const formSchema = z.object({
@@ -76,6 +77,7 @@ const formSchema = z.object({
 });
 
 export default function EditMovieForm({ movie }: Props) {
+  const [isDeleted, setIsDeleted] = useState(movie.deletedAt !== null);
   const anchor = useComboboxAnchor();
   const router = useRouter();
   const form = useForm({
@@ -101,7 +103,7 @@ export default function EditMovieForm({ movie }: Props) {
     },
   });
   return (
-    <Card className="max-w-3xl mx-auto bg-secondary shadow">
+    <Card className="max-w-3xl mx-auto bg-secondary border">
       <CardHeader>
         <CardDescription>Edit movie</CardDescription>
       </CardHeader>
@@ -157,30 +159,6 @@ export default function EditMovieForm({ movie }: Props) {
                 );
               }}
             </form.Field>
-            <form.Field name="price">
-              {(field) => {
-                const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid;
-                return (
-                  <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>Price</FieldLabel>
-                    <Input
-                      id={field.name}
-                      name={field.name}
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(ev) =>
-                        field.handleChange(Number(ev.target.value))
-                      }
-                      aria-invalid={isInvalid}
-                    />
-                    {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
-                    )}
-                  </Field>
-                );
-              }}
-            </form.Field>
             <form.Field name="releaseDate">
               {(field) => {
                 const isInvalid =
@@ -226,12 +204,37 @@ export default function EditMovieForm({ movie }: Props) {
                 );
               }}
             </form.Field>
+            <div className="flex gap-4">
+               <form.Field name="price">
+              {(field) => {
+                const isInvalid =
+                  field.state.meta.isTouched && !field.state.meta.isValid;
+                return (
+                  <Field data-invalid={isInvalid} className="flex 1">
+                    <FieldLabel htmlFor={field.name}>Price</FieldLabel>
+                    <Input
+                      id={field.name}
+                      name={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(ev) =>
+                        field.handleChange(Number(ev.target.value))
+                      }
+                      aria-invalid={isInvalid}
+                    />
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
+                  </Field>
+                );
+              }}
+            </form.Field>
             <form.Field name="stock">
               {(field) => {
                 const isInvalid =
                   field.state.meta.isTouched && !field.state.meta.isValid;
                 return (
-                  <Field data-invalid={isInvalid}>
+                  <Field data-invalid={isInvalid} className="flex 1">
                     <FieldLabel htmlFor={field.name}>Stock</FieldLabel>
                     <Input
                       id={field.name}
@@ -251,12 +254,14 @@ export default function EditMovieForm({ movie }: Props) {
                 );
               }}
             </form.Field>
+
+        
             <form.Field name="runtime">
               {(field) => {
                 const isInvalid =
                   field.state.meta.isTouched && !field.state.meta.isValid;
                 return (
-                  <Field data-invalid={isInvalid}>
+                  <Field data-invalid={isInvalid} className="flex 1">
                     <FieldLabel htmlFor={field.name}>
                       Runtime in minutes
                     </FieldLabel>
@@ -278,6 +283,7 @@ export default function EditMovieForm({ movie }: Props) {
                 );
               }}
             </form.Field>
+            </div>
             <form.Field name="genres">
               {(field) => {
                 const isInvalid =
@@ -426,7 +432,11 @@ export default function EditMovieForm({ movie }: Props) {
               >
                 Reset
               </Button>
-              <DeleteMovieButton movieId={movie.id} />
+              {isDeleted 
+  ? <RestoreMovieButton movieId={movie.id} onSuccess={() => setIsDeleted(false)} />
+  : <DeleteMovieButton movieId={movie.id} onSuccess={() => setIsDeleted(true)} />
+}
+              
             </Field>
           </FieldGroup>
         </form>

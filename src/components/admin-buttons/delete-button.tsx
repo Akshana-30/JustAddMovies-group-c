@@ -1,38 +1,63 @@
 "use client";
-import { deleteMovie } from "@/app/admin-dashboard/_actions/delete-action";
-import React from "react";
-import { useRouter } from "next/navigation";
+import {
+  deleteMovie,
+  restoreMovie,
+} from "@/app/admin-dashboard/_actions/delete-action";
+import React, { useTransition } from "react";
 import { Button } from "../ui/button";
+import { toast } from "sonner";
 
-type Props = React.ComponentProps<typeof Button> & { movieId: string };
+type Props = React.ComponentProps<typeof Button> & { movieId: string } & {
+  onSuccess?: () => void;
+};
 
 export default function DeleteMovieButton({
   movieId,
-  children,
-  disabled,
+  onSuccess,
   ...props
 }: Props) {
-    const [loading, setLoading] = React.useState(false);
-    const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
-    async function handleClick(){
-        const shouldDelete = confirm("Are you sure you want to delete this movie?");
-        if(!shouldDelete){
-            return;
-        }
-        setLoading(true)
-        await deleteMovie(movieId)
-        setLoading(false)
-        // toast.success("Deleted book from library.", { position: "bottom-right" }); not implemented yet
-        router.push(`/admin-dashboard`)
+  async function handleClick() {
+    const shouldDelete = confirm(
+      "Are you sure you want to archive this movie?",
+    );
+    if (!shouldDelete) {
+      return;
     }
-    return(
-        <Button
-        className="cursor-pointer"
-        variant="destructive"
-        onClick={handleClick}
-        disabled={loading || disabled}
-        {...props}
-        >{children || "Delete"}</Button>
-    )
+    await deleteMovie(movieId);
+    onSuccess?.();
+    toast.success("Archived movie.", { position: "bottom-right" });
+  }
+  return (
+    <Button
+      className="cursor-pointer"
+      variant="destructive"
+      onClick={() => startTransition(() => handleClick())}
+      disabled={isPending}
+      {...props}
+    >
+      {isPending ? "Adding to archive.." : "Move to archive"}
+    </Button>
+  );
+}
+
+export function RestoreMovieButton({ movieId, onSuccess, ...props }: Props) {
+  const [isPending, startTransition] = useTransition();
+  async function handleClick() {
+    await restoreMovie(movieId);
+    onSuccess?.();
+    toast.success("Movie restored.", { position: "bottom-right" });
+  }
+  return (
+    <Button
+      className="cursor-pointer"
+      variant="destructive"
+      onClick={() => startTransition(() => handleClick())}
+      disabled={isPending}
+      {...props}
+    >
+      {isPending ? "Restoring movie.." : "Restore"}
+    </Button>
+  );
 }

@@ -26,7 +26,6 @@ export default async function EditMoviePage(
   };
   return (
     <div>
-      <h1 className="text-4xl font-bold m-4">Edit movie</h1>
       <EditMovieForm movie={editMovie} />
     </div>
   );

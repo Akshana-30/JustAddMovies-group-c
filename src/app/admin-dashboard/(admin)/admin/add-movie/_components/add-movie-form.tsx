@@ -149,7 +149,7 @@ export default function AddMovieForm() {
                 );
               }}
             </form.Field>
-            <form.Field name="price">
+            {/* <form.Field name="price">
               {(field) => {
                 const isInvalid =
                   field.state.meta.isTouched && !field.state.meta.isValid;
@@ -172,7 +172,7 @@ export default function AddMovieForm() {
                   </Field>
                 );
               }}
-            </form.Field>
+            </form.Field> */}
             <form.Field name="releaseDate">
               {(field) => {
                 const isInvalid =
@@ -218,7 +218,87 @@ export default function AddMovieForm() {
                 );
               }}
             </form.Field>
-            <form.Field name="stock">
+            <div className="flex gap-4">
+                           <form.Field name="price">
+                          {(field) => {
+                            const isInvalid =
+                              field.state.meta.isTouched && !field.state.meta.isValid;
+                            return (
+                              <Field data-invalid={isInvalid} className="flex 1">
+                                <FieldLabel htmlFor={field.name}>Price</FieldLabel>
+                                <Input
+                                  id={field.name}
+                                  name={field.name}
+                                  value={field.state.value}
+                                  onBlur={field.handleBlur}
+                                  onChange={(ev) =>
+                                    field.handleChange(Number(ev.target.value))
+                                  }
+                                  aria-invalid={isInvalid}
+                                />
+                                {isInvalid && (
+                                  <FieldError errors={field.state.meta.errors} />
+                                )}
+                              </Field>
+                            );
+                          }}
+                        </form.Field>
+                        <form.Field name="stock">
+                          {(field) => {
+                            const isInvalid =
+                              field.state.meta.isTouched && !field.state.meta.isValid;
+                            return (
+                              <Field data-invalid={isInvalid} className="flex 1">
+                                <FieldLabel htmlFor={field.name}>Stock</FieldLabel>
+                                <Input
+                                  id={field.name}
+                                  name={field.name}
+                                  type="number"
+                                  value={field.state.value}
+                                  onBlur={field.handleBlur}
+                                  onChange={(ev) =>
+                                    field.handleChange(Number(ev.target.value))
+                                  }
+                                  aria-invalid={isInvalid}
+                                />
+                                {isInvalid && (
+                                  <FieldError errors={field.state.meta.errors} />
+                                )}
+                              </Field>
+                            );
+                          }}
+                        </form.Field>
+            
+                    
+                        <form.Field name="runtime">
+                          {(field) => {
+                            const isInvalid =
+                              field.state.meta.isTouched && !field.state.meta.isValid;
+                            return (
+                              <Field data-invalid={isInvalid} className="flex 1">
+                                <FieldLabel htmlFor={field.name}>
+                                  Runtime in minutes
+                                </FieldLabel>
+                                <Input
+                                  id={field.name}
+                                  name={field.name}
+                                  type="number"
+                                  value={field.state.value}
+                                  onBlur={field.handleBlur}
+                                  onChange={(ev) =>
+                                    field.handleChange(Number(ev.target.value))
+                                  }
+                                  aria-invalid={isInvalid}
+                                />
+                                {isInvalid && (
+                                  <FieldError errors={field.state.meta.errors} />
+                                )}
+                              </Field>
+                            );
+                          }}
+                        </form.Field>
+                        </div>
+            {/* <form.Field name="stock">
               {(field) => {
                 const isInvalid =
                   field.state.meta.isTouched && !field.state.meta.isValid;
@@ -269,7 +349,7 @@ export default function AddMovieForm() {
                   </Field>
                 );
               }}
-            </form.Field>
+            </form.Field> */}
             <form.Field name="genres">
               {(field) => {
                 const isInvalid =
