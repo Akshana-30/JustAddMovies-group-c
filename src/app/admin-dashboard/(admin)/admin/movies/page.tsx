@@ -32,7 +32,7 @@ export default async function AdminMoviesPage() {
           </p>
         </div>
       </div>
-      <AdminMoviesTable movies={movies as any} archived={archived as any} genres={genres} />
+      <AdminMoviesTable movies={movies} archived={archived} genres={genres} />
     </div>
   );
 }

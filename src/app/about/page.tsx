@@ -23,8 +23,8 @@ export default function AboutPage() {
           Just Add <span style={{ color: "var(--gold)" }}>Movies</span>
         </h1>
         <p className="mx-auto mt-4 max-w-xl font-serif text-lg italic" style={{ color: "var(--text-muted)" }}>
-          "We believe great cinema should be owned, not rented.
-          Built by film lovers, for film lovers."
+          We believe great cinema should be owned, not rented.
+          Built by film lovers, for film lovers.
         </p>
       </div>
 
@@ -34,7 +34,7 @@ export default function AboutPage() {
         <p>
           Just Add Movies is a curated digital storefront for film enthusiasts who want to
           own — not rent — their favourite cinema. We source titles spanning every era and
-          genre, from silent-era masterpieces to this season's awards contenders, and make
+          genre, from silent-era masterpieces to this seasons awards contenders, and make
           them available at honest prices. Every purchase is tied permanently to your account.
         </p>
       </div>
