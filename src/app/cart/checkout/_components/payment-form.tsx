@@ -229,12 +229,14 @@ export default function PaymentForm() {
                   name="expires"
                   validators={{
                     onChange: ({ value }) => {
+                      const now = new Date();
                       if (!value) return "Expiry is required";
                       if (!/^\d{2}\/\d{2}$/.test(value))
                         return "Use MM/YY format";
                       const [mm, yy] = value.split("/").map(Number);
+                      const currentYY = now.getFullYear() % 100;
                       if (mm < 1 || mm > 12) return "Invalid month";
-                      const now = new Date();
+                      if(yy > currentYY + 5) return "Invalid year";
                       const expDate = new Date(2000 + yy, mm - 1, 1);
                       if (
                         expDate < new Date(now.getFullYear(), now.getMonth(), 1)
@@ -342,7 +344,7 @@ export default function PaymentForm() {
                 name="streetAdress"
                 validators={{
                   onChange: ({ value }) => {
-                    if (!value) return "Email is required";
+                    if (!value) return "Street is required";
                     return undefined;
                   },
                 }}
@@ -383,7 +385,7 @@ export default function PaymentForm() {
                   name="city"
                   validators={{
                     onChange: ({ value }) => {
-                      if (!value) return "Email is required";
+                      if (!value) return "City is required";
                       return undefined;
                     },
                   }}
@@ -422,7 +424,7 @@ export default function PaymentForm() {
                   name="zip"
                   validators={{
                     onChange: ({ value }) => {
-                      if (!value) return "Email is required";
+                      if (!value) return "Zip is required";
                       return undefined;
                     },
                   }}
