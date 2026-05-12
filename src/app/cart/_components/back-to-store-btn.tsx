@@ -9,7 +9,7 @@ export default function BackToStore() {
   const [isPending, startTransition] = useTransition();
 
   function handleClick() {
-    router.push("/store");
+    router.push("/movies");
   }
   return (
     <Button
