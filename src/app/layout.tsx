@@ -41,8 +41,7 @@ export default function RootLayout({
       <body className="min-h-screen sm:h-full flex flex-col">
         <ThemeProvider attribute="class"
             defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange>
+            enableSystem>
         <header className="sticky top-0 z-50">
           <NavBar />
         </header>

@@ -32,8 +32,8 @@ export function ContactForm() {
   }
 
   const inputStyle = {
-    background: "var(--surface)",
-    borderColor: "var(--border)",
+    background: "var(--popover)",
+    borderColor: "var(--border-strong)",
     color: "var(--text)",
   };
   const inputCls = "w-full rounded border px-3 py-2.5 text-sm outline-none transition-colors focus:border-gold";
@@ -50,7 +50,7 @@ export function ContactForm() {
           <p className="mt-3 font-display text-xl tracking-wide" style={{ color: "var(--gold)" }}>
             Message Sent!
           </p>
-          <p className="mt-2 text-sm" style={{ color: "var(--text-muted)" }}>
+          <p className="mt-2 text-sm" style={{ color: "var(--gold)" }}>
             We&apos;ll get back to you within 1–2 business days.
           </p>
           <button
@@ -69,25 +69,25 @@ export function ContactForm() {
     <form onSubmit={handleSubmit(onSubmit)} className="contact-form">
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="form-field">
-          <label className={labelCls} style={{ color: "var(--text-muted)" }}>Your Name</label>
+          <label className={labelCls} style={{ color: "var(--gold)" }}>Your Name</label>
           <input className={inputCls} style={inputStyle} placeholder="Jane Doe" {...register("name")} />
           {errors.name && <p className="mt-1 text-xs text-red-400">{errors.name.message}</p>}
         </div>
         <div className="form-field">
-          <label className={labelCls} style={{ color: "var(--text-muted)" }}>Email Address</label>
+          <label className={labelCls} style={{ color: "var(--gold)" }}>Email Address</label>
           <input type="email" className={inputCls} style={inputStyle} placeholder="jane@example.com" {...register("email")} />
           {errors.email && <p className="mt-1 text-xs text-red-400">{errors.email.message}</p>}
         </div>
       </div>
 
       <div className="form-field">
-        <label className={labelCls} style={{ color: "var(--text-muted)" }}>Subject</label>
+        <label className={labelCls} style={{ color: "var(--gold)" }}>Subject</label>
         <input className={inputCls} style={inputStyle} placeholder="What's on your mind?" {...register("subject")} />
         {errors.subject && <p className="mt-1 text-xs text-red-400">{errors.subject.message}</p>}
       </div>
 
       <div className="form-field">
-        <label className={labelCls} style={{ color: "var(--text-muted)" }}>Message</label>
+        <label className={labelCls} style={{ color: "var(--gold)" }}>Message</label>
         <textarea
           rows={6}
           className={inputCls}
@@ -101,7 +101,7 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={isPending}
-        className="flex items-center gap-2 rounded px-6 py-2.5 text-sm font-medium transition-colors hover:opacity-90 disabled:opacity-50"
+        className="inline-flex self-start items-center gap-2 rounded px-3 py-1 text-xs font-medium transition-colors hover:opacity-90 disabled:opacity-50 -mt-2"
         style={{ background: "var(--gold)", color: "#000" }}
       >
         {isPending ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}

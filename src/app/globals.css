@@ -229,16 +229,27 @@
   --gold-light:   #F5C46A;
   --gold-dim:     #8A5E1A;
   --red:          #C0392B;
+  --font-display: 'Bebas Neue', sans-serif;
+  --black:         #080C10;
+  --navy:          #0A0F18;
+  --border-strong: rgba(232,160,48,0.35);
+  /* Light-mode surface/text values (creamy) */
+  --surface:      #ede8de;
+  --surface2:     #e5dfd3;
+  --surface3:     #ddd7c8;
+  --text:         #111111;
+  --text-muted:   #5a5048;
+  --text-dim:     #8a8070;
+}
+
+.dark {
+  /* Dark-mode cinema surface/text values */
   --surface:      #111820;
   --surface2:     #1A242F;
   --surface3:     #222E3C;
   --text:         #E8E0D0;
   --text-muted:   #8A8070;
   --text-dim:     #5A5548;
-  --font-display: 'Bebas Neue', sans-serif;
-  --black:         #080C10;
-  --navy:          #0A0F18;
-  --border-strong: rgba(232,160,48,0.35);
 }
 
 .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--text-dim); font-size: 13px; text-decoration: none; cursor: pointer; margin-bottom: 1.5rem; transition: color 0.15s; }
@@ -268,6 +279,22 @@
 .team-name { font-weight: 500; font-size: 13px; color: var(--text); }
 .team-role { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
 .divider { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+/* ── Contact form styles ── */
+.contact-form { display: flex; flex-direction: column; gap: 1.45rem; max-width: 560px; }
+.form-field { display: flex; flex-direction: column; gap: 6px; }
+.form-field label { font-size: 12px; letter-spacing: 0.04em; }
+.form-field input, .form-field textarea { background: var(--popover); border: 1px solid var(--border-strong); border-radius: 4px; color: var(--text); font-size: 14px; padding: 10px 14px; outline: none; transition: border-color 0.15s; resize: vertical; }
+.form-field input:focus, .form-field textarea:focus { border-color: var(--gold); }
+
+/* ── View transition ripple — suppress default cross-fade ── */
+@supports (view-transition-name: none) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+}
 
 @keyframes solidify {
   from {

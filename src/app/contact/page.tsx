@@ -28,8 +28,8 @@ export default function ContactPage() {
           ].map((item) => (
             <div
               key={item.title}
-              className="rounded-xl border p-4"
-              style={{ background: "var(--surface)", borderColor: "var(--border)" }}
+              className="rounded-xl border p-4 mt-7"
+              style={{ background: "var(--popover)", borderColor: "var(--border-strong)", boxShadow: "0 2px 12px rgba(0,0,0,0.07)" }}
             >
               <div className="mb-2 flex items-center gap-2 font-display text-sm tracking-widest"
                 style={{ color: "var(--gold)" }}>
