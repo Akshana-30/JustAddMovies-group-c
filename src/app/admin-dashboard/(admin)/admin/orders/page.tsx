@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 export default async function Page() {
   const data = await prisma.order.findMany({
     include: {
-      order_items: {
+      orderItem: {
         include: {
           movies: true,
         },

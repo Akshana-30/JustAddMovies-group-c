@@ -18,7 +18,7 @@ export const users = await prisma.user.findMany({
 				totalAmount: true,
 				status: true,
 				orderDate: true,
-				order_items: { select: { quantity: true } },
+				orderItem: { select: { quantity: true } },
 			},
 		},
 	},

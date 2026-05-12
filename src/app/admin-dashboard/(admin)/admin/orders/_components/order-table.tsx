@@ -25,7 +25,7 @@ import { ArrowUpDown } from "lucide-react";
 import { useTransition } from "react";
 
 type OrderType = ({
-  order_items: ({
+  orderItem: ({
     movies: {
       id: string;
       title: string;
@@ -124,7 +124,7 @@ export default function OrderTable({ data }: Props) {
       id: "quantity",
       header: "Qty",
       accessorFn: (row) =>
-        row.order_items.reduce((sum, oi) => sum + oi.quantity, 0),
+        row.orderItem.reduce((sum, oi) => sum + oi.quantity, 0),
     },
     {
       accessorKey: "userId",

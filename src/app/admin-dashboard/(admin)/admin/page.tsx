@@ -30,7 +30,7 @@ export default async function AdminPage() {
       orderBy: { orderDate: "desc" },
       include: {
         user:       { select: { name: true, email: true } },
-        order_items: { select: { quantity: true, priceAtPurchase: true } },
+        orderItem: { select: { quantity: true, priceAtPurchase: true } },
       },
     }),
     // For top movies chart
@@ -177,10 +177,10 @@ export default async function AdminPage() {
                     <p style={{ fontSize: "11px", color: "var(--text-dim)", marginTop: "1px" }}>{order.user.email}</p>
                   </td>
                   <td style={{ padding: "12px 16px", fontSize: "13px", color: "var(--text-muted)" }}>
-                    {order.order_items.reduce((s, i) => s + i.quantity, 0)}
+                    {order.orderItem.reduce((s, i) => s + i.quantity, 0)}
                   </td>
                   <td style={{ padding: "12px 16px", fontSize: "13px", fontWeight: 500, color: "var(--gold)" }}>
-                    {order.order_items.reduce((s, i) => s + i.priceAtPurchase * i.quantity / 100, 0).toLocaleString("sv-SE")} kr
+                    {order.orderItem.reduce((s, i) => s + i.priceAtPurchase * i.quantity / 100, 0).toLocaleString("sv-SE")} kr
                   </td>
                   <td style={{ padding: "12px 16px", fontSize: "12px", color: "var(--text-dim)" }}>
                     {formatDate(order.orderDate)}
@@ -188,8 +188,8 @@ export default async function AdminPage() {
                   <td style={{ padding: "12px 16px" }}>
                     <span style={{
                       fontSize: "11px", padding: "3px 9px", borderRadius: "20px",
-                      background: order.order_items.length > 0
-                        ? (order.order_items.reduce((s,i) => s + i.priceAtPurchase * i.quantity, 0) > 0 ? "rgba(34,197,94,0.15)" : "rgba(232,160,48,0.15)")
+                      background: order.orderItem.length > 0
+                        ? (order.orderItem.reduce((s,i) => s + i.priceAtPurchase * i.quantity, 0) > 0 ? "rgba(34,197,94,0.15)" : "rgba(232,160,48,0.15)")
                         : "rgba(232,160,48,0.15)",
                       color: "#4ade80",
                     }}>

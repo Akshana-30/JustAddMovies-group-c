@@ -35,7 +35,7 @@ export default async function handleCheckout() {
           id: session?.user.id,
         },
       },
-      order_items: {
+      orderItem: {
         create: products.map((p) => ({
           priceAtPurchase: p.price,
           quantity: p.quantity,

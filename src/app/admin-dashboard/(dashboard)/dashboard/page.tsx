@@ -25,7 +25,7 @@ export default async function DashboardPage() {
     where: { userId: session.user.id },
     orderBy: { orderDate: "desc" },
     include: {
-      order_items: {
+      orderItem: {
         include: { movies: true },
       },
     },
@@ -83,7 +83,7 @@ export default async function DashboardPage() {
                 </div>
 
                 <div className="space-y-2">
-                  {order.order_items.map((item) => (
+                  {order.orderItem.map((item) => (
                     <div key={item.id} className="flex items-center gap-3">
                       <Package size={13} className="shrink-0 text-muted-foreground" />
                       <Link href={`/movies/${item.movies.id}`}

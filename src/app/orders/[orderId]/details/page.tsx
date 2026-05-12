@@ -22,7 +22,7 @@ export default async function OrderDetailsPage(
   const order = await prisma.order.findUnique({
     where: { id: params.orderId },
 
-    include: { order_items: { include: { movies: true } } },
+    include: { orderItem: { include: { movies: true } } },
   });
 
   if (!order) {
@@ -46,7 +46,7 @@ export default async function OrderDetailsPage(
           </TableRow>
         </TableHeader>
         <TableBody>
-          {order.order_items.map((item) => (
+          {order.orderItem.map((item) => (
             <TableRow key={item.id}>
               <TableCell>{item.id}</TableCell>
               <TableCell>{item.movies.title}</TableCell>
