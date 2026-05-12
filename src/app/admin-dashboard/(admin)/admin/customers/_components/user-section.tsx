@@ -1,6 +1,7 @@
 import { formatDate } from "@/lib/utils";
 import { users } from "../_actions/users";
 import { StatusBadge } from "./status-badge";
+import { formatPrice } from "@/lib/format";
 
 export function UserSection({ title, people, count }: { title: string; people: typeof users; count: number }) {
     return (
@@ -51,7 +52,7 @@ export function UserSection({ title, people, count }: { title: string; people: t
                                                 </span>
                                                 <StatusBadge status={order.status} />
                                                 <span style={{ color: "var(--gold)", fontWeight: 500 }}>
-                                                    {order.totalAmount.toLocaleString("sv-SE")} kr
+                                                    {formatPrice(order.totalAmount)} kr
                                                 </span>
                                                 <span style={{ color: "var(--text-dim)" }}>
                                                     {formatDate(order.orderDate)}

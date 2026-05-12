@@ -35,6 +35,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     { label: "People",    href: "/admin-dashboard/admin/people",    icon: <Users size={16}/>,          badge: counts.people },
     { label: "Customers", href: "/admin-dashboard/admin/customers", icon: <UserCheck size={16}/>,      badge: counts.customers },
     { label: "Orders",    href: "/admin-dashboard/admin/orders",    icon: <ShoppingCart size={16}/>,   badge: counts.pendingOrders },
+    { label: "Add movie",    href: "/admin-dashboard/admin/add-movie",    icon: <Film size={16}/>},
   ];
 
   return (

@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useTransition, useMemo } from "react";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice } from "@/lib/format";
 import Image from "next/image";
 import { Pencil, Trash2, Plus, Loader2, X, Tag, Search, RotateCcw } from "lucide-react";
 import {

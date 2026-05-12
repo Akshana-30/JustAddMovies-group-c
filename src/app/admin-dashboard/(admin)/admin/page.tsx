@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
 import Link from "next/link";
 import { AdminCharts } from "./AdminCharts";
+import { formatPrice } from "@/lib/format";
 
 export const metadata: Metadata = { title: "Admin Dashboard" };
 
@@ -76,6 +77,7 @@ export default async function AdminPage() {
         return od.getFullYear() === d.getFullYear() && od.getMonth() === d.getMonth();
       })
       .reduce((s, o) => s + o.totalAmount, 0);
+      
     months.push({ label, revenue });
   }
 
@@ -88,14 +90,14 @@ export default async function AdminPage() {
   const totalSold    = soldItems._sum.quantity ?? 0;
 
   const stats = [
-    { label: "Total Revenue",       value: `${totalRevenue.toLocaleString("sv-SE")} kr`, emoji: "💰", color: "var(--gold)",   href: "/admin-dashboard/admin/orders" },
+    { label: "Total Revenue",       value: `${formatPrice(totalRevenue)}`, emoji: "💰", color: "var(--gold)",   href: "/admin-dashboard/admin/orders" },
     { label: "Customers",           value: customerCount,                                 emoji: "👥", color: "#60a5fa",       href: "/admin-dashboard/admin/customers" },
     { label: "Total Orders",        value: orderCount,                                    emoji: "📦", color: "#4ade80",       href: "/admin-dashboard/admin/orders" },
     { label: "Pending (Invoice)",   value: pendingCount,                                  emoji: "⏳", color: "#fbbf24",       href: "/admin-dashboard/admin/orders" },
     { label: "Movies in Catalogue", value: movieCount,                                    emoji: "🎬", color: "var(--gold)",   href: "/admin-dashboard/admin/movies" },
     { label: "Movies Sold",         value: totalSold,                                     emoji: "🎟",  color: "#a78bfa",       href: "/admin-dashboard/admin/orders" },
-    { label: "Avg Order Value",     value: `${avgOrderValue.toLocaleString("sv-SE")} kr`,                        emoji: "📊", color: "#34d399",       href: "#" },
-    { label: "Avg Sale Price",      value: `${avgSalePrice.toLocaleString("sv-SE")} kr`,                         emoji: "🏷",  color: "#f472b6",       href: "#" },
+    { label: "Avg Order Value",     value: `${formatPrice(avgOrderValue)}`,                        emoji: "📊", color: "#34d399",       href: "#" },
+    { label: "Avg Sale Price",      value: `${formatPrice(avgSalePrice)}`,                         emoji: "🏷",  color: "#f472b6",       href: "#" },
   ];
 
   return (
@@ -137,9 +139,9 @@ export default async function AdminPage() {
       <AdminCharts
         topMovies={topMoviesData}
         revenueByMonth={months}
-        avgOrderValue={avgOrderValue}
-        avgSalePrice={avgSalePrice}
-        totalRevenue={totalRevenue}
+        avgOrderValue={avgOrderValue / 100}
+        avgSalePrice={avgSalePrice / 100}
+        totalRevenue={totalRevenue / 100}
         orderCount={orderCount}
         customerCount={customerCount}
       />
@@ -178,7 +180,7 @@ export default async function AdminPage() {
                     {order.orderItem.reduce((s, i) => s + i.quantity, 0)}
                   </td>
                   <td style={{ padding: "12px 16px", fontSize: "13px", fontWeight: 500, color: "var(--gold)" }}>
-                    {order.orderItem.reduce((s, i) => s + i.priceAtPurchase * i.quantity, 0).toLocaleString("sv-SE")} kr
+                    {order.orderItem.reduce((s, i) => s + i.priceAtPurchase * i.quantity / 100, 0).toLocaleString("sv-SE")} kr
                   </td>
                   <td style={{ padding: "12px 16px", fontSize: "12px", color: "var(--text-dim)" }}>
                     {formatDate(order.orderDate)}
