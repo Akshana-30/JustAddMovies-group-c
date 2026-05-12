@@ -15,10 +15,15 @@ export default function AddToCartButton({ productId, productTitle }: Props) {
     <Button
       variant="default"
       className="cursor-pointer "
-      onClick={() =>
+      onClick={e => {
         startTransition(() =>
           addToCart({ id: productId, quantity: 1, title: productTitle }),
         )
+
+        e.preventDefault();
+        e.stopPropagation();
+      }
+        
       }
       disabled={isPending}
     >

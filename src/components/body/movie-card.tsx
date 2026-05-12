@@ -58,6 +58,10 @@ export default function MovieCard({
               </p> <br />
               <p className="my-auto">In stock: {stock}</p>
             </div>
+
+            <div className="mt-4">
+              <AddToCartButton productId={id} productTitle={title} />
+            </div>
           </div> 
         </CardFooter >
 
