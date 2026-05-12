@@ -54,19 +54,23 @@ export function ModeToggle() {
     ]
 
     try {
-      (document as Document & {
-        startViewTransition: (cb: () => void) => { ready: Promise<void> }
+      const trans = (document as Document & {
+        startViewTransition: (cb: () => void) => { ready: Promise<void>; finished: Promise<void> }
       }).startViewTransition(() => {
-        flushSync(() => {
-          applyThemeToDom(next)
-          setTheme(next)
-        })
-      }).ready.then(() => {
+        // Only touch the DOM here — keep next-themes out of the transition callback
+        // so it cannot inject transition:none or otherwise interfere.
+        flushSync(() => { applyThemeToDom(next) })
+      })
+
+      trans.ready.then(() => {
         document.documentElement.animate(
           { clipPath },
           { duration: 400, easing: "ease-in", pseudoElement: "::view-transition-new(root)" },
         )
       }).catch(() => {})
+
+      // Sync next-themes state AFTER the animation so it never runs inside the transition
+      trans.finished.then(() => { setTheme(next) }).catch(() => { setTheme(next) })
     } catch {
       setTheme(next)
     }

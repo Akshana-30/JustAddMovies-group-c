@@ -281,11 +281,14 @@
 .divider { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
 
 /* ── Contact form styles ── */
-.contact-form { display: flex; flex-direction: column; gap: 1.45rem; max-width: 560px; }
+.contact-form { display: flex; flex-direction: column; gap: 2rem; max-width: 560px; }
 .form-field { display: flex; flex-direction: column; gap: 6px; }
 .form-field label { font-size: 12px; letter-spacing: 0.04em; }
-.form-field input, .form-field textarea { background: var(--popover); border: 1px solid var(--border-strong); border-radius: 4px; color: var(--text); font-size: 14px; padding: 10px 14px; outline: none; transition: border-color 0.15s; resize: vertical; }
+.form-field input, .form-field textarea { background: var(--popover); border: 1px solid var(--border-strong); border-radius: 4px; color: #111; font-size: 14px; padding: 10px 14px; outline: none; transition: border-color 0.15s; resize: vertical; }
+.form-field input::placeholder, .form-field textarea::placeholder { color: #888; opacity: 1; }
 .form-field input:focus, .form-field textarea:focus { border-color: var(--gold); }
+.dark .form-field input, .dark .form-field textarea { color: var(--text); }
+.dark .form-field input::placeholder, .dark .form-field textarea::placeholder { color: var(--text-dim); opacity: 1; }
 
 /* ── View transition ripple — suppress default cross-fade ── */
 @supports (view-transition-name: none) {
