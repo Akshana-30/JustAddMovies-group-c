@@ -150,7 +150,7 @@ export async function bulkUpdatePrice(ids: string[], price: number) {
 export async function getTopMovies() {
   const notDeleted = { deletedAt: null };
   const [popular, recent, oldest, cheapest] = await Promise.all([
-    prisma.movie.findMany({ where: notDeleted, take:5, orderBy:{ orderItem:{ _count:"desc" } }, include:{ genres:true, directors:true, actors:true } }),
+    prisma.movie.findMany({ where: notDeleted, take:5, orderBy:{ order_items:{ _count:"desc" } }, include:{ genres:true, directors:true, actors:true } }),
     prisma.movie.findMany({ where: notDeleted, take:5, orderBy:{ releaseDate:"desc" },           include:{ genres:true, directors:true, actors:true } }),
     prisma.movie.findMany({ where: notDeleted, take:5, orderBy:{ releaseDate:"asc" },            include:{ genres:true, directors:true, actors:true } }),
     prisma.movie.findMany({ where: notDeleted, take:5, orderBy:{ price:"asc" },                  include:{ genres:true, directors:true, actors:true } }),
@@ -190,6 +190,6 @@ export async function getMovies(rawFilter?: Record<string, string>) {
 export async function getMovieById(id: string) {
   return prisma.movie.findUnique({
     where: { id },
-    include: { genres:true, directors:true, actors:true, orderItem:{ select:{ quantity:true } } },
+    include: { genres:true, directors:true, actors:true, order_items:{ select:{ quantity:true } } },
   });
 }

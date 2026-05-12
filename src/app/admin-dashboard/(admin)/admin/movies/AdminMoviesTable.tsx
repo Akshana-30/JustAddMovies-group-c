@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useTransition, useMemo } from "react";
-import { formatPrice } from "@/lib/format";
+import { formatPrice, toOre, fromOre } from "@/lib/format";
 import Image from "next/image";
 import { Pencil, Trash2, Plus, Loader2, X, Tag, Search, RotateCcw } from "lucide-react";
 import {
@@ -100,7 +100,7 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
     setForm({
       title:       movie.title,
       description: movie.description,
-      price:       String(movie.price),
+      price:       String(fromOre(movie.price)),
       stock:       String(movie.stock),
       runtime:     String(movie.runtime),
       releaseDate: new Date(movie.releaseDate).toISOString().slice(0, 10),
@@ -123,7 +123,7 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
     setError("");
     const data = {
       title: form.title, description: form.description,
-      price: Math.round(Number(form.price)), stock: Number(form.stock),
+      price: toOre(Number(form.price)), stock: Number(form.stock),
       runtime: Number(form.runtime), releaseDate: form.releaseDate,
       imageUrl: form.imageUrl, genreIds: form.genreIds,
     };
