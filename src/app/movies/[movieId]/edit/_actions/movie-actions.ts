@@ -33,28 +33,9 @@ export async function editMovie(id: string, input: FormValues) {
     where: { id: id },
     include: { genres: true },
   });
-  const existingDir = await prisma.movie.findUnique({
-    where: { id },
-    include: { directors: true },
-  });
-  const existingAct = await prisma.movie.findUnique({
-    where: { id },
-    include: { actors: true },
-  });
-
   const existingGenres = existing?.genres.map((g) => g.name);
   const newGenres = data.genres;
   const genresToRemove = existingGenres?.filter((g) => !newGenres.includes(g));
-
-  const existingDirectors = existingDir?.directors.map((d) => d.name);
-  const newDirectors = data.directors;
-  const directorsToRemove = existingDirectors?.filter(
-    (d) => !newDirectors.includes(d),
-  );
-
-  const existingActors = existingAct?.actors.map((a) => a.name);
-  const newActors = data.actors;
-  const actorsToRemove = existingActors?.filter((a) => !newActors.includes(a));
 
   const editedMovie = await prisma.movie.update({
     where: { id },
@@ -76,21 +57,17 @@ export async function editMovie(id: string, input: FormValues) {
         })),
       },
       directors: {
-        connectOrCreate: data.directors.map((director) => ({
-          where: { name: director },
-          create: { name: director },
-        })),
-        disconnect: directorsToRemove?.map((director) => ({
-          name: director,
+        deleteMany: {},
+        connectOrCreate: data.directors.map((name) => ({
+          where: { name },
+          create: { name },
         })),
       },
       actors: {
-        connectOrCreate: data.actors.map((actor) => ({
-          where: { name: actor },
-          create: { name: actor },
-        })),
-        disconnect: actorsToRemove?.map((actor) => ({
-          name: actor,
+        deleteMany: {},
+        connectOrCreate: data.actors.map((name) => ({
+          where: { name },
+          create: { name },
         })),
       },
     },

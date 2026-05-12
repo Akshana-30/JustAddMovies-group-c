@@ -33,9 +33,9 @@ import { editMovie } from "../_actions/movie-actions";
 import { fromOre, toOre } from "@/lib/format";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import DeleteMovieButton, { RestoreMovieButton } from "@/components/admin-buttons/delete-button";
-import { actorList } from "@/lib/actors";
-import { directorList } from "@/lib/directors";
+import DeleteMovieButton, {
+  RestoreMovieButton,
+} from "@/components/admin-buttons/delete-button";
 import { toast } from "sonner";
 
 type Props = {
@@ -51,7 +51,7 @@ type Props = {
     genres: string[];
     directors: string[];
     actors: string[];
-    deletedAt: Date | null
+    deletedAt: Date | null;
   };
 };
 const formSchema = z.object({
@@ -78,6 +78,8 @@ const formSchema = z.object({
 
 export default function EditMovieForm({ movie }: Props) {
   const [isDeleted, setIsDeleted] = useState(movie.deletedAt !== null);
+  const [directorInput, setDirectorInput] = useState("");
+  const [actorInput, setActorInput] = useState("");
   const anchor = useComboboxAnchor();
   const router = useRouter();
   const form = useForm({
@@ -98,7 +100,9 @@ export default function EditMovieForm({ movie }: Props) {
     },
     onSubmit: async ({ value }) => {
       await editMovie(movie.id, { ...value, price: toOre(value.price) });
-      toast.success("Movie was successfully updated.", { position: "bottom-right" });
+      toast.success("Movie was successfully updated.", {
+        position: "bottom-right",
+      });
       router.push(`/movies/${movie.id}`);
     },
   });
@@ -205,84 +209,83 @@ export default function EditMovieForm({ movie }: Props) {
               }}
             </form.Field>
             <div className="flex gap-4">
-               <form.Field name="price">
-              {(field) => {
-                const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid;
-                return (
-                  <Field data-invalid={isInvalid} className="flex 1">
-                    <FieldLabel htmlFor={field.name}>Price</FieldLabel>
-                    <Input
-                      id={field.name}
-                      name={field.name}
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(ev) =>
-                        field.handleChange(Number(ev.target.value))
-                      }
-                      aria-invalid={isInvalid}
-                    />
-                    {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
-                    )}
-                  </Field>
-                );
-              }}
-            </form.Field>
-            <form.Field name="stock">
-              {(field) => {
-                const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid;
-                return (
-                  <Field data-invalid={isInvalid} className="flex 1">
-                    <FieldLabel htmlFor={field.name}>Stock</FieldLabel>
-                    <Input
-                      id={field.name}
-                      name={field.name}
-                      type="number"
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(ev) =>
-                        field.handleChange(Number(ev.target.value))
-                      }
-                      aria-invalid={isInvalid}
-                    />
-                    {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
-                    )}
-                  </Field>
-                );
-              }}
-            </form.Field>
+              <form.Field name="price">
+                {(field) => {
+                  const isInvalid =
+                    field.state.meta.isTouched && !field.state.meta.isValid;
+                  return (
+                    <Field data-invalid={isInvalid} className="flex 1">
+                      <FieldLabel htmlFor={field.name}>Price</FieldLabel>
+                      <Input
+                        id={field.name}
+                        name={field.name}
+                        value={field.state.value}
+                        onBlur={field.handleBlur}
+                        onChange={(ev) =>
+                          field.handleChange(Number(ev.target.value))
+                        }
+                        aria-invalid={isInvalid}
+                      />
+                      {isInvalid && (
+                        <FieldError errors={field.state.meta.errors} />
+                      )}
+                    </Field>
+                  );
+                }}
+              </form.Field>
+              <form.Field name="stock">
+                {(field) => {
+                  const isInvalid =
+                    field.state.meta.isTouched && !field.state.meta.isValid;
+                  return (
+                    <Field data-invalid={isInvalid} className="flex 1">
+                      <FieldLabel htmlFor={field.name}>Stock</FieldLabel>
+                      <Input
+                        id={field.name}
+                        name={field.name}
+                        type="number"
+                        value={field.state.value}
+                        onBlur={field.handleBlur}
+                        onChange={(ev) =>
+                          field.handleChange(Number(ev.target.value))
+                        }
+                        aria-invalid={isInvalid}
+                      />
+                      {isInvalid && (
+                        <FieldError errors={field.state.meta.errors} />
+                      )}
+                    </Field>
+                  );
+                }}
+              </form.Field>
 
-        
-            <form.Field name="runtime">
-              {(field) => {
-                const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid;
-                return (
-                  <Field data-invalid={isInvalid} className="flex 1">
-                    <FieldLabel htmlFor={field.name}>
-                      Runtime in minutes
-                    </FieldLabel>
-                    <Input
-                      id={field.name}
-                      name={field.name}
-                      type="number"
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(ev) =>
-                        field.handleChange(Number(ev.target.value))
-                      }
-                      aria-invalid={isInvalid}
-                    />
-                    {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
-                    )}
-                  </Field>
-                );
-              }}
-            </form.Field>
+              <form.Field name="runtime">
+                {(field) => {
+                  const isInvalid =
+                    field.state.meta.isTouched && !field.state.meta.isValid;
+                  return (
+                    <Field data-invalid={isInvalid} className="flex 1">
+                      <FieldLabel htmlFor={field.name}>
+                        Runtime in minutes
+                      </FieldLabel>
+                      <Input
+                        id={field.name}
+                        name={field.name}
+                        type="number"
+                        value={field.state.value}
+                        onBlur={field.handleBlur}
+                        onChange={(ev) =>
+                          field.handleChange(Number(ev.target.value))
+                        }
+                        aria-invalid={isInvalid}
+                      />
+                      {isInvalid && (
+                        <FieldError errors={field.state.meta.errors} />
+                      )}
+                    </Field>
+                  );
+                }}
+              </form.Field>
             </div>
             <form.Field name="genres">
               {(field) => {
@@ -329,44 +332,54 @@ export default function EditMovieForm({ movie }: Props) {
                 );
               }}
             </form.Field>
-            <form.Field name="directors">
+
+            <form.Field name="directors" mode="array">
               {(field) => {
                 const isInvalid =
                   field.state.meta.isTouched && !field.state.meta.isValid;
+
+                const handleAdd = () => {
+                  const names = directorInput
+                    .split(",")
+                    .map((n) => n.trim())
+                    .filter(Boolean);
+                  names.forEach((name) => field.pushValue(name));
+                  setDirectorInput("");
+                };
+
                 return (
-                  <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>Director</FieldLabel>
-                    <Combobox
-                      multiple
-                      autoHighlight
-                      items={directorList}
-                      defaultValue={movie.directors}
-                      value={field.state.value}
-                      onValueChange={field.handleChange}
-                    >
-                      <ComboboxChips ref={anchor} className="w-full max-w-full">
-                        <ComboboxValue>
-                          {(values) => (
-                            <React.Fragment>
-                              {values.map((value: string) => (
-                                <ComboboxChip key={value}>{value}</ComboboxChip>
-                              ))}
-                              <ComboboxChipsInput />
-                            </React.Fragment>
-                          )}
-                        </ComboboxValue>
-                      </ComboboxChips>
-                      <ComboboxContent anchor={anchor}>
-                        <ComboboxEmpty>No director selected.</ComboboxEmpty>
-                        <ComboboxList>
-                          {(item) => (
-                            <ComboboxItem key={item} value={item}>
-                              {item}
-                            </ComboboxItem>
-                          )}
-                        </ComboboxList>
-                      </ComboboxContent>
-                    </Combobox>
+                  <Field data-invalid={isInvalid} className="border p-2">
+                    <FieldLabel>Directors</FieldLabel>
+
+                    <div className="px-4 py-2">
+                      {field.state.value.map((name, index) => (
+                        <span
+                          className=" px-2 py-1 rounded mr-1 mt-1 text-xs text-foreground bg-muted"
+                          key={index}
+                        >
+                          {`${name} `}
+                          <button
+                            type="button"
+                            onClick={() => field.removeValue(index)}
+                          >
+                            ✕
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+
+                    <div>
+                      <Input
+                        value={directorInput}
+                        onChange={(ev) => setDirectorInput(ev.target.value)}
+                        onKeyDown={(ev) => ev.key === "Enter" && handleAdd()}
+                        placeholder=".. Christopher Nolan, Steven Spielberg"
+                      />
+                      <Button size="xs" type="button" onClick={handleAdd}>
+                        Add
+                      </Button>
+                    </div>
+
                     {isInvalid && (
                       <FieldError errors={field.state.meta.errors} />
                     )}
@@ -374,44 +387,54 @@ export default function EditMovieForm({ movie }: Props) {
                 );
               }}
             </form.Field>
-            <form.Field name="actors">
+
+            <form.Field name="actors" mode="array">
               {(field) => {
                 const isInvalid =
                   field.state.meta.isTouched && !field.state.meta.isValid;
+
+                const handleAdd = () => {
+                  const names = actorInput
+                    .split(",")
+                    .map((n) => n.trim())
+                    .filter(Boolean);
+                  names.forEach((name) => field.pushValue(name));
+                  setActorInput("");
+                };
+
                 return (
-                  <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>Actors</FieldLabel>
-                    <Combobox
-                      multiple
-                      autoHighlight
-                      items={actorList}
-                      defaultValue={movie.actors}
-                      value={field.state.value}
-                      onValueChange={field.handleChange}
-                    >
-                      <ComboboxChips ref={anchor} className="w-full max-w-full">
-                        <ComboboxValue>
-                          {(values) => (
-                            <React.Fragment>
-                              {values.map((value: string) => (
-                                <ComboboxChip key={value}>{value}</ComboboxChip>
-                              ))}
-                              <ComboboxChipsInput />
-                            </React.Fragment>
-                          )}
-                        </ComboboxValue>
-                      </ComboboxChips>
-                      <ComboboxContent anchor={anchor}>
-                        <ComboboxEmpty>No director selected.</ComboboxEmpty>
-                        <ComboboxList>
-                          {(item) => (
-                            <ComboboxItem key={item} value={item}>
-                              {item}
-                            </ComboboxItem>
-                          )}
-                        </ComboboxList>
-                      </ComboboxContent>
-                    </Combobox>
+                  <Field data-invalid={isInvalid} className="border p-2">
+                    <FieldLabel>Actors</FieldLabel>
+
+                    <div className="px-4 py-2">
+                      {field.state.value.map((name, index) => (
+                        <span
+                          className="px-2 py-1 rounded mr-1 mt-1 text-xs text-foreground bg-muted"
+                          key={index}
+                        >
+                          {`${name} `}
+                          <button
+                            type="button"
+                            onClick={() => field.removeValue(index)}
+                          >
+                            ✕
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+
+                    <div>
+                      <Input
+                        value={actorInput}
+                        onChange={(ev) => setActorInput(ev.target.value)}
+                        onKeyDown={(ev) => ev.key === "Enter" && handleAdd()}
+                        placeholder=".. Liam Neeson, Steven Seagal"
+                      />
+                      <Button size="xs" type="button" onClick={handleAdd}>
+                        Add
+                      </Button>
+                    </div>
+
                     {isInvalid && (
                       <FieldError errors={field.state.meta.errors} />
                     )}
@@ -432,11 +455,17 @@ export default function EditMovieForm({ movie }: Props) {
               >
                 Reset
               </Button>
-              {isDeleted 
-  ? <RestoreMovieButton movieId={movie.id} onSuccess={() => setIsDeleted(false)} />
-  : <DeleteMovieButton movieId={movie.id} onSuccess={() => setIsDeleted(true)} />
-}
-              
+              {isDeleted ? (
+                <RestoreMovieButton
+                  movieId={movie.id}
+                  onSuccess={() => setIsDeleted(false)}
+                />
+              ) : (
+                <DeleteMovieButton
+                  movieId={movie.id}
+                  onSuccess={() => setIsDeleted(true)}
+                />
+              )}
             </Field>
           </FieldGroup>
         </form>
