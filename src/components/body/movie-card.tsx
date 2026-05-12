@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { formatPrice } from "@/lib/format";
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -53,7 +54,7 @@ export default function MovieCard({
             </div>
             <div className=" m-auto">
               <p className="text-card-foreground text-[20px] leading-snug">
-                {price} kr
+                {formatPrice(price)}
               </p> <br />
               <p className="my-auto">In stock: {stock}</p>
             </div>

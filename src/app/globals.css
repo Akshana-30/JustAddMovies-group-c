@@ -240,6 +240,7 @@
   --text:         #111111;
   --text-muted:   #5a5048;
   --text-dim:     #8a8070;
+  --success:      #15803d;
 }
 
 .dark {
@@ -250,6 +251,7 @@
   --text:         #E8E0D0;
   --text-muted:   #8A8070;
   --text-dim:     #5A5548;
+  --success:      #4ade80;
 }
 
 .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--text-dim); font-size: 13px; text-decoration: none; cursor: pointer; margin-bottom: 1.5rem; transition: color 0.15s; }

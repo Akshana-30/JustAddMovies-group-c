@@ -6,19 +6,14 @@ import { AdminMoviesTable } from "./AdminMoviesTable";
 export const metadata: Metadata = { title: "Manage Movies" };
 
 export default async function AdminMoviesPage() {
-  const [movies, archived, genres] = await Promise.all([
+  const [movies, genres] = await Promise.all([
     prisma.movie.findMany({
-      where: { deletedAt: null },
       orderBy: { title: "asc" },
-      include: { genres: true, directors: true },
-    }),
-    prisma.movie.findMany({
-      where: { deletedAt: { not: null } },
-      orderBy: { deletedAt: "desc" },
       include: { genres: true, directors: true },
     }),
     prisma.genre.findMany({ orderBy: { name: "asc" } }),
   ]);
+  const archived: typeof movies = [];
 
   return (
     <div className="p-8">

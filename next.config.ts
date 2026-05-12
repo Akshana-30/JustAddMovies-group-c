@@ -5,21 +5,8 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   images: {
     remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "image.tmdb.org",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "m.media-amazon.com",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "www.themoviedb.org",
-        pathname: "/**",
-      },
+      { protocol: "https", hostname: "**", pathname: "/**" },
+      { protocol: "http",  hostname: "**", pathname: "/**" },
     ],
   },
 };

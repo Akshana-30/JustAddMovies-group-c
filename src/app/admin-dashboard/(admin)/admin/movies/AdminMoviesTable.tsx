@@ -42,11 +42,20 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
   const [search,      setSearch]      = useState("");
   const [genreFilter, setGenreFilter] = useState("");
 
+  // Sort state
+  const [sortCol, setSortCol] = useState<"title" | "price" | "stock">("title");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
+
+  function handleSort(col: "title" | "price" | "stock") {
+    if (sortCol === col) setSortDir((d) => d === "asc" ? "desc" : "asc");
+    else { setSortCol(col); setSortDir("asc"); }
+  }
+
   const source = tab === "active" ? movies : archived;
 
   const visible = useMemo(() => {
     const q = search.trim().toLowerCase();
-    return source.filter((m) => {
+    const filtered = source.filter((m) => {
       if (genreFilter && !m.genres.some((g) => g.id === genreFilter)) return false;
       if (!q) return true;
       return (
@@ -55,7 +64,14 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
         String(new Date(m.releaseDate).getFullYear()).includes(q)
       );
     });
-  }, [source, search, genreFilter]);
+    return [...filtered].sort((a, b) => {
+      let cmp = 0;
+      if (sortCol === "title") cmp = a.title.localeCompare(b.title);
+      else if (sortCol === "price") cmp = a.price - b.price;
+      else if (sortCol === "stock") cmp = a.stock - b.stock;
+      return sortDir === "asc" ? cmp : -cmp;
+    });
+  }, [source, search, genreFilter, sortCol, sortDir]);
 
   // Genres that appear in at least one movie in the current tab (for filter buttons)
   const activeGenres = useMemo(() => {
@@ -302,11 +318,25 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
                   style={{ width: "14px", height: "14px", accentColor: "var(--gold)", cursor: "pointer" }}
                 />
               </th>
-              {["Poster", "Title", "Price", "Stock", "Genres", ""].map((h) => (
-                <th key={h} style={{ textAlign: "left", padding: "10px 12px", fontSize: "11px", letterSpacing: "0.1em", color: "var(--text-dim)", fontWeight: 500 }}>
-                  {h}
-                </th>
-              ))}
+              {(["Poster", "Title", "Price", "Stock", "Genres", ""] as const).map((h) => {
+                const col = h === "Title" ? "title" : h === "Price" ? "price" : h === "Stock" ? "stock" : null;
+                const active = col && sortCol === col;
+                return (
+                  <th key={h}
+                    onClick={col ? () => handleSort(col) : undefined}
+                    style={{
+                      textAlign: "left", padding: "10px 12px", fontSize: "11px",
+                      letterSpacing: "0.1em", fontWeight: 500,
+                      color: active ? "var(--gold)" : "var(--text-dim)",
+                      cursor: col ? "pointer" : "default",
+                      userSelect: "none",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {h}{active ? (sortDir === "asc" ? " ▲" : " ▼") : col ? " ↕" : ""}
+                  </th>
+                );
+              })}
             </tr>
           </thead>
           <tbody>

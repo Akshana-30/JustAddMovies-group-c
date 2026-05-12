@@ -282,7 +282,7 @@ export function TmdbImportClient() {
 
         {/* ── Feedback ──────────────────────────────────────────── */}
         {message && (
-            <div style={{ padding:"10px 14px", borderRadius:"8px", marginBottom:"12px", fontSize:"13px", display:"flex", alignItems:"center", gap:"8px", background: message.ok ? "rgba(74,222,128,0.08)" : "rgba(248,113,113,0.08)", border:`1px solid ${message.ok ? "rgba(74,222,128,0.3)" : "rgba(248,113,113,0.3)"}`, color: message.ok ? "#4ade80" : "#f87171" }}>
+            <div style={{ padding:"10px 14px", borderRadius:"8px", marginBottom:"12px", fontSize:"13px", display:"flex", alignItems:"center", gap:"8px", background: message.ok ? "rgba(74,222,128,0.08)" : "rgba(248,113,113,0.08)", border:`1px solid ${message.ok ? "rgba(74,222,128,0.3)" : "rgba(248,113,113,0.3)"}`, color: message.ok ? "var(--success)" : "#f87171" }}>
               {message.ok ? <Check size={14}/> : <X size={14}/>} {message.text}
             </div>
         )}
@@ -297,7 +297,7 @@ export function TmdbImportClient() {
               <div style={{ display:"flex", flexDirection:"column", gap:"4px", maxHeight:"180px", overflowY:"auto" }}>
                 {bulkLog.map((entry, i) => (
                     <div key={i} style={{ display:"flex", alignItems:"center", gap:"8px", fontSize:"12px" }}>
-                      {entry.ok ? <Check size={12} style={{ color:"#4ade80", flexShrink:0 }}/> : <X size={12} style={{ color:"#f87171", flexShrink:0 }}/>}
+                      {entry.ok ? <Check size={12} style={{ color:"var(--success)", flexShrink:0 }}/> : <X size={12} style={{ color:"#f87171", flexShrink:0 }}/>}
                       <span style={{ color: entry.ok ? "var(--text)" : "#f87171" }}>{entry.title}</span>
                       {entry.error && <span style={{ color:"var(--text-dim)", fontSize:"11px" }}>— {entry.error}</span>}
                     </div>
@@ -407,7 +407,7 @@ export function TmdbImportClient() {
                         {/* Checkbox */}
                         <div style={{ width:"18px", height:"18px", borderRadius:"4px", flexShrink:0, border:`2px solid ${isSelected ? "var(--gold)" : "var(--border-strong)"}`, background: isSelected ? "var(--gold)" : "transparent", display:"flex", alignItems:"center", justifyContent:"center", transition:"all 0.15s" }}>
                           {isSelected && <Check size={11} style={{ color:"var(--black)" }}/>}
-                          {isImported && !isSelected && <Check size={11} style={{ color:"#4ade80" }}/>}
+                          {isImported && !isSelected && <Check size={11} style={{ color:"var(--success)" }}/>}
                         </div>
 
                         {/* Poster */}
@@ -422,7 +422,7 @@ export function TmdbImportClient() {
                         <div style={{ flex:1, minWidth:0 }}>
                           <p style={{ fontSize:"13px", fontWeight:500, color:"var(--text)", whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>
                             {movie.title}
-                            {isImported && <span style={{ marginLeft:"8px", fontSize:"11px", color:"#4ade80" }}>✓ In catalogue</span>}
+                            {isImported && <span style={{ marginLeft:"8px", fontSize:"11px", color:"var(--success)" }}>✓ In catalogue</span>}
                           </p>
                           <div style={{ display:"flex", gap:"10px", marginTop:"2px" }}>
                             {movie.release_date && <span style={{ fontSize:"11px", color:"var(--text-dim)" }}>{movie.release_date.slice(0,4)}</span>}

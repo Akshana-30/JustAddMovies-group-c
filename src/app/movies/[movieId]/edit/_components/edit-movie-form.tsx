@@ -30,6 +30,7 @@ import {
   useComboboxAnchor,
 } from "@/components/ui/combobox";
 import { editMovie } from "../_actions/movie-actions";
+import { fromOre, toOre } from "@/lib/format";
 import { useRouter } from "next/navigation";
 import React from "react";
 import DeleteMovieButton from "@/components/admin-buttons/delete-button";
@@ -81,7 +82,7 @@ export default function EditMovieForm({ movie }: Props) {
     defaultValues: {
       title: movie.title,
       description: movie.description,
-      price: movie.price,
+      price: fromOre(movie.price),
       releaseDate: movie.releaseDate.toISOString().split("T")[0],
       imageUrl: movie.imageUrl,
       stock: movie.stock,
@@ -94,7 +95,7 @@ export default function EditMovieForm({ movie }: Props) {
       onSubmit: formSchema,
     },
     onSubmit: async ({ value }) => {
-      await editMovie(movie.id, value);
+      await editMovie(movie.id, { ...value, price: toOre(value.price) });
       toast.success("Movie was successfully updated.", { position: "bottom-right" });
       router.push(`/movies/${movie.id}`);
     },

@@ -98,12 +98,12 @@ export async function updateMovie(id: string, input: unknown) {
   }
 }
 
-// ── Soft Delete ──────────────────────────────────────
+// ── Delete ───────────────────────────────────────────
 export async function deleteMovie(id: string) {
   if (!await requireAdmin()) return actionError("Unauthorized");
 
   try {
-    await prisma.movie.update({ where: { id }, data: { deletedAt: new Date() } });
+    await prisma.movie.delete({ where: { id } });
     revalidatePath("/admin-dashboard/admin/movies");
     revalidatePath("/movies");
     revalidatePath("/");
@@ -114,19 +114,9 @@ export async function deleteMovie(id: string) {
   }
 }
 
-// ── Restore ──────────────────────────────────────────
-export async function restoreMovie(id: string) {
-  if (!await requireAdmin()) return actionError("Unauthorized");
-
-  try {
-    await prisma.movie.update({ where: { id }, data: { deletedAt: null } });
-    revalidatePath("/admin-dashboard/admin/movies");
-    revalidatePath("/movies");
-    return actionSuccess({ ok: true });
-  } catch (err) {
-    console.error(err);
-    return actionError("Failed to restore movie");
-  }
+// ── Restore (no-op — soft-delete not in schema) ──────
+export async function restoreMovie(_id: string) {
+  return actionError("Restore is not available");
 }
 
 // ── Bulk price update ────────────────────────────────
@@ -148,12 +138,11 @@ export async function bulkUpdatePrice(ids: string[], price: number) {
 
 // ── Read helpers ─────────────────────────────────────
 export async function getTopMovies() {
-  const notDeleted = { deletedAt: null };
   const [popular, recent, oldest, cheapest] = await Promise.all([
-    prisma.movie.findMany({ where: notDeleted, take:5, orderBy:{ order_items:{ _count:"desc" } }, include:{ genres:true, directors:true, actors:true } }),
-    prisma.movie.findMany({ where: notDeleted, take:5, orderBy:{ releaseDate:"desc" },           include:{ genres:true, directors:true, actors:true } }),
-    prisma.movie.findMany({ where: notDeleted, take:5, orderBy:{ releaseDate:"asc" },            include:{ genres:true, directors:true, actors:true } }),
-    prisma.movie.findMany({ where: notDeleted, take:5, orderBy:{ price:"asc" },                  include:{ genres:true, directors:true, actors:true } }),
+    prisma.movie.findMany({ take:5, orderBy:{ order_items:{ _count:"desc" } }, include:{ genres:true, directors:true, actors:true } }),
+    prisma.movie.findMany({ take:5, orderBy:{ releaseDate:"desc" },            include:{ genres:true, directors:true, actors:true } }),
+    prisma.movie.findMany({ take:5, orderBy:{ releaseDate:"asc" },             include:{ genres:true, directors:true, actors:true } }),
+    prisma.movie.findMany({ take:5, orderBy:{ price:"asc" },                   include:{ genres:true, directors:true, actors:true } }),
   ]);
   return { popular, recent, oldest, cheapest };
 }
@@ -167,7 +156,6 @@ export async function getMovies(rawFilter?: Record<string, string>) {
   const limit      = 20;
 
   const where = {
-    deletedAt: null,
     ...(q        && { title:     { contains: q, mode: "insensitive" as const } }),
     ...(genreId  && { genres:    { some: { id: genreId } } }),
     ...(directorId && { directors: { some: { id: directorId } } }),
