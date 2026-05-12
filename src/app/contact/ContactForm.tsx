@@ -102,7 +102,7 @@ export function ContactForm() {
         type="submit"
         disabled={isPending}
         className="flex items-center gap-2 rounded px-6 py-2.5 text-sm font-medium transition-colors hover:opacity-90 disabled:opacity-50"
-        style={{ background: "var(--gold)", color: "var(--black)" }}
+        style={{ background: "var(--gold)", color: "#000" }}
       >
         {isPending ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
         {isPending ? "Sending…" : "Send Message"}
