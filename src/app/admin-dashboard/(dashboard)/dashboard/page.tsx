@@ -19,13 +19,13 @@ const STATUS_STYLES: Record<string, { label: string; color: string }> = {
 
 export default async function DashboardPage() {
   const session = await auth.api.getSession({ headers: await headers() });
-  if (!session) redirect("/auth/sign-in?callbackUrl=/admin-dashboard/dashboard");
+  if (!session) redirect("/sign-in?callbackUrl=/admin-dashboard/dashboard");
 
   const orders = await prisma.order.findMany({
     where: { userId: session.user.id },
     orderBy: { orderDate: "desc" },
     include: {
-      orderItem: {
+      order_items: {
         include: { movies: true },
       },
     },
@@ -83,7 +83,7 @@ export default async function DashboardPage() {
                 </div>
 
                 <div className="space-y-2">
-                  {order.orderItem.map((item) => (
+                  {order.order_items.map((item) => (
                     <div key={item.id} className="flex items-center gap-3">
                       <Package size={13} className="shrink-0 text-muted-foreground" />
                       <Link href={`/movies/${item.movies.id}`}

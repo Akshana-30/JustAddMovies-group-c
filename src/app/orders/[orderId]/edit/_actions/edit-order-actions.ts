@@ -13,7 +13,7 @@ export async function updateOrder(data: FormValues) {
       status: data.status,
       totalAmount: data.totalAmount,
       orderDate: new Date(data.orderDate),
-      orderItem: {
+      order_items: {
         deleteMany: {},
         createMany: {
           data: data.orderItem.map((item) => ({

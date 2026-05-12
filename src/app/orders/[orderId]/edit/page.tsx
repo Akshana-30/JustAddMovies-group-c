@@ -8,7 +8,7 @@ export default async function EditOrderPage(
   const params = await props.params;
   const order = await prisma.order.findUnique({
     where: { id: params.orderId },
-    include: { orderItem: { include: { movies: { select: {title: true}} } }, user: {select: { name : true}} },
+    include: { order_items: { include: { movies: { select: {title: true}} } }, user: {select: { name : true}} },
   });
   if (!order) {
     return notFound();
@@ -17,7 +17,7 @@ export default async function EditOrderPage(
   return (
     <div>
         
-        <EditOrderForm data={order}></EditOrderForm>
+        <EditOrderForm data={{ ...order, orderItem: order.order_items }}></EditOrderForm>
     </div>
   )
 }
