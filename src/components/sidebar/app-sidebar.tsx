@@ -94,11 +94,8 @@ export function AppSidebar({ items, title, subtitle }: AppSidebarProps) {
                   <span className="truncate">{item.label}</span>
                   {item.badge !== undefined && item.badge > 0 && (
                     <span
-                      className={`ml-2 flex h-4 min-w-[1rem] items-center justify-center rounded-full px-1 text-[10px] font-medium ${
-                        active
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-primary/20 text-primary"
-                      }`}
+                      className="ml-2 flex h-4 min-w-[1rem] items-center justify-center rounded-full px-1 text-[10px] font-bold"
+                      style={{ background: "var(--gold)", color: "#1a1a1a" }}
                     >
                       {item.badge}
                     </span>

@@ -10,12 +10,12 @@ import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/format";
 
 const STATUS_STYLES: Record<string, { label: string; color: string }> = {
-  PENDING:    { label: "Pending",    color: "#f59e0b" },
-  PROCESSING: { label: "Processing", color: "#a78bfa" },
-  PAID:       { label: "Paid",       color: "#4ade80" },
-  SHIPPED:    { label: "Shipped",    color: "#60a5fa" },
-  DELIVERED:  { label: "Delivered",  color: "#34d399" },
-  CANCELED:   { label: "Cancelled",  color: "#f87171" },
+  PENDING:    { label: "Pending",    color: "#d97706" },
+  PROCESSING: { label: "Processing", color: "#7c3aed" },
+  PAID:       { label: "Paid",       color: "#16a34a" },
+  SHIPPED:    { label: "Shipped",    color: "#2563eb" },
+  DELIVERED:  { label: "Delivered",  color: "#059669" },
+  CANCELED:   { label: "Cancelled",  color: "#dc2626" },
 };
 
 export default async function DashboardPage() {
@@ -73,11 +73,11 @@ export default async function DashboardPage() {
                     </p>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="rounded-full px-2.5 py-0.5 text-xs font-medium"
-                      style={{ background: `${s.color}20`, color: s.color, border: `1px solid ${s.color}40` }}>
+                    <span className="rounded-full px-2.5 py-0.5 text-xs font-semibold"
+                      style={{ background: s.color, color: "#fff" }}>
                       {s.label}
                     </span>
-                    <span className="text-lg font-bold text-primary">
+                    <span className="text-lg font-bold text-foreground">
                       {formatPrice(order.totalAmount)}
                     </span>
                   </div>
@@ -88,7 +88,7 @@ export default async function DashboardPage() {
                     <div key={item.id} className="flex items-center gap-3">
                       <Package size={13} className="shrink-0 text-muted-foreground" />
                       <Link href={`/movies/${item.movies.id}`}
-                        className="flex-1 truncate text-sm text-muted-foreground hover:text-primary">
+                        className="flex-1 truncate text-sm text-foreground hover:text-primary">
                         {item.movies.title}
                       </Link>
                       <span className="text-xs text-muted-foreground">×{item.quantity}</span>
