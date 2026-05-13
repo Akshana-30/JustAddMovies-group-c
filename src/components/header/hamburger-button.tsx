@@ -42,16 +42,20 @@ export function HamburgerButton({ children }: { children: React.ReactNode }) {
 
             <div
                 ref={menuRef}
-                className={`
+                className={` 
+                    text-chart-5
+                    dark: text-foreground
                     absolute 
                     xl:hidden 
-                    top-25 
-                    min-h-full 
+                    top-23 
+                    min-h-screen
                     right-0  
-                    w-[clamp(220px,40%,275px)]
+                    pt-5
+                    pr-2
+                    w-[clamp(280px,80%,380px)]
                     bg-linear-to-l
                     from-background/80
-                    from-30%
+                    from-60%
                     to-99%
                     backdrop-invert-[.10] 
                     backdrop-blur-sm
@@ -60,8 +64,8 @@ export function HamburgerButton({ children }: { children: React.ReactNode }) {
                     flex-col 
                     text-right 
                     item-center 
-                    gap-6 
-                    font-semibold
+                    gap-8
+                    font-extrabold
                     text-lg 
                     transition
                     duration-200

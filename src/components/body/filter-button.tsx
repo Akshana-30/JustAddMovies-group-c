@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -7,25 +7,38 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function FilterButton() {
-    const router = useRouter();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const filterMenu = [
+    "Date",
+    "Price-high to low",
+    "Price-low to high",
+    "A-Ö",
+  ];
+  const handleFilter = (menu: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("sort", menu);
+    router.push(`/movies?${params.toString()}`);
+  };
 
-    const filterMenu = ['Most popular','Date','Price-high to low', 'Price-low to high','A-Ö']
-    
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="default">Sort by</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-40 bg-background/80" align="start">
-      {filterMenu.map((menu)=> (
-        <DropdownMenuGroup key={menu} onClick={() => router.push(`/movies?sort=${menu}`)}>
-          <DropdownMenuItem>{menu}</DropdownMenuItem>
-        </DropdownMenuGroup>
+        {filterMenu.map((menu) => (
+          <DropdownMenuGroup key={menu}>
+            <DropdownMenuItem onClick={() => handleFilter(menu)}>
+              {menu}
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
         ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );
 }
+

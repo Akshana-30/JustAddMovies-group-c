@@ -139,11 +139,11 @@ async function LandingPage({
           className="max-w-full px-15"
         >
           <h1 className="px-5 pt-2 text-2xl">New Releases </h1>
-          <CarouselContent className="h-90 ">
+          <CarouselContent className="h-90 max-md:h-80 max-sm:h-70 ">
             {latestMovie.map((movies) => (
               <CarouselItem
                 key={movies.id}
-                className="my-auto basis-3/5 lg:basis-1/5 "
+                className="my-auto basis-3/5 xl:basis-1/5 max-lg:basis-1/4 max-md:basis-1/2 max-sm:basis-1/1 "
               >
                 <div className="p-0">
                   <div key={movies.id} className="flex justify-evenly gap-0">
