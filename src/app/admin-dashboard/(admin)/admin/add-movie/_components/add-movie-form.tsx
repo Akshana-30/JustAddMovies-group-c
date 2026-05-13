@@ -31,10 +31,8 @@ import {
   ComboboxValue,
   useComboboxAnchor,
 } from "@/components/ui/combobox";
-import React from "react";
+import React, { useState } from "react";
 import { genreArray } from "@/lib/genres";
-import { directorList } from "@/lib/directors";
-import { actorList } from "@/lib/actors";
 import { toast } from "sonner";
 
 const formSchema = z.object({
@@ -64,6 +62,8 @@ type FormValues = z.infer<typeof formSchema>;
 export default function AddMovieForm() {
   const router = useRouter();
   const anchor = useComboboxAnchor();
+  const [directorInput, setDirectorInput] = useState("");
+  const [actorInput, setActorInput] = useState("");
 
   const form = useForm({
     defaultValues: {
@@ -75,19 +75,24 @@ export default function AddMovieForm() {
       stock: "" as unknown as number,
       runtime: "" as unknown as number,
       genres: [] as FormValues["genres"],
-      directors: [] as FormValues["directors"],
-      actors: [] as FormValues["actors"],
+      directors: [] as string[],
+      actors: [] as string[],
     },
     validators: {
       onSubmit: formSchema,
     },
     onSubmit: async ({ value }) => {
-      const result = await addMovie({ ...value, price: Math.round(value.price * 100) });
+      const result = await addMovie({
+        ...value,
+        price: Math.round(value.price * 100),
+      });
       if (result.error) {
         console.log(result.error);
         return;
       } else {
-        toast.success("Movie was added to the database.", { position: "bottom-right" });
+        toast.success("Movie was added to the database.", {
+          position: "bottom-right",
+        });
         router.push("/");
       }
     },
@@ -149,30 +154,6 @@ export default function AddMovieForm() {
                 );
               }}
             </form.Field>
-            {/* <form.Field name="price">
-              {(field) => {
-                const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid;
-                return (
-                  <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>Price (SEK)</FieldLabel>
-                    <Input
-                      id={field.name}
-                      name={field.name}
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(ev) =>
-                        field.handleChange(Number(ev.target.value))
-                      }
-                      aria-invalid={isInvalid}
-                    />
-                    {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
-                    )}
-                  </Field>
-                );
-              }}
-            </form.Field> */}
             <form.Field name="releaseDate">
               {(field) => {
                 const isInvalid =
@@ -219,137 +200,84 @@ export default function AddMovieForm() {
               }}
             </form.Field>
             <div className="flex gap-4">
-                           <form.Field name="price">
-                          {(field) => {
-                            const isInvalid =
-                              field.state.meta.isTouched && !field.state.meta.isValid;
-                            return (
-                              <Field data-invalid={isInvalid} className="flex 1">
-                                <FieldLabel htmlFor={field.name}>Price</FieldLabel>
-                                <Input
-                                  id={field.name}
-                                  name={field.name}
-                                  value={field.state.value}
-                                  onBlur={field.handleBlur}
-                                  onChange={(ev) =>
-                                    field.handleChange(Number(ev.target.value))
-                                  }
-                                  aria-invalid={isInvalid}
-                                />
-                                {isInvalid && (
-                                  <FieldError errors={field.state.meta.errors} />
-                                )}
-                              </Field>
-                            );
-                          }}
-                        </form.Field>
-                        <form.Field name="stock">
-                          {(field) => {
-                            const isInvalid =
-                              field.state.meta.isTouched && !field.state.meta.isValid;
-                            return (
-                              <Field data-invalid={isInvalid} className="flex 1">
-                                <FieldLabel htmlFor={field.name}>Stock</FieldLabel>
-                                <Input
-                                  id={field.name}
-                                  name={field.name}
-                                  type="number"
-                                  value={field.state.value}
-                                  onBlur={field.handleBlur}
-                                  onChange={(ev) =>
-                                    field.handleChange(Number(ev.target.value))
-                                  }
-                                  aria-invalid={isInvalid}
-                                />
-                                {isInvalid && (
-                                  <FieldError errors={field.state.meta.errors} />
-                                )}
-                              </Field>
-                            );
-                          }}
-                        </form.Field>
-            
-                    
-                        <form.Field name="runtime">
-                          {(field) => {
-                            const isInvalid =
-                              field.state.meta.isTouched && !field.state.meta.isValid;
-                            return (
-                              <Field data-invalid={isInvalid} className="flex 1">
-                                <FieldLabel htmlFor={field.name}>
-                                  Runtime in minutes
-                                </FieldLabel>
-                                <Input
-                                  id={field.name}
-                                  name={field.name}
-                                  type="number"
-                                  value={field.state.value}
-                                  onBlur={field.handleBlur}
-                                  onChange={(ev) =>
-                                    field.handleChange(Number(ev.target.value))
-                                  }
-                                  aria-invalid={isInvalid}
-                                />
-                                {isInvalid && (
-                                  <FieldError errors={field.state.meta.errors} />
-                                )}
-                              </Field>
-                            );
-                          }}
-                        </form.Field>
-                        </div>
-            {/* <form.Field name="stock">
-              {(field) => {
-                const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid;
-                return (
-                  <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>Stock</FieldLabel>
-                    <Input
-                      id={field.name}
-                      name={field.name}
-                      type="number"
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(ev) =>
-                        field.handleChange(Number(ev.target.value))
-                      }
-                      aria-invalid={isInvalid}
-                    />
-                    {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
-                    )}
-                  </Field>
-                );
-              }}
-            </form.Field>
-            <form.Field name="runtime">
-              {(field) => {
-                const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid;
-                return (
-                  <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>
-                      Runtime in minutes
-                    </FieldLabel>
-                    <Input
-                      id={field.name}
-                      name={field.name}
-                      type="number"
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(ev) =>
-                        field.handleChange(Number(ev.target.value))
-                      }
-                      aria-invalid={isInvalid}
-                    />
-                    {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
-                    )}
-                  </Field>
-                );
-              }}
-            </form.Field> */}
+              <form.Field name="price">
+                {(field) => {
+                  const isInvalid =
+                    field.state.meta.isTouched && !field.state.meta.isValid;
+                  return (
+                    <Field data-invalid={isInvalid} className="flex 1">
+                      <FieldLabel htmlFor={field.name}>Price</FieldLabel>
+                      <Input
+                        id={field.name}
+                        name={field.name}
+                        value={field.state.value}
+                        onBlur={field.handleBlur}
+                        onChange={(ev) =>
+                          field.handleChange(Number(ev.target.value))
+                        }
+                        aria-invalid={isInvalid}
+                      />
+                      {isInvalid && (
+                        <FieldError errors={field.state.meta.errors} />
+                      )}
+                    </Field>
+                  );
+                }}
+              </form.Field>
+              <form.Field name="stock">
+                {(field) => {
+                  const isInvalid =
+                    field.state.meta.isTouched && !field.state.meta.isValid;
+                  return (
+                    <Field data-invalid={isInvalid} className="flex 1">
+                      <FieldLabel htmlFor={field.name}>Stock</FieldLabel>
+                      <Input
+                        id={field.name}
+                        name={field.name}
+                        type="number"
+                        value={field.state.value}
+                        onBlur={field.handleBlur}
+                        onChange={(ev) =>
+                          field.handleChange(Number(ev.target.value))
+                        }
+                        aria-invalid={isInvalid}
+                      />
+                      {isInvalid && (
+                        <FieldError errors={field.state.meta.errors} />
+                      )}
+                    </Field>
+                  );
+                }}
+              </form.Field>
+
+              <form.Field name="runtime">
+                {(field) => {
+                  const isInvalid =
+                    field.state.meta.isTouched && !field.state.meta.isValid;
+                  return (
+                    <Field data-invalid={isInvalid} className="flex 1">
+                      <FieldLabel htmlFor={field.name}>
+                        Runtime in minutes
+                      </FieldLabel>
+                      <Input
+                        id={field.name}
+                        name={field.name}
+                        type="number"
+                        value={field.state.value}
+                        onBlur={field.handleBlur}
+                        onChange={(ev) =>
+                          field.handleChange(Number(ev.target.value))
+                        }
+                        aria-invalid={isInvalid}
+                      />
+                      {isInvalid && (
+                        <FieldError errors={field.state.meta.errors} />
+                      )}
+                    </Field>
+                  );
+                }}
+              </form.Field>
+            </div>
             <form.Field name="genres">
               {(field) => {
                 const isInvalid =
@@ -394,43 +322,54 @@ export default function AddMovieForm() {
                 );
               }}
             </form.Field>
-            <form.Field name="directors">
+
+            <form.Field name="directors" mode="array">
               {(field) => {
                 const isInvalid =
                   field.state.meta.isTouched && !field.state.meta.isValid;
+
+                const handleAdd = () => {
+                  const names = directorInput
+                    .split(",")
+                    .map((n) => n.trim())
+                    .filter(Boolean);
+                  names.forEach((name) => field.pushValue(name));
+                  setDirectorInput("");
+                };
+
                 return (
-                  <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>Director</FieldLabel>
-                    <Combobox
-                      multiple
-                      autoHighlight
-                      items={directorList}
-                      value={field.state.value}
-                      onValueChange={field.handleChange}
-                    >
-                      <ComboboxChips ref={anchor} className="w-full max-w-full">
-                        <ComboboxValue>
-                          {(values) => (
-                            <React.Fragment>
-                              {values.map((value: string) => (
-                                <ComboboxChip key={value}>{value}</ComboboxChip>
-                              ))}
-                              <ComboboxChipsInput />
-                            </React.Fragment>
-                          )}
-                        </ComboboxValue>
-                      </ComboboxChips>
-                      <ComboboxContent anchor={anchor}>
-                        <ComboboxEmpty>No director selected.</ComboboxEmpty>
-                        <ComboboxList>
-                          {(item) => (
-                            <ComboboxItem key={item} value={item}>
-                              {item}
-                            </ComboboxItem>
-                          )}
-                        </ComboboxList>
-                      </ComboboxContent>
-                    </Combobox>
+                  <Field data-invalid={isInvalid} className="border p-2">
+                    <FieldLabel>Directors</FieldLabel>
+
+                    <div className="px-4 py-2">
+                      {field.state.value.map((name, index) => (
+                        <span
+                          className=" px-2 py-1 rounded mr-1 mt-1 text-xs text-foreground bg-muted"
+                          key={index}
+                        >
+                          {`${name} `}
+                          <button
+                            type="button"
+                            onClick={() => field.removeValue(index)}
+                          >
+                            ✕
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+
+                    <div>
+                      <Input
+                        value={directorInput}
+                        onChange={(ev) => setDirectorInput(ev.target.value)}
+                        onKeyDown={(ev) => ev.key === "Enter" && handleAdd()}
+                        placeholder=".. Christopher Nolan, Steven Spielberg"
+                      />
+                      <Button size="xs" type="button" onClick={handleAdd}>
+                        Add
+                      </Button>
+                    </div>
+
                     {isInvalid && (
                       <FieldError errors={field.state.meta.errors} />
                     )}
@@ -438,43 +377,54 @@ export default function AddMovieForm() {
                 );
               }}
             </form.Field>
-            <form.Field name="actors">
+
+            <form.Field name="actors" mode="array">
               {(field) => {
                 const isInvalid =
                   field.state.meta.isTouched && !field.state.meta.isValid;
+
+                const handleAdd = () => {
+                  const names = actorInput
+                    .split(",")
+                    .map((n) => n.trim())
+                    .filter(Boolean);
+                  names.forEach((name) => field.pushValue(name));
+                  setActorInput("");
+                };
+
                 return (
-                  <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>Actors</FieldLabel>
-                    <Combobox
-                      multiple
-                      autoHighlight
-                      items={actorList}
-                      value={field.state.value}
-                      onValueChange={field.handleChange}
-                    >
-                      <ComboboxChips ref={anchor} className="w-full max-w-full">
-                        <ComboboxValue>
-                          {(values) => (
-                            <React.Fragment>
-                              {values.map((value: string) => (
-                                <ComboboxChip key={value}>{value}</ComboboxChip>
-                              ))}
-                              <ComboboxChipsInput />
-                            </React.Fragment>
-                          )}
-                        </ComboboxValue>
-                      </ComboboxChips>
-                      <ComboboxContent anchor={anchor}>
-                        <ComboboxEmpty>No director selected.</ComboboxEmpty>
-                        <ComboboxList>
-                          {(item) => (
-                            <ComboboxItem key={item} value={item}>
-                              {item}
-                            </ComboboxItem>
-                          )}
-                        </ComboboxList>
-                      </ComboboxContent>
-                    </Combobox>
+                  <Field data-invalid={isInvalid} className="border p-2">
+                    <FieldLabel>Actors</FieldLabel>
+
+                    <div className="px-4 py-2">
+                      {field.state.value.map((name, index) => (
+                        <span
+                          className="px-2 py-1 rounded mr-1 mt-1 text-xs text-foreground bg-muted"
+                          key={index}
+                        >
+                          {`${name} `}
+                          <button
+                            type="button"
+                            onClick={() => field.removeValue(index)}
+                          >
+                            ✕
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+
+                    <div>
+                      <Input
+                        value={actorInput}
+                        onChange={(ev) => setActorInput(ev.target.value)}
+                        onKeyDown={(ev) => ev.key === "Enter" && handleAdd()}
+                        placeholder=".. Liam Neeson, Steven Seagal"
+                      />
+                      <Button size="xs" type="button" onClick={handleAdd}>
+                        Add
+                      </Button>
+                    </div>
+
                     {isInvalid && (
                       <FieldError errors={field.state.meta.errors} />
                     )}

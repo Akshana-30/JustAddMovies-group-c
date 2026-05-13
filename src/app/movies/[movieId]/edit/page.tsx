@@ -1,10 +1,24 @@
 import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import EditMovieForm from "./_components/edit-movie-form";
+import { redirect } from "next/navigation";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 export default async function EditMoviePage(
   props: PageProps<"/movies/[movieId]/edit">,
 ) {
+  const session = await auth.api.getSession({ headers: await headers() });
+
+  if (!session) {
+    redirect("/sign-in");
+  }
+
+  const isAdmin = session?.user.role === "ADMIN";
+    if(!isAdmin){
+      redirect("/")
+    }
+
   const params = await props.params;
   const movie = await prisma.movie.findUnique({
     where: { id: params.movieId },

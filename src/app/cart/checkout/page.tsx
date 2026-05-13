@@ -2,7 +2,6 @@ import { getCart } from "@/lib/cart";
 import { getCartProducts } from "@/lib/cart-types";
 import PaymentForm from "./_components/payment-form";
 import { formatPrice } from "@/lib/format";
-
 export default async function CheckOutPage() {
   const cart = await getCart();
   const products = await getCartProducts(cart);

@@ -4,9 +4,10 @@ import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import prisma from "@/lib/prisma";
-import { formatPrice, formatDate } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 import { Package, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { formatPrice } from "@/lib/format";
 
 const STATUS_STYLES: Record<string, { label: string; color: string }> = {
   PENDING:    { label: "Pending",    color: "#f59e0b" },

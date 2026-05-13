@@ -36,17 +36,22 @@ export default function PaymentForm() {
       zip: "",
     },
     onSubmit: async () => {
-      startTransition(() => handleClick());
+      startTransition(() => handleCheckoutClick());
     },
   });
 
-  async function handleClick() {
+  async function handleCheckoutClick() {
     await handleCheckout();
     toast.success("Your order has been placed!.", {
       position: "top-center",
     });
     router.push("/");
   }
+
+  function handleCartClick() {
+    router.push("/cart");
+  }
+  
   return (
     <div className="w-full max-w-md">
       <Card>
@@ -462,12 +467,21 @@ export default function PaymentForm() {
             </FieldGroup>
             <Button
               type="submit"
-              className="cursor-pointer w-full mt-4  bg-(--gold) hover:bg-(--gold)]/85"
+              className="cursor-pointer w-full mt-4 bg-(--gold) hover:bg-(--gold)]/85"
               disabled={isPending}
             >
               {isPending ? "Validating payment.." : "Checkout"}
             </Button>
           </form>
+
+          <Button
+            type="button"
+            className="cursor-pointer w-full mt-4 bg-neutral-400! hover:bg-neutral-400/85!"
+            onClick={handleCartClick}
+            disabled={isPending}
+          >
+            Back To Cart
+          </Button>
         </CardContent>
       </Card>
     </div>
