@@ -54,7 +54,7 @@ export default function AboutPage() {
                     { name: "Tobias",  role: "Backend/Database",  emoji: "🧑‍💻" },
                     { name: "Peter",   role: "UI/UX",    emoji: "👨‍🎨" },
                 ].map((member, i) => (
-                    <div key={i} className="team-card">
+                    <div key={i} className="team-card" style={{ background: "var(--surface2)", borderColor: "var(--border-strong)" }}>
                         <div className="team-avatar">{member.emoji}</div>
 
                         <div className="team-name">
@@ -78,7 +78,7 @@ export default function AboutPage() {
             <div
               key={s.name}
               className="flex items-start gap-3 rounded-xl border p-4"
-              style={{ background: "var(--surface)", borderColor: "var(--border)" }}
+              style={{ background: "var(--surface2)", borderColor: "var(--border-strong)" }}
             >
               <span className="mt-0.5 text-xl">{s.icon}</span>
               <div>
