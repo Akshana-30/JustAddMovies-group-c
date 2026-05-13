@@ -4,6 +4,8 @@ import Image from "next/image";
 import MovBanner from "@/components/body/banner-card";
 import AddToCartButton from "@/components/add-to-cart-button";
 import { formatPrice } from "@/lib/format";
+import { WishlistButton } from "@/components/body/wishlist-button";
+import { ShareButton } from "@/components/body/share-button";
 
 async function MovieDetailsPage(props: PageProps<"/movies/[movieId]">) {
   const params = await props.params;
@@ -61,7 +63,14 @@ async function MovieDetailsPage(props: PageProps<"/movies/[movieId]">) {
               {formatPrice(movie.price)}
             </p>
             <br />
-            <AddToCartButton productId={movie.id} productTitle={movie.title} />
+
+            <div className="flex items-center gap-4">
+              <AddToCartButton productId={movie.id} productTitle={movie.title} />
+
+              <WishlistButton movieId={movie.id} />
+
+              <ShareButton />
+            </div>
           </div>
         </div>
       </MovBanner>
