@@ -17,9 +17,9 @@ export function SearchBar() {
 
   return (
     <form onSubmit={handleSearch}>
-      <InputGroup className="bg-secondary text-black rounded-2xl">
+      <InputGroup className="bg-secondary/70 text-black rounded-2xl">
         <InputGroupInput
-          placeholder=" Find by title or actor"
+          placeholder="Find by title or actor"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
