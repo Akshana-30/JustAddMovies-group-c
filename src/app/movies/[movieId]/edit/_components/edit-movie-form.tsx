@@ -37,6 +37,7 @@ import DeleteMovieButton, {
   RestoreMovieButton,
 } from "@/components/admin-buttons/delete-button";
 import { toast } from "sonner";
+import Link from "next/link";
 
 type Props = {
   movie: {
@@ -103,7 +104,7 @@ export default function EditMovieForm({ movie }: Props) {
       toast.success("Movie was successfully updated.", {
         position: "bottom-right",
       });
-      router.push(`/movies/${movie.id}`);
+      router.push(`/admin-dashboard/admin/movies`);
     },
   });
   return (
@@ -466,6 +467,7 @@ export default function EditMovieForm({ movie }: Props) {
                   onSuccess={() => setIsDeleted(true)}
                 />
               )}
+              <Button asChild><Link href="/admin-dashboard/admin/movies">Back to movies</Link></Button>
             </Field>
           </FieldGroup>
         </form>

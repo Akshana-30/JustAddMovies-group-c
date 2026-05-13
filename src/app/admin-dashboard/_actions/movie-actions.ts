@@ -1,6 +1,5 @@
 // src/app/admin-dashboard/_actions/movie-actions.ts
 // Replaces/extends existing movie-actions.ts
-// Adds createMovie, updateMovie, deleteMovie
 "use server";
 
 import { revalidatePath } from "next/cache";
@@ -8,7 +7,6 @@ import prisma from "@/lib/prisma";
 import { actionError, actionSuccess } from "@/lib/utils";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { z } from "zod";
 
 // ── Auth guard ───────────────────────────────────────
 async function requireAdmin() {
@@ -18,106 +16,6 @@ async function requireAdmin() {
   return session;
 }
 
-// ── Movie input schema ───────────────────────────────
-const movieSchema = z.object({
-  title:       z.string().min(1, "Title is required"),
-  description: z.string().min(1, "Description is required"),
-  price:       z.number().int().positive("Price must be positive"),
-  stock:       z.number().int().min(0, "Stock cannot be negative"),
-  runtime:     z.number().int().positive("Runtime must be positive"),
-  releaseDate: z.string().min(1, "Release date is required"),
-  imageUrl:    z.string().optional(),
-  genreIds:    z.array(z.string()).optional(),
-});
-
-// ── Create ───────────────────────────────────────────
-export async function createMovie(input: unknown) {
-  if (!await requireAdmin()) return actionError("Unauthorized");
-
-  const parsed = movieSchema.safeParse(input);
-  if (!parsed.success) return actionError(parsed.error.issues[0].message);
-
-  const { genreIds, releaseDate, imageUrl, ...data } = parsed.data;
-  try {
-    const movie = await prisma.movie.create({
-      data: {
-        ...data,
-        imageUrl:    imageUrl ?? "",
-        releaseDate: new Date(releaseDate),
-        genres: genreIds?.length
-          ? { connect: genreIds.map((id) => ({ id })) }
-          : undefined,
-      },
-    });
-    revalidatePath("/admin-dashboard/admin/movies");
-    revalidatePath("/movies");
-    revalidatePath("/");
-    return actionSuccess({ id: movie.id });
-  } catch (err) {
-    console.error(err);
-    return actionError("Failed to create movie");
-  }
-}
-
-// ── Update ───────────────────────────────────────────
-export async function updateMovie(id: string, input: unknown) {
-  if (!await requireAdmin()) return actionError("Unauthorized");
-
-  const parsed = movieSchema.safeParse(input);
-  if (!parsed.success) return actionError(parsed.error.issues[0].message);
-
-  const { genreIds, releaseDate, imageUrl, ...data } = parsed.data;
-  try {
-    // Get current genres to diff
-    const current = await prisma.movie.findUnique({ where: { id }, include: { genres: true } });
-    const currentIds = current?.genres.map((g) => g.id) ?? [];
-    const newIds     = genreIds ?? [];
-    const toConnect  = newIds.filter((gid) => !currentIds.includes(gid));
-    const toDisconnect = currentIds.filter((gid) => !newIds.includes(gid));
-
-    await prisma.movie.update({
-      where: { id },
-      data: {
-        ...data,
-        imageUrl:    imageUrl ?? "",
-        releaseDate: new Date(releaseDate),
-        genres: {
-          connect:    toConnect.map((gid) => ({ id: gid })),
-          disconnect: toDisconnect.map((gid) => ({ id: gid })),
-        },
-      },
-    });
-    revalidatePath("/admin-dashboard/admin/movies");
-    revalidatePath(`/movies/${id}`);
-    revalidatePath("/movies");
-    revalidatePath("/");
-    return actionSuccess({ id });
-  } catch (err) {
-    console.error(err);
-    return actionError("Failed to update movie");
-  }
-}
-
-// ── Delete ───────────────────────────────────────────
-export async function deleteMovie(id: string) {
-  if (!await requireAdmin()) return actionError("Unauthorized");
-
-  try {
-    await prisma.movie.delete({ where: { id } });
-    revalidatePath("/admin-dashboard/admin/movies");
-    revalidatePath("/movies");
-    revalidatePath("/");
-    return actionSuccess({ ok: true });
-  } catch (err) {
-    console.error(err);
-    return actionError("Failed to delete movie");
-  }
-}
-
-// ── Restore (no-op — soft-delete not in schema) ──────
-export async function restoreMovie(_id: string) {
-  return actionError("Restore is not available");
-}
 
 // ── Bulk price update ────────────────────────────────
 export async function bulkUpdatePrice(ids: string[], price: number) {

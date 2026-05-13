@@ -79,11 +79,11 @@ export function BrowseFilters({ genres, directors, actors, maxPrice, maxRuntime 
           {genres.map((g) => <option key={g.id} value={g.id}>{g.name}</option>)}
         </select>
 
-        {/* Rating */}
+        {/* Rating
         <select title="rating" value={get("ratingMin")} onChange={(e) => update({ ratingMin: e.target.value })}
           style={{ ...IS, minWidth:"130px" }}>
           {RATINGS.map((r) => <option key={r.value} value={r.value}>{r.label}</option>)}
-        </select>
+        </select> */}
 
         {/* Sort */}
         <select title="sort" value={get("sort") || "title"} onChange={(e) => update({ sort: e.target.value })}

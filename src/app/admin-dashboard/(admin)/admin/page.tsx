@@ -78,7 +78,7 @@ export default async function AdminPage() {
       })
       .reduce((s, o) => s + o.totalAmount, 0);
       
-    months.push({ label, revenue });
+    months.push({ label, revenue});
   }
 
   // ── Average price of sold movies ─────────────────────────────

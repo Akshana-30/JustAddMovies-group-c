@@ -6,6 +6,7 @@ import {
 import React, { useTransition } from "react";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
+import { RotateCcw, Trash2 } from "lucide-react";
 
 type Props = React.ComponentProps<typeof Button> & { movieId: string } & {
   onSuccess?: () => void;
@@ -36,8 +37,8 @@ export default function DeleteMovieButton({
       onClick={() => startTransition(() => handleClick())}
       disabled={isPending}
       {...props}
-    >
-      {isPending ? "Adding to archive.." : "Move to archive"}
+    ><Trash2 size={12} />
+      {isPending ? "Archiving.." : "Archive"}
     </Button>
   );
 }
@@ -57,7 +58,8 @@ export function RestoreMovieButton({ movieId, onSuccess, ...props }: Props) {
       disabled={isPending}
       {...props}
     >
-      {isPending ? "Restoring movie.." : "Restore"}
+      <RotateCcw size={12} />
+      {isPending ? "Restoring.." : "Restore"}
     </Button>
   );
 }

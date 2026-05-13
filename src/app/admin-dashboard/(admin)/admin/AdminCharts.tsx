@@ -1,6 +1,7 @@
 // src/app/admin-dashboard/(admin)/admin/AdminCharts.tsx
 "use client";
 
+import { formatPrice } from "@/lib/format";
 import { useState } from "react";
 
 interface Props {
@@ -247,7 +248,7 @@ export function AdminCharts({
               valueKey="revenue"
               labelKey="title"
               color="#a78bfa"
-              formatValue={(v) => `${v.toLocaleString("sv-SE")} kr`}
+              formatValue={(v) => `${formatPrice(v)}`}
             />
           </div>
         </div>
