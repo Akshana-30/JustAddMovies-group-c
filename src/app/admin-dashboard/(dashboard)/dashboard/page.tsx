@@ -66,7 +66,7 @@ export default async function DashboardPage() {
                 <div className="mb-4 flex flex-wrap items-start justify-between gap-2">
                   <div>
                     <p className="font-mono text-xs text-muted-foreground">
-                      Order #{order.id.slice(-8).toUpperCase()}
+                      Order #{order.id}
                     </p>
                     <p className="mt-0.5 text-sm text-muted-foreground">
                       {formatDate(order.orderDate)}

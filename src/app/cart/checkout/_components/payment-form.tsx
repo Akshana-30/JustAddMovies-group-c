@@ -41,11 +41,20 @@ export default function PaymentForm() {
   });
 
   async function handleCheckoutClick() {
-    await handleCheckout();
-    toast.success("Your order has been placed!.", {
-      position: "top-center",
-    });
-    router.push("/");
+    const { streetAdress, city, zip } = form.state.values;
+    try {
+      await handleCheckout({ street: streetAdress, city, zip });
+      toast.success("Your order has been placed!", {
+        position: "top-center",
+      });
+      router.push("/");
+    } catch (err) {
+      console.error("Checkout error:", err);
+      toast.error(
+        err instanceof Error ? err.message : "Checkout failed. Please try again.",
+        { position: "top-center" }
+      );
+    }
   }
 
   function handleCartClick() {

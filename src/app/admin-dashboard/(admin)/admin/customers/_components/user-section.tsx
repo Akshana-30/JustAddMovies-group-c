@@ -48,7 +48,7 @@ export function UserSection({ title, people, count }: { title: string; people: t
                                         {user.orders.map((order) => (
                                             <div key={order.id} style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "12px" }}>
                                                 <span style={{ color: "var(--text-dim)", fontFamily: "monospace", fontSize: "10px" }}>
-                                                    #{order.id.slice(-6).toUpperCase()}
+                                                    #{order.id}
                                                 </span>
                                                 <StatusBadge status={order.status} />
                                                 <span style={{ color: "var(--gold)", fontWeight: 500 }}>
