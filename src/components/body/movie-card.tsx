@@ -7,6 +7,8 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import AddToCartButton from "../add-to-cart-button";
+import { WishlistButton } from "./wishlist-button";
+import { ShareButton } from "./share-button";
 
 type Props = React.ComponentProps<typeof Card> & {
   imageUrl: string;
@@ -59,10 +61,14 @@ export default function MovieCard({
               <p className="my-auto">In stock: {stock}</p>
             </div>
 
-            <div className="mt-4">
+            <div className="mt-4 flex items-center gap-4">
               <AddToCartButton productId={id} productTitle={title} />
+
+              <WishlistButton movieId={id} />
+
+              <ShareButton movieId={id}/>
             </div>
-          </div> 
+          </div>
         </CardFooter >
 
       </Card>
