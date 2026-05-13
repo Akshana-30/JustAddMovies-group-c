@@ -157,7 +157,7 @@ export default function OrderTable({ data }: Props) {
   });
 
   return (
-    <div className="bg-secondary overflow-hidden rounded-md border max-w-6xl mx-auto mt-10">
+    <div className="bg-secondary overflow-hidden rounded border mt-10">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

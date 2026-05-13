@@ -3,8 +3,6 @@
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardHeader,
 } from "@/components/ui/card";
 import z from "zod";
 import { useForm } from "@tanstack/react-form";
@@ -98,10 +96,7 @@ export default function AddMovieForm() {
     },
   });
   return (
-    <Card className="max-w-3xl mx-auto bg-secondary shadow">
-      <CardHeader>
-        <CardDescription>Add movie</CardDescription>
-      </CardHeader>
+    <Card className="bg-secondary max-w-3xl mt-10 border">
       <CardContent>
         <form
           onSubmit={(ev) => {

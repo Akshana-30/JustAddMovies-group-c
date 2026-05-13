@@ -3,8 +3,6 @@ import { genreArray } from "@/lib/genres";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardHeader,
 } from "@/components/ui/card";
 import z from "zod";
 import { useForm } from "@tanstack/react-form";
@@ -108,10 +106,7 @@ export default function EditMovieForm({ movie }: Props) {
     },
   });
   return (
-    <Card className="max-w-3xl mx-auto bg-secondary border">
-      <CardHeader>
-        <CardDescription>Edit movie</CardDescription>
-      </CardHeader>
+    <Card className="max-w-3xl mt-10 mx-auto border">
       <CardContent>
         <form
           onSubmit={(ev) => {
@@ -352,7 +347,7 @@ export default function EditMovieForm({ movie }: Props) {
                   <Field data-invalid={isInvalid} className="border p-2">
                     <FieldLabel>Directors</FieldLabel>
 
-                    <div className="px-4 py-2">
+                    <div className="py-2">
                       {field.state.value.map((name, index) => (
                         <span
                           className=" px-2 py-1 rounded mr-1 mt-1 text-xs text-foreground bg-muted"
@@ -407,7 +402,7 @@ export default function EditMovieForm({ movie }: Props) {
                   <Field data-invalid={isInvalid} className="border p-2">
                     <FieldLabel>Actors</FieldLabel>
 
-                    <div className="px-4 py-2">
+                    <div className="py-2">
                       {field.state.value.map((name, index) => (
                         <span
                           className="px-2 py-1 rounded mr-1 mt-1 text-xs text-foreground bg-muted"
