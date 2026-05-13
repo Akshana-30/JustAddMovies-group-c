@@ -10,8 +10,9 @@ export default async function CheckOutPage() {
   }, 0);
 
   return (
-    <div className="flex justify-center mt-10 px-4">
-      <div className="w-full max-w-md p-5 border rounded-2xl bg-secondary">
+    <div >
+      <div className="flex mt-10 px-4 border rounded-2xl bg-secondary max-w-4xl mx-auto">
+      <div className="w-full max-w-md p-5">
         <div>{products.map((p) => (
             <div key={p.id} className="border p-4">
                 <div><span className="">{p.title} x {p.quantity}</span> : <span className="text-right text-yellow-400">{formatPrice(p.price)}</span></div>
@@ -20,6 +21,7 @@ export default async function CheckOutPage() {
         <div className="border p-4 font-bold text-right  text-yellow-400 ">Total Order Cost: {formatPrice(total)}</div>
       </div>
       <PaymentForm/>
+      </div>
     </div>
   );
 }

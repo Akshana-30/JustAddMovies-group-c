@@ -62,15 +62,9 @@ export default function PaymentForm() {
   }
   
   return (
-    <div className="w-full max-w-md">
-      <Card>
-        <CardHeader>
-          <CardTitle>
-            Payment Details
-            <CardDescription></CardDescription>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+    
+          <div className="w-full max-w-md p-4">
+            <h1 className="mb-4">Payment Details</h1>
           <form
             onSubmit={(ev) => {
               ev.preventDefault();
@@ -491,8 +485,5 @@ export default function PaymentForm() {
           >
             Back To Cart
           </Button>
-        </CardContent>
-      </Card>
-    </div>
-  );
-}
+          </div>
+)}
