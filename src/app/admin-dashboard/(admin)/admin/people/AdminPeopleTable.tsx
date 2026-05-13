@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Plus, Trash2, Loader2 } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { createDirector, deleteDirector, createActor, deleteActor } from "@/app/admin-dashboard/_actions/people-actions";
 
 interface Person { id: string; name: string; _count: { movies: number } }
