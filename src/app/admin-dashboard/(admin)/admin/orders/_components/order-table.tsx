@@ -173,7 +173,7 @@ export default function OrderTable({ data }: Props) {
   });
 
   return (
-    <div className="flex flex-col justify-between bg-secondary rounded-2xl border mt-10 min-h-150">
+    <div className="flex flex-col justify-between border border-(--gold) bg-sidebar-accent rounded-2xl mt-10 min-h-150">
       <div className="flex items-center py-4 ml-2">
         <div className="relative">
         <Input

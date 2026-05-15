@@ -41,7 +41,7 @@ export default async function OrderPage(props: PageProps<"/orders/[orderId]">) {
     return notFound();
   }
   return (
-    <div className="flex-row max-w-3xl mx-auto border rounded-2xl p-4 bg-secondary mt-10">
+    <div className="flex-row max-w-3xl mx-auto border border-(--gold) bg-sidebar-accent rounded-2xl p-4 mt-10">
       <div className="border-b-2 mb-10">
         <h1 className="text-4xl font-bold m-4">{`ID: ${order.id}`}</h1>
         <Table>
@@ -85,7 +85,7 @@ export default async function OrderPage(props: PageProps<"/orders/[orderId]">) {
         </Table>
       </div>
       <div className="border rounded-2xl p-2">
-        <Table>
+        <Table className="overflow-hidden">
           <TableHeader>
             <TableRow>
               <TableHead>Movie Title</TableHead>

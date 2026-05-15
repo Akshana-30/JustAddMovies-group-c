@@ -96,7 +96,7 @@ export default function AddMovieForm() {
     },
   });
   return (
-    <Card className="bg-secondary max-w-3xl mt-10 border">
+    <Card className="border border-(--gold) bg-sidebar-accent max-w-3xl mt-10">
       <CardContent>
         <form
           onSubmit={(ev) => {

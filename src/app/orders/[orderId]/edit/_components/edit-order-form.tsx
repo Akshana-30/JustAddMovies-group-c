@@ -96,7 +96,7 @@ export default function EditOrderForm({ data }: Props) {
   });
 
   return (
-    <div className="max-w-3xl mx-auto bg-secondary p-5">
+    <div className="max-w-3xl mx-auto border border-(--gold) bg-sidebar-accent p-5 rounded-2xl">
       <form
         onSubmit={(ev) => {
           ev.preventDefault();
