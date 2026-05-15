@@ -1,10 +1,18 @@
 // src/components/sidebar/app-sidebar.tsx
+// ── Customer dashboard sidebar ─────────────────────────────────────
+// Marked "use client" because it reads the current pathname via
+// usePathname to highlight the active nav item, and manages its own
+// collapsed/expanded state with useState.
 "use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 
+// ── Types ─────────────────────────────────────────────────────────
+// badge is optional — only My Orders and Wishlist pass a count.
+// The count is fetched server-side in dashboard/layout.tsx so it is
+// always accurate without an extra client-side request.
 type NavItem = {
   label: string;
   href: string;
@@ -33,7 +41,9 @@ export function AppSidebar({ items, title, subtitle }: AppSidebarProps) {
         minHeight: "100%",
       }}
     >
-      {/* Collapse toggle */}
+      {/* ── Collapse toggle ───────────────────────────────────────── */}
+      {/* Positioned absolutely so it sits on the edge of the sidebar  */}
+      {/* and overlaps the main content area slightly.                  */}
       <button
         onClick={() => setCollapsed(!collapsed)}
         aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
@@ -51,7 +61,8 @@ export function AppSidebar({ items, title, subtitle }: AppSidebarProps) {
         </svg>
       </button>
 
-      {/* Header */}
+      {/* ── Header ────────────────────────────────────────────────── */}
+      {/* Title and email are hidden when collapsed to save space.     */}
       <div className="flex h-14 shrink-0 items-center border-b border-border px-4">
         {!collapsed && (
           <div className="overflow-hidden">
@@ -67,9 +78,11 @@ export function AppSidebar({ items, title, subtitle }: AppSidebarProps) {
         )}
       </div>
 
-      {/* Nav items */}
+      {/* ── Nav items ─────────────────────────────────────────────── */}
       <nav className="flex flex-col gap-0.5 p-2">
         {items.map((item) => {
+          // Active detection: exact match for dashboard root, prefix
+          // match for nested pages (e.g. /dashboard/wishlist).
           const active =
             pathname === item.href ||
             (item.href.length > 1 && pathname.startsWith(item.href + "/"));
@@ -92,6 +105,12 @@ export function AppSidebar({ items, title, subtitle }: AppSidebarProps) {
               {!collapsed && (
                 <span className="flex flex-1 items-center justify-between truncate">
                   <span className="truncate">{item.label}</span>
+
+                  {/* ── Count badge ───────────────────────────────── */}
+                  {/* Uses var(--gold) with a hardcoded dark text      */}
+                  {/* colour instead of Tailwind theme classes because */}
+                  {/* bg-primary/text-primary-foreground rendered the  */}
+                  {/* badge nearly invisible in dark mode.             */}
                   {item.badge !== undefined && item.badge > 0 && (
                     <span
                       className="ml-2 flex h-4 min-w-[1rem] items-center justify-center rounded-full px-1 text-[10px] font-bold"

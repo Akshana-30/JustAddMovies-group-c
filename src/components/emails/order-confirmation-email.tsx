@@ -1,3 +1,8 @@
+// ── Order confirmation email template ─────────────────────────────
+// Built with react-email so the layout is written as JSX and rendered
+// to a plain HTML string at send time. The Tailwind preset (pixel-based)
+// is used instead of CSS variables because email clients do not support
+// custom properties — all colours must be hardcoded hex values.
 import {
     Body,
     Column,
@@ -13,8 +18,16 @@ import {
     Tailwind,
     Text,
 } from "react-email";
+
+// ── formatPrice ───────────────────────────────────────────────────
+// Prices in the database are stored in öre (e.g. 8900 = 89 kr).
+// formatPrice divides by 100 and formats with the Swedish locale so
+// the email matches the prices shown in the storefront.
 import { formatPrice } from "@/lib/format";
 
+// ── Props ─────────────────────────────────────────────────────────
+// Exported so send-order-confirmation.tsx can reuse the same type
+// without duplicating the shape in two places.
 export interface OrderConfirmationEmailProps {
     userName:  string;
     userEmail: string;
@@ -24,10 +37,16 @@ export interface OrderConfirmationEmailProps {
     shippingAddress: { street: string; city: string; zip: string };
 }
 
+// ── Base URL ──────────────────────────────────────────────────────
+// Email clients cannot resolve relative paths, so images require an
+// absolute URL. On Vercel the environment variable is set automatically;
+// locally BETTER_AUTH_URL (defined in .env) is used as the fallback so
+// the logo resolves to http://localhost:3000/JAM.png during development.
 const baseUrl = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
     : (process.env.BETTER_AUTH_URL ?? "http://localhost:3000");
 
+// ── Template ──────────────────────────────────────────────────────
 export const OrderConfirmationEmail = ({
                                            userName,
                                            orderId,
@@ -39,9 +58,14 @@ export const OrderConfirmationEmail = ({
         <Html>
             <Head />
             <Body className="bg-[#f6f9fc] py-2.5 font-sans">
+                {/* Preview text shown in inbox before opening the email */}
                 <Preview>Your order #{orderId} is confirmed!</Preview>
 
                 <Container className="bg-white border border-solid border-[#f0f0f0] p-11.25">
+
+                    {/* ── Logo ─────────────────────────────────────────────── */}
+                    {/* JAM.png is served from /public and referenced via an    */}
+                    {/* absolute URL so it loads in all email clients.           */}
                     <Img
                         src={`${baseUrl}/JAM.png`}
                         width="40"
@@ -49,6 +73,7 @@ export const OrderConfirmationEmail = ({
                         alt="Just Add Movies logo"
                     />
 
+                    {/* ── Greeting ─────────────────────────────────────────── */}
                     <Section>
                         <Text className="text-base font-light text-[#404040] leading-6.5">
                             Hi {userName},
@@ -56,6 +81,7 @@ export const OrderConfirmationEmail = ({
                         <Text className="text-base font-light text-[#404040] leading-6.5">
                             Thank you for your order! Here&apos;s your summary:
                         </Text>
+                        {/* Full cuid(2) ID shown to match the customer dashboard */}
                         <Text className="text-xs font-medium text-[#706a7b] uppercase tracking-wider">
                             Order #{orderId}
                         </Text>
@@ -63,6 +89,9 @@ export const OrderConfirmationEmail = ({
 
                     <Hr className="border-[#f0f0f0] my-4" />
 
+                    {/* ── Order items ──────────────────────────────────────── */}
+                    {/* Price per line = unit price × quantity, both in öre,   */}
+                    {/* formatted to Swedish kronor by formatPrice.             */}
                     <Section>
                         {items.map((item, i) => (
                             <Row key={i} className="py-1">
@@ -83,6 +112,7 @@ export const OrderConfirmationEmail = ({
 
                     <Hr className="border-[#f0f0f0] my-4" />
 
+                    {/* ── Order total ───────────────────────────────────────── */}
                     <Section>
                         <Row>
                             <Column className="flex-1">
@@ -100,6 +130,10 @@ export const OrderConfirmationEmail = ({
 
                     <Hr className="border-[#f0f0f0] my-4" />
 
+                    {/* ── Shipping ──────────────────────────────────────────── */}
+                    {/* The address is collected in the payment form and passed  */}
+                    {/* through handleCheckout so the customer can verify where  */}
+                    {/* their order will be delivered. Shipping is always free.  */}
                     <Section>
                         <Row>
                             <Column className="flex-1">
@@ -121,6 +155,7 @@ export const OrderConfirmationEmail = ({
 
                     <Hr className="border-[#f0f0f0] my-4" />
 
+                    {/* ── Sign-off ──────────────────────────────────────────── */}
                     <Section>
                         <Text className="text-base font-light text-[#404040] leading-6.5">
                             Happy movie time!
@@ -128,6 +163,7 @@ export const OrderConfirmationEmail = ({
                     </Section>
                 </Container>
 
+                {/* ── Footer ────────────────────────────────────────────── */}
                 <Section className="max-w-145 mx-auto">
                     <Row>
                         <Text className="text-center text-[#706a7b]">
@@ -141,6 +177,9 @@ export const OrderConfirmationEmail = ({
     </Tailwind>
 );
 
+// ── Preview props ─────────────────────────────────────────────────
+// Used by the react-email dev server (npm run email:dev) to render a
+// realistic preview at http://localhost:3001 without placing a real order.
 OrderConfirmationEmail.PreviewProps = {
     userName:  "Alan",
     userEmail: "alan@example.com",

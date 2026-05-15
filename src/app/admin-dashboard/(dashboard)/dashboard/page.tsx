@@ -9,6 +9,11 @@ import { Package, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/format";
 
+// ── Status badge colours ───────────────────────────────────────────
+// Darker 600-level hex values are used intentionally so the badge
+// background has enough contrast for white text in both light and
+// dark mode. The earlier pastel variants (#4ade80, #f59e0b etc.) were
+// near-invisible on the light beige background.
 const STATUS_STYLES: Record<string, { label: string; color: string }> = {
   PENDING:    { label: "Pending",    color: "#d97706" },
   PROCESSING: { label: "Processing", color: "#7c3aed" },
@@ -19,9 +24,13 @@ const STATUS_STYLES: Record<string, { label: string; color: string }> = {
 };
 
 export default async function DashboardPage() {
+  // ── Session guard ────────────────────────────────────────────────
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) redirect("/sign-in?callbackUrl=/admin-dashboard/dashboard");
 
+  // ── Fetch orders ─────────────────────────────────────────────────
+  // Filtered by the logged-in user's ID so customers only ever see
+  // their own orders. Ordered by date descending (newest first).
   const orders = await prisma.order.findMany({
     where: { userId: session.user.id },
     orderBy: { orderDate: "desc" },
@@ -46,6 +55,7 @@ export default async function DashboardPage() {
         </Button>
       </div>
 
+      {/* ── Empty state ─────────────────────────────────────────── */}
       {orders.length === 0 ? (
         <div className="rounded-xl border bg-card py-20 text-center">
           <ShoppingBag size={40} className="mx-auto mb-4 opacity-20" />
@@ -64,6 +74,10 @@ export default async function DashboardPage() {
             return (
               <div key={order.id} className="rounded-xl border bg-card p-5">
                 <div className="mb-4 flex flex-wrap items-start justify-between gap-2">
+
+                  {/* ── Order meta ──────────────────────────────── */}
+                  {/* Full cuid(2) ID displayed to match the admin   */}
+                  {/* panel and avoid confusion between the two views */}
                   <div>
                     <p className="font-mono text-xs text-muted-foreground">
                       Order #{order.id}
@@ -72,21 +86,33 @@ export default async function DashboardPage() {
                       {formatDate(order.orderDate)}
                     </p>
                   </div>
+
                   <div className="flex items-center gap-3">
+                    {/* ── Status badge ────────────────────────────── */}
+                    {/* Solid background + white text so the badge is  */}
+                    {/* readable in both light and dark mode.           */}
                     <span className="rounded-full px-2.5 py-0.5 text-xs font-semibold"
                       style={{ background: s.color, color: "#fff" }}>
                       {s.label}
                     </span>
+
+                    {/* ── Order total ─────────────────────────────── */}
+                    {/* text-foreground (not text-primary) is used so  */}
+                    {/* the amount is black in light mode and white in  */}
+                    {/* dark mode rather than the gold brand colour     */}
+                    {/* which has low contrast on a beige background.  */}
                     <span className="text-lg font-bold text-foreground">
                       {formatPrice(order.totalAmount)}
                     </span>
                   </div>
                 </div>
 
+                {/* ── Line items ──────────────────────────────────── */}
                 <div className="space-y-2">
                   {order.orderItem.map((item) => (
                     <div key={item.id} className="flex items-center gap-3">
                       <Package size={13} className="shrink-0 text-muted-foreground" />
+                      {/* text-foreground keeps the title readable in light mode */}
                       <Link href={`/movies/${item.movies.id}`}
                         className="flex-1 truncate text-sm text-foreground hover:text-primary">
                         {item.movies.title}
