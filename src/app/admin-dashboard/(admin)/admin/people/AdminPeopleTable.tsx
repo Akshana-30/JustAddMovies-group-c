@@ -57,9 +57,12 @@ function PersonTable({
         {/* regardless of how long the names in the first column are. */}
         <table style={{ width:"100%", borderCollapse:"collapse", tableLayout:"fixed" }}>
           <colgroup>
-            <col style={{ width:"280px" }} />  {/* Name — fixed so Movies never drifts */}
-            <col style={{ width:"100px" }} />  {/* Movies count */}
-            <col />                             {/* Remove button — takes remaining space */}
+            {/* Name — pinned so the Movies column never drifts */}
+            <col style={{ width:"280px" }} />
+            {/* Movies count */}
+            <col style={{ width:"100px" }} />
+            {/* Remove button — takes the remaining space */}
+            <col />
           </colgroup>
           <thead>
             <tr>
