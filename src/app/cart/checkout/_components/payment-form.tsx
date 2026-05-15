@@ -63,7 +63,7 @@ export default function PaymentForm() {
   
   return (
 
-    <div className="w-full max-w-md ">
+    <div className="w-full max-w-md">
       <Card className="rounded-l-none border-r border-t border-b border-(--gold)/30 bg-sidebar-accent dark:bg-sidebar-accent/60">
         <CardHeader>
           <CardTitle>
@@ -491,6 +491,7 @@ export default function PaymentForm() {
               {isPending ? "Validating payment.." : "Checkout"}
             </Button>
           </form>
+           
 
           <Button
             type="button"
@@ -500,5 +501,7 @@ export default function PaymentForm() {
           >
             Back To Cart
           </Button>
+           </CardContent>
+          </Card>
           </div>
 )}
