@@ -49,7 +49,7 @@ export function AdminGenresTable({ genres }: { genres: Genre[] }) {
           <thead>
             <tr style={{ borderBottom:"1px solid var(--border)" }}>
               {["Name","Movies",""].map((h) => (
-                <th key={h} style={{ textAlign:"left", padding:"10px 14px", fontSize:"11px", letterSpacing:"0.1em", color:"var(--text-dim)" }}>{h}</th>
+                <th key={h} style={{ textAlign: h === "Movies" ? "center" : "left", padding:"10px 14px", fontSize:"11px", letterSpacing:"0.1em", color:"var(--text-dim)" }}>{h}</th>
               ))}
             </tr>
           </thead>

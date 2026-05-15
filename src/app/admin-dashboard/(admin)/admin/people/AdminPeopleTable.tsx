@@ -51,7 +51,7 @@ function PersonTable({
           <thead>
             <tr>
               {["Name","Movies",""].map((h) => (
-                <th key={h} style={{ textAlign:"left", padding:"8px 14px", fontSize:"11px", letterSpacing:"0.1em", color:"var(--text-dim)", borderBottom:"1px solid var(--border)" }}>{h}</th>
+                <th key={h} style={{ textAlign: h === "Movies" ? "center" : "left", padding:"8px 14px", fontSize:"11px", letterSpacing:"0.1em", color:"var(--text-dim)", borderBottom:"1px solid var(--border)" }}>{h}</th>
               ))}
             </tr>
           </thead>
@@ -63,7 +63,7 @@ function PersonTable({
                 {/* ── Movie count link ───────────────────────────── */}
                 {/* Clicking the count navigates to the admin movies  */}
                 {/* page pre-filtered to show only this person's films */}
-                <td style={{ padding:"10px 14px", fontSize:"13px" }}>
+                <td style={{ padding:"10px 14px", fontSize:"13px", textAlign:"center" }}>
                   {p._count.movies > 0 ? (
                     <Link
                       href={`/admin-dashboard/admin/movies?${type}=${p.id}`}
