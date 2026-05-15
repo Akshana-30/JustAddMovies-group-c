@@ -1,29 +1,26 @@
-
-
 import FilterButton from "@/components/body/filter-button";
 import MovieCard from "@/components/body/movie-card";
 import prisma from "@/lib/prisma";
-
 
 export default async function MoviesPage({
   searchParams,
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const { title } = await searchParams;
-  const { genre } = await searchParams;
-  const { sort } = await searchParams;
+  const { title, genre, sort } = await searchParams;
 
-console.log("sort:", sort);
+  console.log("sort:", sort);
 
   const orderBy =
-    
-    sort === "Price-high to low" ? { price: "desc" as const } :
-    sort === "Price-low to high" ? { price: "asc" as const } :
-    sort === "Date"              ? {releaseDate : "desc" as const } :
-    sort === "A-Ö"              ? { title: "asc" as const } :
-    undefined;
-
+    sort === "Price-high to low"
+      ? { price: "desc" as const }
+      : sort === "Price-low to high"
+        ? { price: "asc" as const }
+        : sort === "Date"
+          ? { releaseDate: "desc" as const }
+          : sort === "A-Ö"
+            ? { title: "asc" as const }
+            : undefined;
 
   const movies =
     typeof genre === "string"
@@ -37,32 +34,33 @@ console.log("sort:", sort);
           orderBy,
         })
       : typeof title === "string"
-      ? await prisma.movie.findMany({
-          where:  {
-            OR: [
-              {deletedAt:{equals:null} },
-              { title: { contains: title, mode: "insensitive" }, },
-              {
-                actors: {
-                  some: { name: { contains: title, mode: "insensitive" } },
+        ? await prisma.movie.findMany({
+            where: {
+              deletedAt: { equals: null },
+              OR: [
+                { title: { contains: title, mode: "insensitive" } },
+                {
+                  actors: {
+                    some: { name: { contains: title, mode: "insensitive" } },
+                  },
                 },
-              },
-            ],
-          },
-          include: { genres: { select: { name: true, id: true } } },
-          orderBy,
-        })
-      : await prisma.movie.findMany({
-          where: {deletedAt:{equals:null} },
-          include: { genres: { select: { name: true, id: true } } },
-          orderBy,
-        });
+              ],
+            },
+            include: { genres: { select: { name: true, id: true } } },
+            orderBy,
+          })
+        : await prisma.movie.findMany({
+            where: { deletedAt: { equals: null } },
+            include: { genres: { select: { name: true, id: true } } },
+            orderBy,
+          });
   return (
     <div className=" max-w-[90%] p-8 rounded-4xl m-auto bg-secondary-foreground/10">
-      
-      <div className="flex justify-end pb-15">  <FilterButton/></div>
+      <div className="flex justify-end pb-15">
+        {" "}
+        <FilterButton />
+      </div>
       <div className="grid grid-cols-5 gap-8 max-lg:grid-cols-2 max-sm:grid-cols-1">
-      
         {movies.map((movie) => (
           <div className="pb-5" key={movie.id}>
             <MovieCard

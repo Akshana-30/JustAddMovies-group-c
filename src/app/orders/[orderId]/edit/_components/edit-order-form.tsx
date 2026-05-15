@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { updateOrder } from "../_actions/edit-order-actions";
+import Link from "next/link";
 
 type Movie = {
   title: string;
@@ -90,12 +91,12 @@ export default function EditOrderForm({ data }: Props) {
       toast.success("Order was successfully updated.", {
         position: "bottom-right",
       });
-      router.push(`/orders/${data?.id}`);
+      router.push(`/admin-dashboard/admin/orders`);
     },
   });
 
   return (
-    <div className="max-w-3xl mx-auto bg-secondary p-5">
+    <div className="max-w-3xl mx-auto border border-(--gold) bg-sidebar-accent p-5 rounded-2xl">
       <form
         onSubmit={(ev) => {
           ev.preventDefault();
@@ -283,6 +284,7 @@ export default function EditOrderForm({ data }: Props) {
             >
               Reset
             </Button>
+            <Button variant="outline" asChild><Link href="/admin-dashboard/admin/orders">Back to orders</Link></Button>
           </Field>
         </FieldGroup>
       </form>

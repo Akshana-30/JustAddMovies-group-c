@@ -1,3 +1,4 @@
+'use client'
 import { cn } from "@/lib/utils";
 import React from "react";
 import { Card } from "../ui/card";
@@ -13,6 +14,8 @@ export default function MovBanner({
   className,
   ...props
 }: Props) {
+
+  
   return (
     <Card
       className={cn(" p-10  min-h-150 bg-cover bg-position-[0%_30%] w-auto h-auto", className)}

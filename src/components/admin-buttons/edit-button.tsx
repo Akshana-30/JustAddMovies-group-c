@@ -3,6 +3,7 @@
 import React, { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
+import { Pencil } from "lucide-react";
 
 type Props = React.ComponentProps<typeof Button> & { movieId: string };
 
@@ -18,6 +19,8 @@ export default function EditMovieButton({
     router.push(`/movies/${movieId}/edit`);
   }
   return (
+    <div className="border rounded ">
+      
     <Button
       className="cursor-pointer"
       variant="ghost"
@@ -25,7 +28,9 @@ export default function EditMovieButton({
       disabled={isPending || disabled}
       {...props}
     >
+      <Pencil size={12} />
       {isPending ? "Edit.." : "Edit"}
     </Button>
+    </div>
   );
 }

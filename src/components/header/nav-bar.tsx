@@ -29,7 +29,7 @@ export async function NavBar() {
     return total + product.quantity;
   }, 0);
   return (
-    <nav className="navbar py-2 flex items-center md-20">
+    <nav className="navbar py-2 flex items-center md-20 bg-linear-to-b dark:from-background from-background via-[#fff9e8] to-background dark:via-[#003957] via-50% dark:to-background">
       <Link href="/" className="relative md:flex ml-5">
         <Image
           src="/JAM-li.png"

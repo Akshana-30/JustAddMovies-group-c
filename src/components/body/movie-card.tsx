@@ -1,12 +1,19 @@
 "use client";
 
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { formatPrice } from "@/lib/format";
-import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import AddToCartButton from "../add-to-cart-button";
+import { WishlistButton } from "./wishlist-button";
+import { ShareButton } from "./share-button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type Props = React.ComponentProps<typeof Card> & {
   imageUrl: string;
@@ -59,10 +66,33 @@ export default function MovieCard({
               <p className="my-auto">In stock: {stock}</p>
             </div>
 
-            <div className="mt-4">
-              <AddToCartButton productId={id} productTitle={title} />
-            </div>
-          </div> 
+            <TooltipProvider>
+              <div className="flex items-center gap-4">
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span><AddToCartButton productId={id} productTitle={title} /></span>
+                  </TooltipTrigger>
+                  <TooltipContent>Add to cart</TooltipContent>
+                </Tooltip>
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span><WishlistButton movieId={id} /></span>
+                  </TooltipTrigger>
+                  <TooltipContent>Add to wishlist</TooltipContent>
+                </Tooltip>
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span><ShareButton /></span>
+                  </TooltipTrigger>
+                  <TooltipContent>Share</TooltipContent>
+                </Tooltip>
+
+              </div>
+            </TooltipProvider>
+          </div>
         </CardFooter >
 
       </Card>

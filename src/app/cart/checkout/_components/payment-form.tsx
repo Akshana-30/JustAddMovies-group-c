@@ -41,11 +41,20 @@ export default function PaymentForm() {
   });
 
   async function handleCheckoutClick() {
-    await handleCheckout();
-    toast.success("Your order has been placed!.", {
-      position: "top-center",
-    });
-    router.push("/");
+    const { streetAdress, city, zip } = form.state.values;
+    try {
+      await handleCheckout({ street: streetAdress, city, zip });
+      toast.success("Your order has been placed!", {
+        position: "top-center",
+      });
+      router.push("/");
+    } catch (err) {
+      console.error("Checkout error:", err);
+      toast.error(
+        err instanceof Error ? err.message : "Checkout failed. Please try again.",
+        { position: "top-center" }
+      );
+    }
   }
 
   function handleCartClick() {
@@ -53,8 +62,9 @@ export default function PaymentForm() {
   }
   
   return (
-    <div className="w-full max-w-md">
-      <Card>
+
+    <div className="w-full max-w-md ">
+      <Card className="rounded-l-none border-r border-t border-b border-(--gold)/30 bg-sidebar-accent dark:bg-sidebar-accent/60">
         <CardHeader>
           <CardTitle>
             Payment Details
@@ -85,6 +95,7 @@ export default function PaymentForm() {
                     <Field data-invalid={isInvalid}>
                       <FieldLabel htmlFor={field.name}>Name</FieldLabel>
                       <Input
+                      className=" border-(--gold)/40"
                         id={field.name}
                         name={field.name}
                         value={field.state.value}
@@ -124,6 +135,7 @@ export default function PaymentForm() {
                     <Field data-invalid={isInvalid}>
                       <FieldLabel htmlFor={field.name}>Email</FieldLabel>
                       <Input
+                      className=" border-(--gold)/40"
                         id={field.name}
                         name={field.name}
                         value={field.state.value}
@@ -201,6 +213,7 @@ export default function PaymentForm() {
                         )}
                       </FieldLabel>
                       <Input
+                      className=" border-(--gold)/40"
                         id={field.name}
                         name={field.name}
                         value={field.state.value ?? ""}
@@ -266,6 +279,7 @@ export default function PaymentForm() {
                       <Field data-invalid={isInvalid} className="flex-1">
                         <FieldLabel htmlFor={field.name}>Expiry</FieldLabel>
                         <Input
+                        className=" border-(--gold)/40"
                           id={field.name}
                           name={field.name}
                           value={field.state.value ?? ""}
@@ -314,6 +328,7 @@ export default function PaymentForm() {
                       <Field data-invalid={isInvalid} className="flex-1">
                         <FieldLabel htmlFor={field.name}>CVV</FieldLabel>
                         <Input
+                        className=" border-(--gold)/40"
                           id={field.name}
                           name={field.name}
                           value={field.state.value ?? ""}
@@ -363,6 +378,7 @@ export default function PaymentForm() {
                         Street Adress
                       </FieldLabel>
                       <Input
+                      className=" border-(--gold)/40"
                         id={field.name}
                         name={field.name}
                         value={field.state.value}
@@ -402,6 +418,7 @@ export default function PaymentForm() {
                       <Field data-invalid={isInvalid} className="flex-1">
                         <FieldLabel htmlFor={field.name}>City</FieldLabel>
                         <Input
+                        className=" border-(--gold)/40"
                           id={field.name}
                           name={field.name}
                           value={field.state.value}
@@ -441,6 +458,7 @@ export default function PaymentForm() {
                       <Field data-invalid={isInvalid} className="flex-1">
                         <FieldLabel htmlFor={field.name}>Zip</FieldLabel>
                         <Input
+                        className=" border-(--gold)/40"
                           id={field.name}
                           name={field.name}
                           value={field.state.value}
@@ -482,8 +500,5 @@ export default function PaymentForm() {
           >
             Back To Cart
           </Button>
-        </CardContent>
-      </Card>
-    </div>
-  );
-}
+          </div>
+)}

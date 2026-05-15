@@ -1,3 +1,7 @@
+// ── Admin customer section ─────────────────────────────────────────
+// Renders a group of users (admins or customers) with their recent
+// orders. Receives pre-fetched data from the parent page so no
+// additional database calls are made here.
 import { formatDate } from "@/lib/utils";
 import { users } from "../_actions/users";
 import { StatusBadge } from "./status-badge";
@@ -13,7 +17,10 @@ export function UserSection({ title, people, count }: { title: string; people: t
                 {people.map((user) => (
                     <div key={user.id} className="rounded-xl border p-5 bg-[(--surface)] border-[(--border)]">
                         <div className="flex flex-wrap items-start justify-between gap-4">
-                            {/* User info */}
+
+                            {/* ── User info ─────────────────────────────────── */}
+                            {/* Avatar shows the first letter of the user's name */}
+                            {/* as a fallback since we don't store profile images. */}
                             <div style={{ display: "flex", gap: "14px", alignItems: "flex-start" }}>
                                 <div style={{
                                     width: "42px", height: "42px", borderRadius: "50%",
@@ -26,19 +33,16 @@ export function UserSection({ title, people, count }: { title: string; people: t
                                 <div>
                                     <p style={{ fontSize: "14px", fontWeight: 500, color: "var(--text)" }}>{user.name}</p>
                                     <p style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "2px" }}>{user.email}</p>
-                                    {/* {user.phone && (
-                                    <p style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "2px" }}>📞 {user.phone}</p>
-                                    )}
-                                    {user.shippingAddress && (
-                                    <p style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "2px" }}>📦 {user.shippingAddress}</p>
-                                    )} */}
                                     <p style={{ fontSize: "11px", color: "var(--text-dim)", marginTop: "4px" }}>
                                         Member since {formatDate(user.createdAt)} · {user._count.orders} order{user._count.orders !== 1 ? "s" : ""}
                                     </p>
                                 </div>
                             </div>
 
-                            {/* Recent orders */}
+                            {/* ── Recent orders ─────────────────────────────── */}
+                            {/* Only rendered when the user has at least one     */}
+                            {/* order. The full cuid(2) ID is shown to match     */}
+                            {/* what appears in the admin orders table.          */}
                             {user.orders.length > 0 && (
                                 <div style={{ minWidth: "200px" }}>
                                     <p style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-dim)", marginBottom: "6px" }}>
@@ -47,8 +51,9 @@ export function UserSection({ title, people, count }: { title: string; people: t
                                     <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
                                         {user.orders.map((order) => (
                                             <div key={order.id} style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "12px" }}>
+                                                {/* Full order ID in monospace for easy scanning */}
                                                 <span style={{ color: "var(--text-dim)", fontFamily: "monospace", fontSize: "10px" }}>
-                                                    #{order.id.slice(-6).toUpperCase()}
+                                                    #{order.id}
                                                 </span>
                                                 <StatusBadge status={order.status} />
                                                 <span style={{ color: "var(--gold)", fontWeight: 500 }}>

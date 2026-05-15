@@ -2,64 +2,94 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Plus, Trash2, Loader2 } from "lucide-react";
-import { createDirector, deleteDirector, createActor, deleteActor } from "@/app/admin-dashboard/_actions/people-actions";
+import { Plus, Trash2 } from "lucide-react";
+import Link from "next/link";
+import { deleteDirector, deleteActor } from "@/app/admin-dashboard/_actions/people-actions";
 
 interface Person { id: string; name: string; _count: { movies: number } }
 
+// ── PersonTable ────────────────────────────────────────────────────
+// Reusable for both Directors and Actors. The `type` prop determines
+// which URL query param is used when linking the movie count to the
+// filtered admin movies page.
 function PersonTable({
-  title, people, onCreate, onDelete, isPending,
-}: { title: string; people: Person[]; onCreate: (name: string) => void; onDelete: (id: string) => void; isPending: boolean }) {
+  title, type, people, onCreate, onDelete, isPending,
+}: {
+  title: string;
+  type: "director" | "actor";
+  people: Person[];
+  onCreate: (name: string) => void;
+  onDelete: (id: string) => void;
+  isPending: boolean;
+}) {
   const [newName, setNewName] = useState("");
 
   return (
-    <div className="rounded-xl border overflow-hidden mb-6" style={{ borderColor:"var(--border)", background:"var(--surface)" }}>
-      <div style={{ padding:"14px 16px", borderBottom:"1px solid var(--border)", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
-        <h2 className="font-display text-lg tracking-wide" style={{ color:"var(--gold)" }}>{title.toUpperCase()}</h2>
-        <div style={{ display:"flex", gap:"8px" }}>
-          <input
-            value={newName}
-            onChange={(e) => setNewName(e.target.value)}
-            onKeyDown={(e) => { if (e.key === "Enter" && newName.trim()) { onCreate(newName.trim()); setNewName(""); } }}
-            placeholder={`Add ${title.toLowerCase().replace("s","")} name…`}
-            style={{ background:"var(--surface2)", border:"1px solid var(--border)", borderRadius:"4px", color:"var(--text)", fontSize:"13px", padding:"6px 10px", outline:"none", width:"220px" }}
-          />
-          <button
-            onClick={() => { if (newName.trim()) { onCreate(newName.trim()); setNewName(""); } }}
-            disabled={isPending || !newName.trim()}
-            className="jam-btn-gold"
-            style={{ display:"inline-flex", alignItems:"center", gap:"4px", padding:"6px 12px", opacity: isPending || !newName.trim() ? 0.5 : 1 }}
-          >
-            <Plus size={13}/> Add
-          </button>
+    // ── Width constraint ───────────────────────────────────────────
+    // maxWidth keeps the table at roughly half the page width so it
+    // doesn't stretch uncomfortably across a wide viewport.
+    <div style={{ maxWidth: "600px" }}>
+      <div className="rounded-xl border overflow-hidden mb-6" style={{ borderColor:"var(--border)", background:"var(--surface)" }}>
+        <div style={{ padding:"14px 16px", borderBottom:"1px solid var(--border)", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+          <h2 className="font-display text-lg tracking-wide" style={{ color:"var(--gold)" }}>{title.toUpperCase()}</h2>
+
         </div>
-      </div>
-      <table style={{ width:"100%", borderCollapse:"collapse" }}>
-        <thead>
-          <tr>
-            {["Name","Movies",""].map((h) => (
-              <th key={h} style={{ textAlign:"left", padding:"8px 14px", fontSize:"11px", letterSpacing:"0.1em", color:"var(--text-dim)", borderBottom:"1px solid var(--border)" }}>{h}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {people.map((p) => (
-            <tr key={p.id} style={{ borderBottom:"1px solid var(--border)" }}>
-              <td style={{ padding:"10px 14px", fontSize:"13px", color:"var(--text)" }}>{p.name}</td>
-              <td style={{ padding:"10px 14px", fontSize:"13px", color:"var(--gold)" }}>{p._count.movies}</td>
-              <td style={{ padding:"10px 14px", textAlign:"right" }}>
-                <button onClick={() => { if(confirm(`Remove ${p.name}?`)) onDelete(p.id); }}
-                  style={{ padding:"4px 10px", borderRadius:"4px", border:"1px solid rgba(248,113,113,0.3)", background:"transparent", color:"#f87171", cursor:"pointer", fontSize:"12px", display:"inline-flex", alignItems:"center", gap:"4px" }}>
-                  <Trash2 size={11}/> Remove
-                </button>
-              </td>
+
+        {/* ── Fixed column widths ───────────────────────────────── */}
+        {/* tableLayout fixed + explicit col widths keep the Movies  */}
+        {/* column at the same position in both Directors and Actors  */}
+        {/* regardless of how long the names in the first column are. */}
+        <table style={{ width:"100%", borderCollapse:"collapse", tableLayout:"fixed" }}>
+          <colgroup>
+            {/* Name — pinned so the Movies column never drifts */}
+            <col style={{ width:"280px" }} />
+            {/* Movies count */}
+            <col style={{ width:"100px" }} />
+            {/* Remove button — takes the remaining space */}
+            <col />
+          </colgroup>
+          <thead>
+            <tr>
+              {["Name","Movies",""].map((h) => (
+                <th key={h} style={{ textAlign: h === "Movies" ? "center" : "left", padding:"8px 14px", fontSize:"11px", letterSpacing:"0.1em", color:"var(--text-dim)", borderBottom:"1px solid var(--border)" }}>{h}</th>
+              ))}
             </tr>
-          ))}
-          {people.length === 0 && (
-            <tr><td colSpan={3} style={{ padding:"20px 14px", textAlign:"center", color:"var(--text-dim)", fontSize:"13px" }}>No {title.toLowerCase()} yet</td></tr>
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {people.map((p) => (
+              <tr key={p.id} style={{ borderBottom:"1px solid var(--border)" }}>
+                <td style={{ padding:"10px 14px", fontSize:"13px", color:"var(--text)" }}>{p.name}</td>
+
+                {/* ── Movie count link ───────────────────────────── */}
+                {/* Clicking the count navigates to the admin movies  */}
+                {/* page pre-filtered to show only this person's films */}
+                <td style={{ padding:"10px 14px", fontSize:"13px", textAlign:"center" }}>
+                  {p._count.movies > 0 ? (
+                    <Link
+                      href={`/admin-dashboard/admin/movies?${type}=${p.id}`}
+                      style={{ color:"var(--gold)", fontWeight:500, textDecoration:"underline", textUnderlineOffset:"3px" }}
+                    >
+                      {p._count.movies}
+                    </Link>
+                  ) : (
+                    <span style={{ color:"var(--text-dim)" }}>0</span>
+                  )}
+                </td>
+
+                <td style={{ padding:"10px 14px", textAlign:"right" }}>
+                  <button onClick={() => { if(confirm(`Remove ${p.name}?`)) onDelete(p.id); }}
+                    style={{ padding:"4px 10px", borderRadius:"4px", border:"1px solid rgba(248,113,113,0.3)", background:"transparent", color:"#f87171", cursor:"pointer", fontSize:"12px", display:"inline-flex", alignItems:"center", gap:"4px" }}>
+                    <Trash2 size={11}/> Remove
+                  </button>
+                </td>
+              </tr>
+            ))}
+            {people.length === 0 && (
+              <tr><td colSpan={3} style={{ padding:"20px 14px", textAlign:"center", color:"var(--text-dim)", fontSize:"13px" }}>No {title.toLowerCase()} yet</td></tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
@@ -75,7 +105,7 @@ export function AdminPeopleTable({ directors, actors }: { directors: Person[]; a
 
   return (
     <>
-      {/* Tab switcher */}
+      {/* ── Tab switcher ──────────────────────────────────────────── */}
       <div style={{ display:"flex", gap:"8px", marginBottom:"20px" }}>
         {(["directors", "actors"] as const).map((t) => {
           const active = tab === t;
@@ -91,10 +121,10 @@ export function AdminPeopleTable({ directors, actors }: { directors: Person[]; a
       </div>
 
       {tab === "directors" && (
-        <PersonTable title="Directors" people={directors} onCreate={makeDirector} onDelete={removeDirector} isPending={isPending} />
+        <PersonTable title="Directors" type="director" people={directors} onCreate={makeDirector} onDelete={removeDirector} isPending={isPending} />
       )}
       {tab === "actors" && (
-        <PersonTable title="Actors" people={actors} onCreate={makeActor} onDelete={removeActor} isPending={isPending} />
+        <PersonTable title="Actors" type="actor" people={actors} onCreate={makeActor} onDelete={removeActor} isPending={isPending} />
       )}
     </>
   );

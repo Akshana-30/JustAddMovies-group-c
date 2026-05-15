@@ -1,6 +1,7 @@
 // src/app/admin-dashboard/(admin)/admin/AdminCharts.tsx
 "use client";
 
+import { formatPrice } from "@/lib/format";
 import { useState } from "react";
 
 interface Props {
@@ -28,10 +29,10 @@ function BarChart({
   formatValue?: (v: number) => string;
 }) {
   const [hovered, setHovered] = useState<number | null>(null);
-  const values  = data.map((d) => Number(d[valueKey]));
-  const max     = Math.max(...values, 1);
+  const values = data.map((d) => Number(d[valueKey]));
+  const max    = Math.max(...values, 1);
   const W = 600; const H = 200; const PAD = 40; const GAP = 8;
-  const barW    = (W - PAD * 2 - GAP * (data.length - 1)) / data.length;
+  const barW   = (W - PAD * 2 - GAP * (data.length - 1)) / data.length;
 
   return (
     <div style={{ overflowX: "auto" }}>
@@ -53,11 +54,13 @@ function BarChart({
 
         {/* Bars */}
         {data.map((d, i) => {
-          const val  = Number(d[valueKey]);
-          const barH = (val / max) * H;
-          const x    = PAD + i * (barW + GAP);
-          const y    = PAD + H - barH;
-          const isHov = hovered === i;
+          const val    = Number(d[valueKey]);
+          const label  = String(d[labelKey]);
+          const barH   = (val / max) * H;
+          const x      = PAD + i * (barW + GAP);
+          const y      = PAD + H - barH;
+          const isHov  = hovered === i;
+
           return (
             <g key={i}
               onMouseEnter={() => setHovered(i)}
@@ -71,25 +74,31 @@ function BarChart({
                 style={{ transition: "fill 0.15s" }}
                 opacity={isHov ? 1 : 0.85}
               />
-              {/* Value label on hover */}
+
+              {/* Tooltip on hover — full title + value */}
               {isHov && (
                 <g>
-                  <rect x={x - 4} y={y - 26} width={barW + 8} height={22} rx={4}
-                    fill="var(--surface2)" />
-                  <text x={x + barW / 2} y={y - 11} textAnchor="middle"
+                  <rect
+                    x={x - 4} y={y - 46} width={barW + 8} height={40} rx={4}
+                    fill="var(--surface2)"
+                  />
+                  <text x={x + barW / 2} y={y - 30} textAnchor="middle"
+                    fill="var(--text-muted)" fontSize="9">
+                    {label}
+                  </text>
+                  <text x={x + barW / 2} y={y - 13} textAnchor="middle"
                     fill="var(--gold)" fontSize="11" fontWeight="600">
                     {formatValue(val)}
                   </text>
                 </g>
               )}
-              {/* X label */}
+
+              {/* X-axis label — truncated for space */}
               <text
                 x={x + barW / 2} y={PAD + H + 16}
                 textAnchor="middle" fill="var(--text-muted)" fontSize="10"
               >
-                {String(d[labelKey]).length > 12
-                  ? String(d[labelKey]).slice(0, 11) + "…"
-                  : String(d[labelKey])}
+                {label.length > 12 ? label.slice(0, 11) + "…" : label}
               </text>
             </g>
           );
@@ -146,7 +155,6 @@ export function AdminCharts({
   orderCount,
   customerCount,
 }: Props) {
-  const maxRevMonth = Math.max(...revenueByMonth.map((m) => m.revenue), 1);
 
   const cardStyle: React.CSSProperties = {
     background: "var(--surface)",
@@ -194,14 +202,14 @@ export function AdminCharts({
             <DonutStat
               value={avgOrderValue}
               max={Math.max(avgOrderValue * 2, 500)}
-              label={`${avgOrderValue.toLocaleString("sv-SE")} kr`}
+              label={formatPrice(avgOrderValue)}
               sublabel="avg order"
               color="var(--gold)"
             />
             <DonutStat
               value={avgSalePrice}
               max={Math.max(avgSalePrice * 2, 200)}
-              label={`${avgSalePrice.toLocaleString("sv-SE")} kr`}
+              label={formatPrice(avgSalePrice)}
               sublabel="avg price"
               color="#a78bfa"
             />
@@ -247,7 +255,7 @@ export function AdminCharts({
               valueKey="revenue"
               labelKey="title"
               color="#a78bfa"
-              formatValue={(v) => `${v.toLocaleString("sv-SE")} kr`}
+              formatValue={(v) => `${formatPrice(v)}`}
             />
           </div>
         </div>
@@ -257,11 +265,11 @@ export function AdminCharts({
       <div style={{ ...cardStyle, display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "16px" }}>
         <div style={titleStyle}>Summary</div>
         {[
-          { label: "Total Revenue",       value: `${totalRevenue.toLocaleString("sv-SE")} kr`, color: "var(--gold)" },
-          { label: "Average Order Value", value: `${avgOrderValue.toLocaleString("sv-SE")} kr`,                        color: "#4ade80" },
-          { label: "Average Sale Price",  value: `${avgSalePrice.toLocaleString("sv-SE")} kr`,                         color: "#a78bfa" },
+          { label: "Total Revenue",       value: `${formatPrice(totalRevenue)}`, color: "var(--gold)" },
+          { label: "Average Order Value", value: `${formatPrice(avgOrderValue)}`, color: "#4ade80" },
+          { label: "Average Sale Price",  value: `${formatPrice(avgSalePrice)}`,                         color: "#a78bfa" },
           { label: "Orders per Customer", value: customerCount > 0 ? (orderCount / customerCount).toFixed(1) : "—", color: "#60a5fa" },
-          { label: "Revenue per Customer", value: customerCount > 0 ? `${Math.round(totalRevenue / customerCount).toLocaleString("sv-SE")} kr` : "—", color: "#f472b6" },
+          { label: "Revenue per Customer", value: customerCount > 0 ? `${formatPrice(totalRevenue / customerCount)}` : "—", color: "#f472b6" },
         ].map((item) => (
           <div key={item.label} style={{ borderLeft: `3px solid ${item.color}`, paddingLeft: "12px" }}>
             <div style={{ fontFamily: "var(--font-display)", fontSize: "1.4rem", color: item.color, letterSpacing: "0.04em" }}>

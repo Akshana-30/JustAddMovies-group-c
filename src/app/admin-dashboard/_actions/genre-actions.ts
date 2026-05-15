@@ -16,14 +16,6 @@ export async function getGenres() {
   return prisma.genre.findMany({ orderBy: { name: "asc" } });
 }
 
-export async function createGenre(data: { name: string; description?: string }) {
-  if (!await requireAdmin()) return actionError("Unauthorized");
-  try {
-    const genre = await prisma.genre.create({ data: { name: data.name, description: data.description || null } });
-    revalidatePath("/admin-dashboard/admin/genres");
-    return actionSuccess({ id: genre.id });
-  } catch { return actionError("Genre name already exists"); }
-}
 
 export async function updateGenre(id: string, data: { name: string; description?: string }) {
   if (!await requireAdmin()) return actionError("Unauthorized");

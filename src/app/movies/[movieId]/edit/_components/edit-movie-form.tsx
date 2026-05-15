@@ -3,8 +3,6 @@ import { genreArray } from "@/lib/genres";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardHeader,
 } from "@/components/ui/card";
 import z from "zod";
 import { useForm } from "@tanstack/react-form";
@@ -37,6 +35,7 @@ import DeleteMovieButton, {
   RestoreMovieButton,
 } from "@/components/admin-buttons/delete-button";
 import { toast } from "sonner";
+import Link from "next/link";
 
 type Props = {
   movie: {
@@ -103,14 +102,16 @@ export default function EditMovieForm({ movie }: Props) {
       toast.success("Movie was successfully updated.", {
         position: "bottom-right",
       });
-      router.push(`/movies/${movie.id}`);
+      router.push(`/admin-dashboard/admin/movies`);
     },
   });
   return (
-    <Card className="max-w-3xl mx-auto bg-secondary border">
+
+    <Card className="max-w-3xl mx-auto bg-sidebar-accent/60 border-(--gold)/30 border">
       <CardHeader>
-        <CardDescription>Edit movie</CardDescription>
+        <CardDescription className="text-lg font-semibold ">Edit movie</CardDescription>
       </CardHeader>
+
       <CardContent>
         <form
           onSubmit={(ev) => {
@@ -125,8 +126,9 @@ export default function EditMovieForm({ movie }: Props) {
                   field.state.meta.isTouched && !field.state.meta.isValid;
                 return (
                   <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>Title</FieldLabel>
+                    <FieldLabel  htmlFor={field.name} >Title</FieldLabel>
                     <Input
+                    className="border-r border-b border-(--gold)/30 "
                       id={field.name}
                       name={field.name}
                       value={field.state.value}
@@ -147,8 +149,9 @@ export default function EditMovieForm({ movie }: Props) {
                   field.state.meta.isTouched && !field.state.meta.isValid;
                 return (
                   <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>Description</FieldLabel>
+                    <FieldLabel htmlFor={field.name} className="">Description</FieldLabel>
                     <Textarea
+                    className="border border-(--gold)/40"
                       id={field.name}
                       name={field.name}
                       value={field.state.value}
@@ -171,6 +174,7 @@ export default function EditMovieForm({ movie }: Props) {
                   <Field data-invalid={isInvalid}>
                     <FieldLabel htmlFor={field.name}>Release Date</FieldLabel>
                     <Input
+                    className="border border-(--gold)/40"
                       id={field.name}
                       name={field.name}
                       type="date"
@@ -194,6 +198,7 @@ export default function EditMovieForm({ movie }: Props) {
                   <Field data-invalid={isInvalid}>
                     <FieldLabel htmlFor={field.name}>Image URL</FieldLabel>
                     <Input
+                    className="border border-(--gold)/40"
                       id={field.name}
                       name={field.name}
                       value={field.state.value}
@@ -217,6 +222,7 @@ export default function EditMovieForm({ movie }: Props) {
                     <Field data-invalid={isInvalid} className="flex 1">
                       <FieldLabel htmlFor={field.name}>Price</FieldLabel>
                       <Input
+                      className="border border-(--gold)/40"
                         id={field.name}
                         name={field.name}
                         value={field.state.value}
@@ -241,6 +247,7 @@ export default function EditMovieForm({ movie }: Props) {
                     <Field data-invalid={isInvalid} className="flex 1">
                       <FieldLabel htmlFor={field.name}>Stock</FieldLabel>
                       <Input
+                      className="border border-(--gold)/40"
                         id={field.name}
                         name={field.name}
                         type="number"
@@ -265,10 +272,11 @@ export default function EditMovieForm({ movie }: Props) {
                     field.state.meta.isTouched && !field.state.meta.isValid;
                   return (
                     <Field data-invalid={isInvalid} className="flex 1">
-                      <FieldLabel htmlFor={field.name}>
+                      <FieldLabel htmlFor={field.name} >
                         Runtime in minutes
                       </FieldLabel>
                       <Input
+                      className="border border-(--gold)/40"
                         id={field.name}
                         name={field.name}
                         type="number"
@@ -301,13 +309,14 @@ export default function EditMovieForm({ movie }: Props) {
                       defaultValue={movie.genres}
                       value={field.state.value}
                       onValueChange={field.handleChange}
+                    
                     >
-                      <ComboboxChips ref={anchor} className="w-full max-w-full">
-                        <ComboboxValue>
+                      <ComboboxChips ref={anchor} className="border border-(--gold)/40 w-full max-w-full">
+                        <ComboboxValue >
                           {(values) => (
-                            <React.Fragment>
+                            <React.Fragment >
                               {values.map((value: string) => (
-                                <ComboboxChip key={value}>{value}</ComboboxChip>
+                                <ComboboxChip className='text-background' key={value}>{value}</ComboboxChip>
                               ))}
                               <ComboboxChipsInput />
                             </React.Fragment>
@@ -316,7 +325,7 @@ export default function EditMovieForm({ movie }: Props) {
                       </ComboboxChips>
                       <ComboboxContent anchor={anchor}>
                         <ComboboxEmpty>No genres selected.</ComboboxEmpty>
-                        <ComboboxList>
+                        <ComboboxList >
                           {(item) => (
                             <ComboboxItem key={item} value={item}>
                               {item}
@@ -351,16 +360,17 @@ export default function EditMovieForm({ movie }: Props) {
                   <Field data-invalid={isInvalid} className="border p-2">
                     <FieldLabel>Directors</FieldLabel>
 
-                    <div className="px-4 py-2">
+                    <div className="py-2">
                       {field.state.value.map((name, index) => (
                         <span
-                          className=" px-2 py-1 rounded mr-1 mt-1 text-xs text-foreground bg-muted"
+                          className=" px-2 py-1 rounded mr-1 mt-1 text-xs text-background bg-(--gold)"
                           key={index}
                         >
                           {`${name} `}
                           <button
                             type="button"
                             onClick={() => field.removeValue(index)}
+                            className="opacity-50 hover:opacity-100"
                           >
                             ✕
                           </button>
@@ -368,16 +378,18 @@ export default function EditMovieForm({ movie }: Props) {
                       ))}
                     </div>
 
-                    <div>
+                    <div className="relative flex items-center">
                       <Input
+                      className="border border-(--gold)/40 pr-16"
                         value={directorInput}
                         onChange={(ev) => setDirectorInput(ev.target.value)}
                         onKeyDown={(ev) => ev.key === "Enter" && handleAdd()}
-                        placeholder=".. Christopher Nolan, Steven Spielberg"
-                      />
-                      <Button size="xs" type="button" onClick={handleAdd}>
+                        placeholder=".. Christopher Nolan, Steven Spielberg"    
+                      ></Input>
+                      <Button className="absolute right-1 my-auto" size="xs" type="button" onClick={handleAdd}>
                         Add
                       </Button>
+                      
                     </div>
 
                     {isInvalid && (
@@ -406,14 +418,15 @@ export default function EditMovieForm({ movie }: Props) {
                   <Field data-invalid={isInvalid} className="border p-2">
                     <FieldLabel>Actors</FieldLabel>
 
-                    <div className="px-4 py-2">
+                    <div className="py-2">
                       {field.state.value.map((name, index) => (
                         <span
-                          className="px-2 py-1 rounded mr-1 mt-1 text-xs text-foreground bg-muted"
+                          className="px-2 py-1 rounded mr-1 mt-1 text-xs text-background bg-(--gold)"
                           key={index}
                         >
                           {`${name} `}
                           <button
+                          className=" opacity-50 hover:opacity-100"
                             type="button"
                             onClick={() => field.removeValue(index)}
                           >
@@ -423,16 +436,19 @@ export default function EditMovieForm({ movie }: Props) {
                       ))}
                     </div>
 
-                    <div>
+                    <div className="relative flex items-center">
+                      
                       <Input
+                      className="border border-(--gold)/40 pr-16"
                         value={actorInput}
                         onChange={(ev) => setActorInput(ev.target.value)}
                         onKeyDown={(ev) => ev.key === "Enter" && handleAdd()}
                         placeholder=".. Liam Neeson, Steven Seagal"
-                      />
-                      <Button size="xs" type="button" onClick={handleAdd}>
+                      ></Input>
+                      <Button className="absolute right-1 my-auto" size="xs" type="button" onClick={handleAdd}>
                         Add
                       </Button>
+                     
                     </div>
 
                     {isInvalid && (
@@ -466,6 +482,7 @@ export default function EditMovieForm({ movie }: Props) {
                   onSuccess={() => setIsDeleted(true)}
                 />
               )}
+              <Button asChild><Link href="/admin-dashboard/admin/movies">Back to movies</Link></Button>
             </Field>
           </FieldGroup>
         </form>

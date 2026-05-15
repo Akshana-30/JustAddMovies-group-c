@@ -3,7 +3,7 @@
 
 import { useState, useTransition } from "react";
 import { Plus, Pencil, Trash2, Loader2, X } from "lucide-react";
-import { createGenre, updateGenre, deleteGenre } from "@/app/admin-dashboard/_actions/genre-actions";
+import { updateGenre, deleteGenre } from "@/app/admin-dashboard/_actions/genre-actions";
 
 interface Genre { id: string; name: string; description: string | null; _count: { movies: number } }
 
@@ -40,28 +40,25 @@ export function AdminGenresTable({ genres }: { genres: Genre[] }) {
 
   return (
     <>
-      <div className="mb-4">
-        <button onClick={openAdd} className="jam-btn-gold" style={{ display:"inline-flex", alignItems:"center", gap:"6px" }}>
-          <Plus size={14} /> Add Genre
-        </button>
-      </div>
-
+      {/* ── Table width ───────────────────────────────────────────── */}
+      {/* Outer div caps at 600 px — identical to the maxWidth wrapper */}
+      {/* on the People tables so both pages render at the same width. */}
+      <div style={{ maxWidth:"600px" }}>
       <div className="overflow-x-auto rounded-xl border" style={{ borderColor:"var(--border)" }}>
         <table style={{ width:"100%", borderCollapse:"collapse", background:"var(--surface)" }}>
           <thead>
             <tr style={{ borderBottom:"1px solid var(--border)" }}>
-              {["Name","Description","Movies",""].map((h) => (
-                <th key={h} style={{ textAlign:"left", padding:"10px 14px", fontSize:"11px", letterSpacing:"0.1em", color:"var(--text-dim)" }}>{h}</th>
+              {["Name","Movies",""].map((h) => (
+                <th key={h} style={{ textAlign: h === "Movies" ? "center" : "left", padding:"10px 14px", fontSize:"11px", letterSpacing:"0.1em", color:"var(--text-dim)" }}>{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {genres.map((g) => (
               <tr key={g.id} style={{ borderBottom:"1px solid var(--border)" }}>
-                <td style={{ padding:"12px 14px", fontSize:"13px", fontWeight:500, color:"var(--text)" }}>{g.name}</td>
-                <td style={{ padding:"12px 14px", fontSize:"13px", color:"var(--text-muted)" }}>{g.description ?? "—"}</td>
-                <td style={{ padding:"12px 14px", fontSize:"13px", color:"var(--gold)" }}>{g._count.movies}</td>
-                <td style={{ padding:"12px 14px", textAlign:"right" }}>
+                <td style={{ padding:"10px 14px", fontSize:"13px", fontWeight:500, color:"var(--text)" }}>{g.name}</td>
+                <td style={{ padding:"10px 14px", fontSize:"13px", color:"var(--gold)", textAlign:"center" }}>{g._count.movies}</td>
+                <td style={{ padding:"10px 14px", textAlign:"right" }}>
                   <div style={{ display:"flex", gap:"6px", justifyContent:"flex-end" }}>
                     <button onClick={() => openEdit(g)} style={{ padding:"4px 10px", borderRadius:"4px", border:"1px solid var(--border-strong)", background:"transparent", color:"var(--text-muted)", cursor:"pointer", fontSize:"12px", display:"flex", alignItems:"center", gap:"4px" }}>
                       <Pencil size={11}/> Edit
@@ -75,6 +72,7 @@ export function AdminGenresTable({ genres }: { genres: Genre[] }) {
             ))}
           </tbody>
         </table>
+      </div>
       </div>
 
       {showForm && (
