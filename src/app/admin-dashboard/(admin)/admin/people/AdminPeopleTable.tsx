@@ -51,7 +51,16 @@ function PersonTable({
           </div>
         </div>
 
-        <table style={{ width:"100%", borderCollapse:"collapse" }}>
+        {/* ── Fixed column widths ───────────────────────────────── */}
+        {/* tableLayout fixed + explicit col widths keep the Movies  */}
+        {/* column at the same position in both Directors and Actors  */}
+        {/* regardless of how long the names in the first column are. */}
+        <table style={{ width:"100%", borderCollapse:"collapse", tableLayout:"fixed" }}>
+          <colgroup>
+            <col style={{ width:"280px" }} />  {/* Name — fixed so Movies never drifts */}
+            <col style={{ width:"100px" }} />  {/* Movies count */}
+            <col />                             {/* Remove button — takes remaining space */}
+          </colgroup>
           <thead>
             <tr>
               {["Name","Movies",""].map((h) => (

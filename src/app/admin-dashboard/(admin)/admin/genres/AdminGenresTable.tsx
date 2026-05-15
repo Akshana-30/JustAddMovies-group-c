@@ -46,8 +46,11 @@ export function AdminGenresTable({ genres }: { genres: Genre[] }) {
         </button>
       </div>
 
-      <div className="overflow-x-auto rounded-xl border" style={{ borderColor:"var(--border)", width:"fit-content", minWidth:"450px" }}>
-        <table style={{ borderCollapse:"collapse", background:"var(--surface)" }}>
+      {/* ── Table width ───────────────────────────────────────────── */}
+      {/* minWidth matches the 600 px maxWidth used on the People     */}
+      {/* tables so both pages feel visually consistent.              */}
+      <div className="overflow-x-auto rounded-xl border" style={{ borderColor:"var(--border)", minWidth:"600px" }}>
+        <table style={{ width:"100%", borderCollapse:"collapse", background:"var(--surface)" }}>
           <thead>
             <tr style={{ borderBottom:"1px solid var(--border)" }}>
               {["Name","Movies",""].map((h) => (
