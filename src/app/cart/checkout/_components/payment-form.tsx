@@ -500,5 +500,8 @@ export default function PaymentForm() {
           >
             Back To Cart
           </Button>
-          </div>
-)}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
