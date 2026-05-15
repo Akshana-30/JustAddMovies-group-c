@@ -40,12 +40,6 @@ export function AdminGenresTable({ genres }: { genres: Genre[] }) {
 
   return (
     <>
-      <div className="mb-4">
-        <button onClick={openAdd} className="jam-btn-gold" style={{ display:"inline-flex", alignItems:"center", gap:"6px" }}>
-          <Plus size={14} /> Add Genre
-        </button>
-      </div>
-
       {/* ── Table width ───────────────────────────────────────────── */}
       {/* Outer div caps at 600 px — identical to the maxWidth wrapper */}
       {/* on the People tables so both pages render at the same width. */}
