@@ -47,9 +47,10 @@ export function AdminGenresTable({ genres }: { genres: Genre[] }) {
       </div>
 
       {/* ── Table width ───────────────────────────────────────────── */}
-      {/* minWidth matches the 600 px maxWidth used on the People     */}
-      {/* tables so both pages feel visually consistent.              */}
-      <div className="overflow-x-auto rounded-xl border" style={{ borderColor:"var(--border)", minWidth:"600px" }}>
+      {/* Outer div caps at 600 px — identical to the maxWidth wrapper */}
+      {/* on the People tables so both pages render at the same width. */}
+      <div style={{ maxWidth:"600px" }}>
+      <div className="overflow-x-auto rounded-xl border" style={{ borderColor:"var(--border)" }}>
         <table style={{ width:"100%", borderCollapse:"collapse", background:"var(--surface)" }}>
           <thead>
             <tr style={{ borderBottom:"1px solid var(--border)" }}>
@@ -77,6 +78,7 @@ export function AdminGenresTable({ genres }: { genres: Genre[] }) {
             ))}
           </tbody>
         </table>
+      </div>
       </div>
 
       {showForm && (
