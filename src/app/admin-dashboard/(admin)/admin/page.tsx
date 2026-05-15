@@ -169,7 +169,7 @@ export default async function AdminPage() {
           className="mt-1 font-serif italic"
           style={{ color: "var(--text-muted)" }}
         >
-          The Reel Movies — statistics & management
+          Statistics & management
         </p>
       </div>
 

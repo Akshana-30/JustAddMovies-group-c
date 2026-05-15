@@ -6,7 +6,7 @@ import { headers } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice } from "@/lib/format";
 
 export const metadata: Metadata = { title: "My Wishlist" };
 
