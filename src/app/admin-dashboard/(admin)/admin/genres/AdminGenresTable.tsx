@@ -46,11 +46,11 @@ export function AdminGenresTable({ genres }: { genres: Genre[] }) {
         </button>
       </div>
 
-      <div className="overflow-x-auto rounded-xl border" style={{ borderColor:"var(--border)" }}>
-        <table style={{ width:"100%", borderCollapse:"collapse", background:"var(--surface)" }}>
+      <div className="overflow-x-auto rounded-xl border" style={{ borderColor:"var(--border)", width:"fit-content" }}>
+        <table style={{ borderCollapse:"collapse", background:"var(--surface)" }}>
           <thead>
             <tr style={{ borderBottom:"1px solid var(--border)" }}>
-              {["Name","Description","Movies",""].map((h) => (
+              {["Name","Movies",""].map((h) => (
                 <th key={h} style={{ textAlign:"left", padding:"10px 14px", fontSize:"11px", letterSpacing:"0.1em", color:"var(--text-dim)" }}>{h}</th>
               ))}
             </tr>
@@ -58,10 +58,9 @@ export function AdminGenresTable({ genres }: { genres: Genre[] }) {
           <tbody>
             {genres.map((g) => (
               <tr key={g.id} style={{ borderBottom:"1px solid var(--border)" }}>
-                <td style={{ padding:"12px 14px", fontSize:"13px", fontWeight:500, color:"var(--text)" }}>{g.name}</td>
-                <td style={{ padding:"12px 14px", fontSize:"13px", color:"var(--text-muted)" }}>{g.description ?? "—"}</td>
-                <td style={{ padding:"12px 14px", fontSize:"13px", color:"var(--gold)" }}>{g._count.movies}</td>
-                <td style={{ padding:"12px 14px", textAlign:"right" }}>
+                <td style={{ padding:"10px 14px", fontSize:"13px", fontWeight:500, color:"var(--text)" }}>{g.name}</td>
+                <td style={{ padding:"10px 14px", fontSize:"13px", color:"var(--gold)", textAlign:"center" }}>{g._count.movies}</td>
+                <td style={{ padding:"10px 14px", textAlign:"right" }}>
                   <div style={{ display:"flex", gap:"6px", justifyContent:"flex-end" }}>
                     <button onClick={() => openEdit(g)} style={{ padding:"4px 10px", borderRadius:"4px", border:"1px solid var(--border-strong)", background:"transparent", color:"var(--text-muted)", cursor:"pointer", fontSize:"12px", display:"flex", alignItems:"center", gap:"4px" }}>
                       <Pencil size={11}/> Edit
