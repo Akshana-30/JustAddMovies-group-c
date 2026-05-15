@@ -29,14 +29,7 @@ export function MovieButtons({
     <TooltipProvider>
       <div className="flex items-center gap-4">
 
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <span>
-              <AddToCartButton productId={movieId} productTitle={movieTitle} />
-            </span>
-          </TooltipTrigger>
-          <TooltipContent>Add to cart</TooltipContent>
-        </Tooltip>
+        <AddToCartButton productId={movieId} productTitle={movieTitle} />
 
         <Tooltip>
           <TooltipTrigger asChild>

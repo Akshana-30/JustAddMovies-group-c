@@ -69,12 +69,7 @@ export default function MovieCard({
             <TooltipProvider>
               <div className="flex items-center gap-4">
 
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <span><AddToCartButton productId={id} productTitle={title} /></span>
-                  </TooltipTrigger>
-                  <TooltipContent>Add to cart</TooltipContent>
-                </Tooltip>
+                <AddToCartButton productId={id} productTitle={title} />
 
                 <Tooltip>
                   <TooltipTrigger asChild>

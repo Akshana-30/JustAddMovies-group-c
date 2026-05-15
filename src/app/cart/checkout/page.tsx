@@ -21,7 +21,8 @@ export default async function CheckOutPage() {
         <div className="border-b border-r border-l border-(--gold)/40 p-4 font-bold text-right text-(--gold) rounded-md">Total Order Cost: {formatPrice(total)}</div>
       </div>
       <div className="w-full max-w-md">
-      <PaymentForm/>
+        <PaymentForm/>
+      </div>
     </div>
   );
 }
