@@ -12,14 +12,7 @@ async function requireAdmin() {
   return session?.user?.role === "ADMIN" ? session : null;
 }
 
-export async function createDirector(name: string) {
-  if (!await requireAdmin()) return actionError("Unauthorized");
-  try {
-    const d = await prisma.director.create({ data: { name } });
-    revalidatePath("/admin-dashboard/admin/people");
-    return actionSuccess({ id: d.id });
-  } catch { return actionError("Director already exists"); }
-}
+
 
 export async function deleteDirector(id: string) {
   if (!await requireAdmin()) return actionError("Unauthorized");
@@ -31,14 +24,7 @@ export async function deleteDirector(id: string) {
   } catch { return actionError("Failed to delete director"); }
 }
 
-export async function createActor(name: string) {
-  if (!await requireAdmin()) return actionError("Unauthorized");
-  try {
-    const a = await prisma.actor.create({ data: { name } });
-    revalidatePath("/admin-dashboard/admin/people");
-    return actionSuccess({ id: a.id });
-  } catch { return actionError("Actor already exists"); }
-}
+
 
 export async function deleteActor(id: string) {
   if (!await requireAdmin()) return actionError("Unauthorized");

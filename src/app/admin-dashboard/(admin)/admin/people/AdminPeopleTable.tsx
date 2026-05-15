@@ -4,7 +4,7 @@
 import { useState, useTransition } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { createDirector, deleteDirector, createActor, deleteActor } from "@/app/admin-dashboard/_actions/people-actions";
+import { deleteDirector, deleteActor } from "@/app/admin-dashboard/_actions/people-actions";
 
 interface Person { id: string; name: string; _count: { movies: number } }
 
@@ -32,23 +32,7 @@ function PersonTable({
       <div className="rounded-xl border overflow-hidden mb-6" style={{ borderColor:"var(--border)", background:"var(--surface)" }}>
         <div style={{ padding:"14px 16px", borderBottom:"1px solid var(--border)", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
           <h2 className="font-display text-lg tracking-wide" style={{ color:"var(--gold)" }}>{title.toUpperCase()}</h2>
-          <div style={{ display:"flex", gap:"8px" }}>
-            <input
-              value={newName}
-              onChange={(e) => setNewName(e.target.value)}
-              onKeyDown={(e) => { if (e.key === "Enter" && newName.trim()) { onCreate(newName.trim()); setNewName(""); } }}
-              placeholder={`Add ${title.toLowerCase().replace("s","")} name…`}
-              style={{ background:"var(--surface2)", border:"1px solid var(--border)", borderRadius:"4px", color:"var(--text)", fontSize:"13px", padding:"6px 10px", outline:"none", width:"180px" }}
-            />
-            <button
-              onClick={() => { if (newName.trim()) { onCreate(newName.trim()); setNewName(""); } }}
-              disabled={isPending || !newName.trim()}
-              className="jam-btn-gold"
-              style={{ display:"inline-flex", alignItems:"center", gap:"4px", padding:"6px 12px", opacity: isPending || !newName.trim() ? 0.5 : 1 }}
-            >
-              <Plus size={13}/> Add
-            </button>
-          </div>
+
         </div>
 
         {/* ── Fixed column widths ───────────────────────────────── */}

@@ -3,7 +3,7 @@
 
 import { useState, useTransition } from "react";
 import { Plus, Pencil, Trash2, Loader2, X } from "lucide-react";
-import { createGenre, updateGenre, deleteGenre } from "@/app/admin-dashboard/_actions/genre-actions";
+import { updateGenre, deleteGenre } from "@/app/admin-dashboard/_actions/genre-actions";
 
 interface Genre { id: string; name: string; description: string | null; _count: { movies: number } }
 
