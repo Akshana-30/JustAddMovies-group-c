@@ -22,7 +22,6 @@ export default async function CheckOutPage() {
       </div>
       <div className="w-full max-w-md">
       <PaymentForm/>
-      </div>
     </div>
   );
 }

@@ -2,16 +2,8 @@ import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import MovBanner from "@/components/body/banner-card";
-import AddToCartButton from "@/components/add-to-cart-button";
 import { formatPrice } from "@/lib/format";
-import { WishlistButton } from "@/components/body/wishlist-button";
-import { ShareButton } from "@/components/body/share-button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { MovieButtonsLoader } from "./_components/movie-buttons-loader";
 
 async function MovieDetailsPage(props: PageProps<"/movies/[movieId]">) {
   const params = await props.params;
@@ -76,32 +68,7 @@ async function MovieDetailsPage(props: PageProps<"/movies/[movieId]">) {
             </p>
             <br />
 
-            <TooltipProvider>
-              <div className="flex items-center gap-4">
-
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <span><AddToCartButton productId={movie.id} productTitle={movie.title} /></span>
-                  </TooltipTrigger>
-                  <TooltipContent>Add to cart</TooltipContent>
-                </Tooltip>
-
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <span><WishlistButton movieId={movie.id} /></span>
-                  </TooltipTrigger>
-                  <TooltipContent>Add to wishlist</TooltipContent>
-                </Tooltip>
-
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <span><ShareButton /></span>
-                  </TooltipTrigger>
-                  <TooltipContent>Share</TooltipContent>
-                </Tooltip>
-
-              </div>
-            </TooltipProvider>
+            <MovieButtonsLoader movieId={movie.id} movieTitle={movie.title} />
           </div>
         </div>
       </MovBanner>
