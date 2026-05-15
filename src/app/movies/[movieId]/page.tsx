@@ -6,6 +6,12 @@ import AddToCartButton from "@/components/add-to-cart-button";
 import { formatPrice } from "@/lib/format";
 import { WishlistButton } from "@/components/body/wishlist-button";
 import { ShareButton } from "@/components/body/share-button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 async function MovieDetailsPage(props: PageProps<"/movies/[movieId]">) {
   const params = await props.params;
@@ -64,13 +70,32 @@ async function MovieDetailsPage(props: PageProps<"/movies/[movieId]">) {
             </p>
             <br />
 
-            <div className="flex items-center gap-4">
-              <AddToCartButton productId={movie.id} productTitle={movie.title} />
+            <TooltipProvider>
+              <div className="flex items-center gap-4">
 
-              <WishlistButton movieId={movie.id} />
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span><AddToCartButton productId={movie.id} productTitle={movie.title} /></span>
+                  </TooltipTrigger>
+                  <TooltipContent>Add to cart</TooltipContent>
+                </Tooltip>
 
-              <ShareButton />
-            </div>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span><WishlistButton movieId={movie.id} /></span>
+                  </TooltipTrigger>
+                  <TooltipContent>Add to wishlist</TooltipContent>
+                </Tooltip>
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span><ShareButton /></span>
+                  </TooltipTrigger>
+                  <TooltipContent>Share</TooltipContent>
+                </Tooltip>
+
+              </div>
+            </TooltipProvider>
           </div>
         </div>
       </MovBanner>

@@ -9,6 +9,12 @@ import Link from "next/link";
 import AddToCartButton from "../add-to-cart-button";
 import { WishlistButton } from "./wishlist-button";
 import { ShareButton } from "./share-button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type Props = React.ComponentProps<typeof Card> & {
   imageUrl: string;
@@ -61,13 +67,32 @@ export default function MovieCard({
               <p className="my-auto">In stock: {stock}</p>
             </div>
 
-            <div className="mt-4 flex items-center gap-4">
-              <AddToCartButton productId={id} productTitle={title} />
+            <TooltipProvider>
+              <div className="flex items-center gap-4">
 
-              <WishlistButton movieId={id} />
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span><AddToCartButton productId={id} productTitle={title} /></span>
+                  </TooltipTrigger>
+                  <TooltipContent>Add to cart</TooltipContent>
+                </Tooltip>
 
-              <ShareButton movieId={id}/>
-            </div>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span><WishlistButton movieId={id} /></span>
+                  </TooltipTrigger>
+                  <TooltipContent>Add to wishlist</TooltipContent>
+                </Tooltip>
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span><ShareButton /></span>
+                  </TooltipTrigger>
+                  <TooltipContent>Share</TooltipContent>
+                </Tooltip>
+
+              </div>
+            </TooltipProvider>
           </div>
         </CardFooter >
 
