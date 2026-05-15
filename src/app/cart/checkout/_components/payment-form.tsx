@@ -501,7 +501,8 @@ export default function PaymentForm() {
           >
             Back To Cart
           </Button>
-           </CardContent>
+          </CardContent>
           </Card>
           </div>
-)}
+)
+}

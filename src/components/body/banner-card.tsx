@@ -18,7 +18,7 @@ export default function MovBanner({
   
   return (
     <Card
-      className={cn(" p-10  min-h-150 bg-cover bg-position-[0%_30%] w-auto h-auto", className)}
+      className={cn("p-10 min-h-150 overflow-visible bg-cover bg-position-[0%_30%] w-auto h-auto", className)}
       style={{ backgroundImage: `url('${imageUrl}')` }}
       {...props}
     >{children}</Card>
