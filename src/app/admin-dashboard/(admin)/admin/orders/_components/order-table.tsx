@@ -9,6 +9,8 @@ import {
   SortingState,
   flexRender,
   getPaginationRowModel,
+  ColumnFiltersState,
+  getFilteredRowModel
 } from "@tanstack/react-table";
 import {
   Table,
@@ -21,8 +23,9 @@ import {
 import Link from "next/link";
 import { formatPrice } from "@/lib/format";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, X } from "lucide-react";
 import { useTransition } from "react";
+import { Input } from "@/components/ui/input"
 
 type OrderType = ({
   orderItem: ({
@@ -62,11 +65,15 @@ export default function OrderTable({ data }: Props) {
   const [isPending, startTransition] = useTransition();
   
   const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  )
 
   const columns: ColumnDef<Order>[] = [
     {
       accessorKey: "id",
       header: "Order ID",
+      size: 220,
       cell: (info) => {
         const id = info.getValue<string>();
         return (
@@ -83,6 +90,7 @@ export default function OrderTable({ data }: Props) {
     {
       accessorKey: "status",
       header: "Status",
+      size: 100,
       cell: (info) => {
         const status = info.getValue<string>();
         return (
@@ -117,18 +125,21 @@ export default function OrderTable({ data }: Props) {
           </Button>
         );
       },
+      size: 160,
       cell: (info) => info.getValue<Date>().toDateString(),
       sortingFn: "datetime",
     },
     {
       id: "quantity",
       header: "Qty",
+      size: 60,
       accessorFn: (row) =>
         row.orderItem.reduce((sum, oi) => sum + oi.quantity, 0),
     },
     {
       accessorKey: "userId",
       header: "User ID",
+      size: 280,
       cell: (info) => {
         const uId = info.getValue<string>();
         return <span className="text-xs">{uId}</span>;
@@ -136,10 +147,11 @@ export default function OrderTable({ data }: Props) {
     },
     {
       accessorKey: "totalAmount",
-      header: "Total SEK",
+      header: () => <span className="flex justify-end">Total SEK</span>,
+      size: 120,
       cell: (info) => {
         const price = info.getValue<number>();
-        return <span className="text-right">{formatPrice(price)}</span>;
+        return <span className="flex justify-end">{formatPrice(price)}</span>;
       },
     },
   ];
@@ -151,14 +163,38 @@ export default function OrderTable({ data }: Props) {
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    columnResizeMode: "onChange",
     state: {
       sorting,
+      columnFilters,
     },
   });
 
   return (
-    <div className="bg-secondary overflow-hidden rounded border mt-10">
-      <Table>
+    <div className="flex flex-col justify-between bg-secondary rounded-2xl border mt-10 min-h-150">
+      <div className="flex items-center py-4 ml-2">
+        <div className="relative">
+        <Input
+          placeholder="Filter user id..."
+          value={(table.getColumn("userId")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("userId")?.setFilterValue(event.target.value)
+          }
+          className="min-w-90"
+        />
+        
+    <button
+      onClick={() => table.getColumn("userId")?.setFilterValue("")}
+      className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+    >
+      <X className="h-4 w-4" />
+    </button>
+    </div>
+      </div>
+      <div className="flex-1">
+      <Table className="table-fixed w-full">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
@@ -200,10 +236,11 @@ export default function OrderTable({ data }: Props) {
           )}
         </TableBody>
       </Table>
-      <div className="flex items-center justify-end space-x-2 py-4 mr-4">
+      </div>
+      <div className="flex justify-end space-x-2 py-4 mr-2">
         <Button
-          variant="outline"
           size="sm"
+          className="cursor-pointer"
           onClick={() =>
               startTransition(() =>
                 table.previousPage(),
@@ -214,9 +251,9 @@ export default function OrderTable({ data }: Props) {
         >
           Previous
         </Button>
-        <Button
-          variant="outline"
+        <Button       
           size="sm"
+          className="cursor-pointer"
           onClick={() =>
               startTransition(() =>
                 table.nextPage(),
