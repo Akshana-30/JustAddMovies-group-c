@@ -1,9 +1,8 @@
 "use client";
 
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { formatPrice } from "@/lib/format";
-import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import AddToCartButton from "../add-to-cart-button";

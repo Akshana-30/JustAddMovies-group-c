@@ -18,7 +18,11 @@ async function MovieDetailsPage(props: PageProps<"/movies/[movieId]">) {
 
   const movie = await prisma.movie.findUnique({
     where: { id: params.movieId },
-    include: { genres: { select: { name: true, description: true } } },
+    include: {
+      genres: { select: { name: true, description: true } },
+      directors: { select: { name: true } },
+      actors: { select: { name: true } },
+    },
   });
 
   if (!movie) {
@@ -48,11 +52,14 @@ async function MovieDetailsPage(props: PageProps<"/movies/[movieId]">) {
               <p>|</p>
               <p>{movie.runtime} mins</p>
             </div>
-
             <h4 className="text-xl pt-5">Synopsis:</h4>
-            <p className="  font-medium pt-5">
-              {movie.description}
-            </p>
+            <p className="  font-medium pt-5">{movie.description}</p> <br />
+            <div className="text-white/80">
+              Actors : {movie.actors.map((actor) => actor.name).join(", ")}
+            </div>
+            <div className="text-white/80">
+              Directors : {movie.directors.map((director) => director.name).join(", ")}
+            </div>
             <div className="flex gap-2 flex-wrap pt-5">
               {movie.genres.map((genre) => (
                 <div
@@ -64,7 +71,6 @@ async function MovieDetailsPage(props: PageProps<"/movies/[movieId]">) {
               ))}
               <br />
             </div>
-
             <p className="pt-10 whitespace-pre-line text-xl mb-2">
               {formatPrice(movie.price)}
             </p>

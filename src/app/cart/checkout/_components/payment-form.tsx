@@ -62,9 +62,16 @@ export default function PaymentForm() {
   }
   
   return (
-    
-          <div className="w-full max-w-md p-4">
-            <h1 className="mb-4">Payment Details</h1>
+
+    <div className="w-full max-w-md ">
+      <Card className="rounded-l-none border-r border-t border-b border-(--gold)/30 bg-sidebar-accent dark:bg-sidebar-accent/60">
+        <CardHeader>
+          <CardTitle>
+            Payment Details
+            <CardDescription></CardDescription>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
           <form
             onSubmit={(ev) => {
               ev.preventDefault();
@@ -88,6 +95,7 @@ export default function PaymentForm() {
                     <Field data-invalid={isInvalid}>
                       <FieldLabel htmlFor={field.name}>Name</FieldLabel>
                       <Input
+                      className=" border-(--gold)/40"
                         id={field.name}
                         name={field.name}
                         value={field.state.value}
@@ -127,6 +135,7 @@ export default function PaymentForm() {
                     <Field data-invalid={isInvalid}>
                       <FieldLabel htmlFor={field.name}>Email</FieldLabel>
                       <Input
+                      className=" border-(--gold)/40"
                         id={field.name}
                         name={field.name}
                         value={field.state.value}
@@ -204,6 +213,7 @@ export default function PaymentForm() {
                         )}
                       </FieldLabel>
                       <Input
+                      className=" border-(--gold)/40"
                         id={field.name}
                         name={field.name}
                         value={field.state.value ?? ""}
@@ -269,6 +279,7 @@ export default function PaymentForm() {
                       <Field data-invalid={isInvalid} className="flex-1">
                         <FieldLabel htmlFor={field.name}>Expiry</FieldLabel>
                         <Input
+                        className=" border-(--gold)/40"
                           id={field.name}
                           name={field.name}
                           value={field.state.value ?? ""}
@@ -317,6 +328,7 @@ export default function PaymentForm() {
                       <Field data-invalid={isInvalid} className="flex-1">
                         <FieldLabel htmlFor={field.name}>CVV</FieldLabel>
                         <Input
+                        className=" border-(--gold)/40"
                           id={field.name}
                           name={field.name}
                           value={field.state.value ?? ""}
@@ -366,6 +378,7 @@ export default function PaymentForm() {
                         Street Adress
                       </FieldLabel>
                       <Input
+                      className=" border-(--gold)/40"
                         id={field.name}
                         name={field.name}
                         value={field.state.value}
@@ -405,6 +418,7 @@ export default function PaymentForm() {
                       <Field data-invalid={isInvalid} className="flex-1">
                         <FieldLabel htmlFor={field.name}>City</FieldLabel>
                         <Input
+                        className=" border-(--gold)/40"
                           id={field.name}
                           name={field.name}
                           value={field.state.value}
@@ -444,6 +458,7 @@ export default function PaymentForm() {
                       <Field data-invalid={isInvalid} className="flex-1">
                         <FieldLabel htmlFor={field.name}>Zip</FieldLabel>
                         <Input
+                        className=" border-(--gold)/40"
                           id={field.name}
                           name={field.name}
                           value={field.state.value}

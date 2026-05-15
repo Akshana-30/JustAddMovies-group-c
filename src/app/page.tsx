@@ -8,13 +8,14 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-
 import { Suspense } from "react";
 import { EmailApprovedToast } from "@/components/auth/email-approved-toast";
-
 import MovieCardWithHover from "@/components/body/movie-card-with-hover";
 import { GenreCard } from "@/components/body/genre-card";
 import { Card } from "@/components/ui/card";
+import BannerCarousel from "@/components/body/banner-carousel";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 async function LandingPage({
   searchParams,
@@ -31,7 +32,6 @@ async function LandingPage({
     },
   });
 
- 
   const mostPurchased = await prisma.movie.findMany({
     take: 10,
     orderBy: {
@@ -73,56 +73,39 @@ async function LandingPage({
     <div className="pt-2 overflow-hidden p-8">
       <div className=" flex justify-between gap-4 w-full max-md:flex-col pb-5">
         <div className="lg:w-[85%] max-lg: w-full">
-          <Carousel className="w-full border-amber-300/50 border rounded-2xl">
-            <CarouselContent>
-              {latestMovie.map((latest) => (
-                <CarouselItem key={latest.id}>
-                  <MovBanner
-                    imageUrl={latest.imageUrl}
-                    className="relative p-0"
-                  >
-                    <div className=" bg-linear-to-r from-black via-black/10 to-transparent rounded-3xl h-150">
-                      <div className="pt-100 p-10 flex text-left flex-col max-w-150">
-                        <h1 className="text-4xl text-white font-bold z-10">
-                          {latest.title}
-                        </h1>
-                        <br />
-                        <p className="text-white/70">
-                          {latest.description
-                            .split(" ")
-                            .slice(0, 15)
-                            .join(" ") + ".."}
-                        </p>
-                      </div>
+          <BannerCarousel>
+            {latestMovie.map((latest) => (
+              <CarouselItem key={latest.id}>
+                <MovBanner imageUrl={latest.imageUrl} className="relative p-0">
+                  <div className=" bg-linear-to-r from-black via-black/10 to-transparent rounded-3xl h-150">
+                    <div className="pt-100 p-10 flex text-left flex-col max-w-150">
+                      <h1 className="text-4xl text-white font-bold z-10">
+                        {latest.title}
+                      </h1>
+                      <br />
+                      <p className="text-white/70">
+                        {latest.description.split(" ").slice(0, 15).join(" ") +
+                          ".."}
+                      </p>{" "}
+                      <br></br>
+                      <Button asChild className="cursor-pointer w-20">
+                        <Link href={`/movies/${latest.id}`}>View</Link>
+                      </Button>
                     </div>
-                  </MovBanner>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious
-              variant="outline"
-              size="icon-lg"
-              className="absolute left-4 top-1/2 -translate-y-1/2 z-10"
-            />
-            <CarouselNext
-              size="icon-lg"
-              className="absolute right-4 top-1/2 -translate-y-1/2 z-10"
-            />
-          </Carousel>
+                  </div>
+                </MovBanner>
+              </CarouselItem>
+            ))}
+          </BannerCarousel>
         </div>
 
-               
-        
         <div className="lg:w-[40%] max-lg: w-full ">
-          
-            <Card  className="border-amber-300/50 border flex-row! flex-wrap content-start gap-2 p-2 overflow-y-auto bg-primary/20 h-150 max-md:h-25">
-{genres.map((genre)=>( 
- <GenreCard key= {genre.id} name = {genre.name}></GenreCard>
- ))}
- </Card>
-
+          <Card className="border-amber-300/50 border flex-row! flex-wrap content-start gap-2 p-2 overflow-y-auto bg-primary/20 h-150 max-md:h-25">
+            {genres.map((genre) => (
+              <GenreCard key={genre.id} name={genre.name}></GenreCard>
+            ))}
+          </Card>
         </div>
-        
       </div>
       <Suspense>
         <EmailApprovedToast />
@@ -130,7 +113,6 @@ async function LandingPage({
 
       {/* top ten newest */}
       <div className="max-w-[98%] rounded-4xl m-auto  p-5 gap-4 bg-secondary-foreground/7">
-
         <Carousel
           opts={{
             align: "start",
@@ -138,7 +120,16 @@ async function LandingPage({
           }}
           className="max-w-full px-15"
         >
-          <h1 className="px-5 pt-2 text-2xl">New Releases </h1>
+          <h1 className="px-5 pt-2 text-2xl">
+            New Releases
+            <Button
+              variant="ghost"
+              className="hover:bg-blue-200/10!"
+              size="icon-lg"
+            >
+              🡆
+            </Button>
+          </h1>
           <CarouselContent className="h-90 max-md:h-80 max-sm:h-70 ">
             {latestMovie.map((movies) => (
               <CarouselItem

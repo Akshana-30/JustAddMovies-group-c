@@ -44,7 +44,7 @@ export function HamburgerButton({ children }: { children: React.ReactNode }) {
                 ref={menuRef}
                 className={` 
                     text-chart-5
-                    dark: text-foreground
+                    dark:text-foreground
                     absolute 
                     xl:hidden 
                     top-23 

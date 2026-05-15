@@ -17,6 +17,7 @@ import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import Image from "next/image";
 
 export default async function CartPage() {
   const session = await auth.api.getSession({
@@ -39,7 +40,7 @@ export default async function CartPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Title</TableHead>
+              <TableHead>Product</TableHead>
               <TableHead>Qty</TableHead>
               <TableHead>Price</TableHead>
             </TableRow>
@@ -62,12 +63,12 @@ export default async function CartPage() {
   }
 
   return (
-    <div className="flex-row max-w-6xl mx-auto border rounded-2xl p-4 bg-secondary">
+    <div className=" flex-row max-w-5xl mx-auto border border-(--gold)/40! rounded-2xl p-5 bg-sidebar-accent/60 ">
       <h1 className="font-bold text-2xl">Cart</h1>
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Title</TableHead>
+            <TableHead>Product</TableHead>
             <TableHead>Qty</TableHead>
             <TableHead>Price</TableHead>
           </TableRow>
@@ -75,25 +76,26 @@ export default async function CartPage() {
         <TableBody>
           {products.map((product) => (
             <TableRow key={product.id}>
-              <TableCell>
-                <Link href={`/movies/${product.id}`}>{product.title}</Link>
+              <TableCell className="flex flex-row">
+                <Link href={`/movies/${product.id}`}><Image src={product.imageUrl} height={60} width={60} alt={product.title}/> </Link> 
+                <Link className='my-auto' href={`/movies/${product.id}`}>&emsp; {product.title}</Link>
               </TableCell>
               <TableCell>{product.quantity}</TableCell>
               <TableCell>{formatPrice(product.price)}</TableCell>
-              <TableCell>
+              <TableCell className="border-(--gold)/40">
                 <CartItemControls id={product.id} quantity={product.quantity} />
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
         <TableFooter>
-          <TableRow>
+          <TableRow >
             <TableCell>Total price: {formatPrice(total)}</TableCell>
-            <TableCell>
+            <TableCell className="text-right">
               <BackToStore />
             </TableCell>
             <TableCell></TableCell>
-            <TableCell>
+            <TableCell className="text-right ">
               <Checkout />
             </TableCell>
           </TableRow>

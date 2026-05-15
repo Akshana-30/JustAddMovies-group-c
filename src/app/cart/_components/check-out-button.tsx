@@ -18,7 +18,7 @@ export default function Checkout({disabled}: Props) {
   return (
     <Button
       disabled={disabled || isPending}
-      variant="outline"
+
       className="cursor-pointer"
       onClick={() =>
               startTransition(() =>
@@ -26,7 +26,7 @@ export default function Checkout({disabled}: Props) {
               )
             }
     >
-      Checkout
+    {isPending ? "Checkout.." : "Checkout" }
     </Button>
   );
 }
