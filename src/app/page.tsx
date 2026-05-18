@@ -70,7 +70,7 @@ async function LandingPage({
   }
 
   return (
-    <div className="pt-2 overflow-hidden p-8">
+    <div className="pt-2 p-8">
       <div className=" flex justify-between gap-4 w-full max-md:flex-col pb-5">
         <div className="lg:w-[85%] max-lg: w-full">
           <BannerCarousel>
@@ -99,11 +99,13 @@ async function LandingPage({
           </BannerCarousel>
         </div>
 
-        <div className="lg:w-[40%] max-lg: w-full ">
-          <Card className="border-amber-300/50 border flex-row! flex-wrap content-start gap-2 p-2 overflow-y-auto bg-primary/20 h-150 max-md:h-25">
-            {genres.map((genre) => (
-              <GenreCard key={genre.id} name={genre.name}></GenreCard>
-            ))}
+        <div className="lg:w-[40%] max-lg:w-full sticky top-4 self-start">
+          <Card className="border-amber-300/50 border p-2 overflow-y-auto bg-primary/20 h-150 max-md:h-25">
+            <div className="grid grid-cols-2 gap-2 w-full">
+              {genres.map((genre) => (
+                <GenreCard key={genre.id} id={genre.id} name={genre.name} />
+              ))}
+            </div>
           </Card>
         </div>
       </div>
@@ -112,7 +114,7 @@ async function LandingPage({
       </Suspense>
 
       {/* top ten newest */}
-      <div className="max-w-[98%] rounded-4xl m-auto  p-5 gap-4 bg-secondary-foreground/7">
+      <div className="max-w-[98%] rounded-4xl m-auto p-5 gap-4 bg-secondary-foreground/7 overflow-hidden">
         <Carousel
           opts={{
             align: "start",

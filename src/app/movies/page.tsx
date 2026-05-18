@@ -1,10 +1,7 @@
 import FilterButton from "@/components/body/filter-button";
 import MovieCard from "@/components/body/movie-card";
-import prisma from "@/lib/prisma";
 import { GenreCard } from "@/components/body/genre-card";
-
-// inside the page function, before the return:
-const genres = await prisma.genre.findMany({ orderBy: { name: "asc" } });
+import prisma from "@/lib/prisma";
 
 export default async function MoviesPage({
   searchParams,
@@ -12,8 +9,6 @@ export default async function MoviesPage({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const { title, genre, sort } = await searchParams;
-
-  console.log("sort:", sort);
 
   const orderBy =
     sort === "Price-high to low"
@@ -26,61 +21,72 @@ export default async function MoviesPage({
             ? { title: "asc" as const }
             : undefined;
 
-  const movies =
+  const [movies, genres] = await Promise.all([
     typeof genre === "string"
-      ? await prisma.movie.findMany({
-          where: {
-            genres: {
-              some: { name: genre },
-            },
-          },
+      ? prisma.movie.findMany({
+          where: { genres: { some: { name: genre } } },
           include: { genres: { select: { name: true, id: true } } },
           orderBy,
         })
       : typeof title === "string"
-        ? await prisma.movie.findMany({
+        ? prisma.movie.findMany({
             where: {
               deletedAt: { equals: null },
               OR: [
                 { title: { contains: title, mode: "insensitive" } },
-                {
-                  actors: {
-                    some: { name: { contains: title, mode: "insensitive" } },
-                  },
-                },
+                { actors: { some: { name: { contains: title, mode: "insensitive" } } } },
               ],
             },
             include: { genres: { select: { name: true, id: true } } },
             orderBy,
           })
-        : await prisma.movie.findMany({
+        : prisma.movie.findMany({
             where: { deletedAt: { equals: null } },
             include: { genres: { select: { name: true, id: true } } },
             orderBy,
-          });
+          }),
+    prisma.genre.findMany({ orderBy: { name: "asc" } }),
+  ]);
+
   return (
-    <div className=" max-w-[90%] p-8 rounded-4xl m-auto bg-secondary-foreground/10">
-        <div className="flex flex-col items-center gap-3 pb-6">
-            <div className="flex items-center gap-2 flex-wrap justify-center">
-                {genres.map((g) => (
-                    <GenreCard key={g.id} id={g.id} name={g.name} />
-                ))}
-            </div>
-            <FilterButton />
-        </div>
-      <div className="grid grid-cols-5 gap-8 max-lg:grid-cols-2 max-sm:grid-cols-1">
-        {movies.map((movie) => (
-          <div className="pb-5" key={movie.id}>
-            <MovieCard
-              imageUrl={movie.imageUrl}
-              genres={movie.genres}
-              title={movie.title}
-              id={movie.id}
-              price={movie.price}
-              stock={movie.stock}
-            ></MovieCard>
+    // calc(100vh - 6rem) = viewport minus navbar height (~96px)
+    <div className="flex flex-col" style={{ height: "calc(100vh - 6rem)" }}>
+
+      {/* Sort bar — never scrolls, always visible at top */}
+      <div className="flex justify-center py-3 px-8 shrink-0 bg-background/80 backdrop-blur-sm border-b border-border/30">
+        <FilterButton />
+      </div>
+
+      {/* Content row — fills remaining height, inner scroll only */}
+      <div className="flex gap-6 flex-1 overflow-hidden px-8 py-6">
+
+        {/* Movie grid — scrolls independently */}
+        <div className="flex-1 overflow-y-auto pr-2">
+          <div className="grid grid-cols-4 gap-8 max-lg:grid-cols-2 max-sm:grid-cols-1 items-start">
+            {movies.map((movie) => (
+              <div className="pb-5 h-full" key={movie.id}>
+                <MovieCard
+                  imageUrl={movie.imageUrl}
+                  genres={movie.genres}
+                  title={movie.title}
+                  id={movie.id}
+                  price={movie.price}
+                  stock={movie.stock}
+                />
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
+
+        {/* Genre sidebar — never scrolls */}
+        <div className="w-56 shrink-0">
+          <div className="grid grid-cols-2 gap-2 w-full">
+            {genres.map((g) => (
+              <GenreCard key={g.id} id={g.id} name={g.name} active={genre === g.name} />
+            ))}
+          </div>
+        </div>
+
       </div>
     </div>
   );

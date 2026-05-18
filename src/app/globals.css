@@ -49,6 +49,7 @@
 }
 
 :root {
+  --genre-text: #000000;
   --background: #e9e4d9;
   --foreground: oklch(0.2686 0 0);
   --card: oklch(79.159% 0.03422 107.205);
@@ -105,6 +106,7 @@
 }
  
 .dark {
+  --genre-text: #ffffff;
   --background: oklch(12.442% 0.04154 255.394);
   --foreground: oklch(0.9219 0 0);
   --card: oklch(0.2686 0 0);

@@ -1,10 +1,11 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 
 export default function FilterButton() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const currentSort = searchParams.get("sort");
 
   const sortOptions = [
@@ -17,7 +18,11 @@ export default function FilterButton() {
   const handleFilter = (option: string) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("sort", option);
-    router.push(`/movies?${params.toString()}`);
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  const handleReset = () => {
+    router.push(pathname);
   };
 
   return (
@@ -36,6 +41,14 @@ export default function FilterButton() {
           {option}
         </Button>
       ))}
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={handleReset}
+        className="text-muted-foreground hover:text-red-400"
+      >
+        ✕ Reset
+      </Button>
     </div>
   );
 }
