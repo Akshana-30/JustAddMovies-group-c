@@ -81,11 +81,10 @@ export default function OrderTable({ data }: Props) {
     {
       accessorKey: "id",
       header: "Order ID",
-      size: 220,
       cell: (info) => {
         const id = info.getValue<string>();
         return (
-          <Link className="text-blue-400 text-xs pl-2" href={`/orders/${id}`}>
+          <Link className="text-blue-400 text-xs pl-2 block truncate max-w-20 md:max-w-full" href={`/orders/${id}`}>
             {id}
           </Link>
         );
@@ -94,7 +93,6 @@ export default function OrderTable({ data }: Props) {
     {
       accessorKey: "status",
       header: "Status",
-      size: 100,
       cell: (info) => {
         const status = info.getValue<string>();
         return (
@@ -130,31 +128,29 @@ export default function OrderTable({ data }: Props) {
         );
       },
       enableGlobalFilter: false,
-      size: 160,
-      cell: (info) => info.getValue<Date>().toDateString(),
-      sortingFn: "datetime",
+      cell: (info) => {
+        const date = info.getValue<Date>();
+      return new Intl.DateTimeFormat("sv-SE").format(date);
+    }
     },
     {
       id: "quantity",
       header: "Qty",
       enableGlobalFilter: false,
-      size: 60,
       accessorFn: (row) =>
         row.orderItem.reduce((sum, oi) => sum + oi.quantity, 0),
     },
     {
       accessorKey: "userId",
-      header: "User ID",
-      size: 200,
+      header: () => <span className="block">User ID</span>,
       cell: (info) => {
         const uId = info.getValue<string>();
-        return <span className="text-xs">{uId}</span>;
+        return <span className="text-xs block truncate max-w-20 md:max-w-full">{uId}</span>;
       },
     },
     {
       accessorKey: "totalAmount",
       header: () => <span className="flex justify-end">Total SEK</span>,
-      size: 120,
       cell: (info) => {
         const price = info.getValue<number>();
         return <span className="flex justify-end">{formatPrice(price)}</span>;
@@ -207,13 +203,13 @@ export default function OrderTable({ data }: Props) {
 
   return (
     <div className="flex flex-col justify-between border border-(--gold)/30 bg-sidebar-accent/40 rounded-2xl mt-10 min-h-150">
-      <div className="flex items-center py-4 ml-2">
-        <div className="relative">
+      <div className="flex items-center py-4 ml-2 mr-2">
+        <div className="relative w-full max-w-sm">
           <Input
             placeholder="Filter..."
             value={globalFilter ?? ""}
             onChange={(e) => table.setGlobalFilter(String(e.target.value))}
-            className="bg-secondary/70 min-w-90 border-(--gold)/30"
+            className="bg-secondary/70 w-full border-(--gold)/30"
           />
 
           <button
@@ -224,8 +220,8 @@ export default function OrderTable({ data }: Props) {
           </button>
         </div>
       </div>
-      <div className="flex-1">
-        <Table className="table-fixed w-full">
+      <div className="flex-1 overflow-x-auto">
+        <Table className="w-full min-w-150 text-sm">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
