@@ -63,7 +63,7 @@ export default async function CartPage() {
   }
 
   return (
-    <div className=" flex-row max-w-5xl mx-auto border border-(--gold)/40! rounded-2xl p-5 bg-sidebar-accent/60 ">
+    <div className=" flex-row max-w-5xl mx-auto border border-(--gold)/40! rounded-2xl p-5 bg-sidebar-accent/40 ">
       <h1 className="font-bold text-2xl">Cart</h1>
       <Table>
         <TableHeader>

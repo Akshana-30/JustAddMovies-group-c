@@ -118,7 +118,7 @@ function DonutStat({
   const dash = frac * circ;
 
   return (
-    <div style={{ textAlign: "center" }}>
+    <div  style={{ textAlign: "center" }}>
       <svg width={140} height={140} style={{ display: "block", margin: "0 auto" }}>
         {/* Track */}
         <circle cx={cx} cy={cy} r={R} fill="none"
@@ -178,7 +178,7 @@ export function AdminCharts({
       <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: "16px" }}>
 
         {/* Revenue by month */}
-        <div style={cardStyle}>
+        <div className='border border-(--gold)/40! bg-sidebar-accent/30!'style={cardStyle}>
           <div style={titleStyle}>Revenue by Month (kr)</div>
           {revenueByMonth.every((m) => m.revenue === 0) ? (
             <p style={{ color: "var(--text-dim)", fontStyle: "italic", fontSize: "13px", padding: "40px 0", textAlign: "center" }}>
@@ -196,7 +196,7 @@ export function AdminCharts({
         </div>
 
         {/* KPI donuts */}
-        <div style={cardStyle}>
+        <div className='border border-(--gold)/40! bg-sidebar-accent/30!' style={cardStyle}>
           <div style={titleStyle}>Key Metrics</div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
             <DonutStat
@@ -236,7 +236,7 @@ export function AdminCharts({
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
 
           {/* Top movies by quantity */}
-          <div style={cardStyle}>
+          <div className='border border-(--gold)/40! bg-sidebar-accent/30!' style={cardStyle}>
             <div style={titleStyle}>Most Popular Movies (units sold)</div>
             <BarChart
               data={topMovies}
@@ -248,7 +248,7 @@ export function AdminCharts({
           </div>
 
           {/* Top movies by revenue */}
-          <div style={cardStyle}>
+          <div className="border border-(--gold)/40! bg-sidebar-accent/30!" style={cardStyle}>
             <div style={titleStyle}>Top Movies by Revenue (kr)</div>
             <BarChart
               data={topMovies}
@@ -262,7 +262,7 @@ export function AdminCharts({
       )}
 
       {/* Row 3: Revenue breakdown text summary */}
-      <div style={{ ...cardStyle, display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "16px" }}>
+      <div className="border border-(--gold)/40! bg-sidebar-accent/30!" style={{ ...cardStyle, display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "16px" }}>
         <div style={titleStyle}>Summary</div>
         {[
           { label: "Total Revenue",       value: `${formatPrice(totalRevenue)}`, color: "var(--gold)" },

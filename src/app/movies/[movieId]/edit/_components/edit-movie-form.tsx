@@ -3,6 +3,8 @@ import { genreArray } from "@/lib/genres";
 import {
   Card,
   CardContent,
+  CardDescription,
+  CardHeader,
 } from "@/components/ui/card";
 import z from "zod";
 import { useForm } from "@tanstack/react-form";
@@ -107,7 +109,7 @@ export default function EditMovieForm({ movie }: Props) {
   });
   return (
 
-    <Card className="max-w-3xl mx-auto bg-sidebar-accent/60 border-(--gold)/30 border">
+    <Card className="max-w-3xl mx-auto bg-sidebar-accent/40 border-(--gold)/30 border">
       <CardHeader>
         <CardDescription className="text-lg font-semibold ">Edit movie</CardDescription>
       </CardHeader>

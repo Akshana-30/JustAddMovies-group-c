@@ -29,8 +29,8 @@ function PersonTable({
     // maxWidth keeps the table at roughly half the page width so it
     // doesn't stretch uncomfortably across a wide viewport.
     <div style={{ maxWidth: "600px" }}>
-      <div className="rounded-xl border overflow-hidden mb-6" style={{ borderColor:"var(--border)", background:"var(--surface)" }}>
-        <div style={{ padding:"14px 16px", borderBottom:"1px solid var(--border)", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+      <div className="rounded-xl border overflow-hidden mb-6 " style={{ borderColor:"var(--border)", background:"var(--surface)" }}>
+        <div className=" border border-(--gold)/40 bg-sidebar-accent/40! dark:bg-sidebar-accent/30!" style={{ padding:"14px 16px", borderBottom:"1px solid var(--border)", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
           <h2 className="font-display text-lg tracking-wide" style={{ color:"var(--gold)" }}>{title.toUpperCase()}</h2>
 
         </div>
@@ -39,7 +39,7 @@ function PersonTable({
         {/* tableLayout fixed + explicit col widths keep the Movies  */}
         {/* column at the same position in both Directors and Actors  */}
         {/* regardless of how long the names in the first column are. */}
-        <table style={{ width:"100%", borderCollapse:"collapse", tableLayout:"fixed" }}>
+        <table className=" border-(--gold)/40 border-b border-r border-l  bg-sidebar-accent/40! dark:bg-sidebar-accent/30! " style={{ width:"100%", borderCollapse:"collapse", tableLayout:"fixed" }}>
           <colgroup>
             {/* Name — pinned so the Movies column never drifts */}
             <col style={{ width:"280px" }} />
@@ -51,7 +51,7 @@ function PersonTable({
           <thead>
             <tr>
               {["Name","Movies",""].map((h) => (
-                <th key={h} style={{ textAlign: h === "Movies" ? "center" : "left", padding:"8px 14px", fontSize:"11px", letterSpacing:"0.1em", color:"var(--text-dim)", borderBottom:"1px solid var(--border)" }}>{h}</th>
+                <th className="border-b border-(--gold)/60 text-(--gold)/70" key={h} style={{ textAlign: h === "Movies" ? "center" : "left", padding:"8px 14px", fontSize:"11px", letterSpacing:"0.1em", borderBottom:"1px solid var(--border)" }}>{h}</th>
               ))}
             </tr>
           </thead>
@@ -85,7 +85,7 @@ function PersonTable({
               </tr>
             ))}
             {people.length === 0 && (
-              <tr><td colSpan={3} style={{ padding:"20px 14px", textAlign:"center", color:"var(--text-dim)", fontSize:"13px" }}>No {title.toLowerCase()} yet</td></tr>
+              <tr><td  className="border-t border-(--gold)/60" colSpan={3} style={{ padding:"20px 14px", textAlign:"center", color:"var(--text-dim)", fontSize:"13px" }}>No {title.toLowerCase()} yet</td></tr>
             )}
           </tbody>
         </table>

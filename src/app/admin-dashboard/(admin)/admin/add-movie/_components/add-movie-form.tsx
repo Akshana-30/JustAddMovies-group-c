@@ -96,7 +96,7 @@ export default function AddMovieForm() {
     },
   });
   return (
-    <Card className="border border-(--gold) bg-sidebar-accent max-w-3xl mt-10">
+    <Card className="border border-(--gold)/30 bg-sidebar-accent/40 max-w-3xl mt-10">
       <CardContent>
         <form
           onSubmit={(ev) => {
@@ -113,6 +113,7 @@ export default function AddMovieForm() {
                   <Field data-invalid={isInvalid}>
                     <FieldLabel htmlFor={field.name}>Title</FieldLabel>
                     <Input
+                    className="border-r border-b border-(--gold)/40 "
                       id={field.name}
                       name={field.name}
                       value={field.state.value}
@@ -135,6 +136,7 @@ export default function AddMovieForm() {
                   <Field data-invalid={isInvalid}>
                     <FieldLabel htmlFor={field.name}>Description</FieldLabel>
                     <Textarea
+                    className="border-r border-b border-(--gold)/40 "
                       id={field.name}
                       name={field.name}
                       value={field.state.value}
@@ -157,6 +159,7 @@ export default function AddMovieForm() {
                   <Field data-invalid={isInvalid}>
                     <FieldLabel htmlFor={field.name}>Release Date</FieldLabel>
                     <Input
+                    className="border-r border-b border-(--gold)/40 "
                       id={field.name}
                       name={field.name}
                       type="date"
@@ -180,6 +183,7 @@ export default function AddMovieForm() {
                   <Field data-invalid={isInvalid}>
                     <FieldLabel htmlFor={field.name}>Image URL</FieldLabel>
                     <Input
+                    className="border-r border-b border-(--gold)/40 "
                       id={field.name}
                       name={field.name}
                       value={field.state.value}
@@ -203,6 +207,7 @@ export default function AddMovieForm() {
                     <Field data-invalid={isInvalid} className="flex 1">
                       <FieldLabel htmlFor={field.name}>Price</FieldLabel>
                       <Input
+                      className="border-r border-b border-(--gold)/40 "
                         id={field.name}
                         name={field.name}
                         value={field.state.value}
@@ -227,6 +232,7 @@ export default function AddMovieForm() {
                     <Field data-invalid={isInvalid} className="flex 1">
                       <FieldLabel htmlFor={field.name}>Stock</FieldLabel>
                       <Input
+                      className="border-r border-b border-(--gold)/40 "
                         id={field.name}
                         name={field.name}
                         type="number"
@@ -255,6 +261,7 @@ export default function AddMovieForm() {
                         Runtime in minutes
                       </FieldLabel>
                       <Input
+                      className="border-r border-b border-(--gold)/40 "
                         id={field.name}
                         name={field.name}
                         type="number"
@@ -287,7 +294,7 @@ export default function AddMovieForm() {
                       value={field.state.value}
                       onValueChange={field.handleChange}
                     >
-                      <ComboboxChips ref={anchor} className="w-full max-w-full">
+                      <ComboboxChips ref={anchor} className="w-full max-w-full border border-(--gold)/40">
                         <ComboboxValue>
                           {(values) => (
                             <React.Fragment>
@@ -339,13 +346,14 @@ export default function AddMovieForm() {
                     <div className="px-4 py-2">
                       {field.state.value.map((name, index) => (
                         <span
-                          className=" px-2 py-1 rounded mr-1 mt-1 text-xs text-foreground bg-muted"
+                          className=" px-2 py-1 rounded mr-1 mt-1 text-xs text-background bg-(--gold)"
                           key={index}
                         >
                           {`${name} `}
                           <button
                             type="button"
                             onClick={() => field.removeValue(index)}
+                            className="hover:opacity-100 opacity-50"
                           >
                             ✕
                           </button>
@@ -353,14 +361,15 @@ export default function AddMovieForm() {
                       ))}
                     </div>
 
-                    <div>
+                    <div className="relative flex items-center">
                       <Input
+                      className="border border-(--gold)/40 pr-16 "
                         value={directorInput}
                         onChange={(ev) => setDirectorInput(ev.target.value)}
                         onKeyDown={(ev) => ev.key === "Enter" && handleAdd()}
                         placeholder=".. Christopher Nolan, Steven Spielberg"
                       />
-                      <Button size="xs" type="button" onClick={handleAdd}>
+                      <Button size="xs" type="button" onClick={handleAdd} className="absolute right-1 my-auto">
                         Add
                       </Button>
                     </div>
@@ -394,13 +403,14 @@ export default function AddMovieForm() {
                     <div className="px-4 py-2">
                       {field.state.value.map((name, index) => (
                         <span
-                          className="px-2 py-1 rounded mr-1 mt-1 text-xs text-foreground bg-muted"
+                          className="px-2 py-1 rounded mr-1 mt-1 text-xs text-background bg-(--gold)"
                           key={index}
                         >
                           {`${name} `}
                           <button
                             type="button"
                             onClick={() => field.removeValue(index)}
+                            className="opacity-50 hover:opacity-100"
                           >
                             ✕
                           </button>
@@ -408,14 +418,15 @@ export default function AddMovieForm() {
                       ))}
                     </div>
 
-                    <div>
+                    <div className="relative flex items-center">
                       <Input
+                      className="border border-(--gold)/40 pr-16"
                         value={actorInput}
                         onChange={(ev) => setActorInput(ev.target.value)}
                         onKeyDown={(ev) => ev.key === "Enter" && handleAdd()}
                         placeholder=".. Liam Neeson, Steven Seagal"
                       />
-                      <Button size="xs" type="button" onClick={handleAdd}>
+                      <Button className="my-auto absolute right-1" size="xs" type="button" onClick={handleAdd}>
                         Add
                       </Button>
                     </div>

@@ -173,7 +173,7 @@ export default function OrderTable({ data }: Props) {
   });
 
   return (
-    <div className="flex flex-col justify-between border border-(--gold) bg-sidebar-accent rounded-2xl mt-10 min-h-150">
+    <div className="flex flex-col justify-between border border-(--gold)/30 bg-sidebar-accent/40 rounded-2xl mt-10 min-h-150">
       <div className="flex items-center py-4 ml-2">
         <div className="relative">
         <Input
@@ -182,7 +182,7 @@ export default function OrderTable({ data }: Props) {
           onChange={(event) =>
             table.getColumn("userId")?.setFilterValue(event.target.value)
           }
-          className="min-w-90"
+          className="bg-secondary/70 min-w-90 border-(--gold)/30"
         />
         
     <button

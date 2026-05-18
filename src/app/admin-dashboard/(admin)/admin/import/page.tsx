@@ -10,7 +10,7 @@ export default function TmdbImportPage() {
   return (
     <div className="p-8 max-w-4xl">
       <div className="mb-8">
-        <h1 className="font-display text-3xl tracking-wide" style={{ color: "var(--text)" }}>
+        <h1 className="font-display text-3xl tracking-wide " style={{ color: "var(--text)" }}>
           Import from <span style={{ color: "var(--gold)" }}>TMDB</span>
         </h1>
         <p className="mt-1 font-serif italic" style={{ color: "var(--text-muted)" }}>
@@ -19,7 +19,7 @@ export default function TmdbImportPage() {
       </div>
 
       {!hasKey ? (
-        <div style={{
+        <div  style={{
           background: "rgba(248,113,113,0.08)", border: "1px solid rgba(248,113,113,0.3)",
           borderRadius: "10px", padding: "20px 24px",
         }}>

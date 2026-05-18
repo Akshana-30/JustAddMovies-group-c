@@ -151,7 +151,7 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
   return (
     <>
       {/* Active / Archived tabs */}
-      <div style={{ display: "flex", gap: "8px", marginBottom: "16px" }}>
+      <div  style={{ display: "flex", gap: "8px", marginBottom: "16px" }}>
         {(["active", "archived"] as const).map((t) => {
           const isActive = tab === t;
           const count = t === "active" ? movies.length : archived.length;
@@ -464,6 +464,7 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
         style={{ borderColor: "var(--border)" }}
       >
         <table
+        className="bg-sidebar-accent/40!"
           style={{
             width: "100%",
             borderCollapse: "collapse",
@@ -471,9 +472,9 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
           }}
         >
           <thead>
-            <tr style={{ borderBottom: `1px solid var(--border)` }}>
+            <tr className='border border-(--gold)/40' style={{ borderBottom: `1px solid var(--border)` }}>
               {/* Select-all checkbox */}
-              <th style={{ padding: "10px 12px", width: "36px" }}>
+              <th className='border border-(--gold)/40' style={{ padding: "10px 12px", width: "36px" }}>
                 <input
                   title="checkbox"
                   type="checkbox"
@@ -501,6 +502,7 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
                 const active = col && sortCol === col;
                 return (
                   <th
+                  className='border-b border-(--gold)/40'
                     key={h}
                     onClick={col ? () => handleSort(col) : undefined}
                     style={{
@@ -555,7 +557,7 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
                     background: isChecked ? "rgba(232,160,48,0.04)" : undefined,
                   }}
                 >
-                  <td style={{ padding: "10px 12px" }}>
+                  <td className='border border-(--gold)/40' style={{ padding: "10px 12px" }}>
                     <input
                       title="checkbox"
                       type="checkbox"
@@ -569,7 +571,7 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
                       }}
                     />
                   </td>
-                  <td style={{ padding: "10px 12px", width: "52px" }}>
+                  <td className='border-b border-(--gold)/40' style={{ padding: "10px 12px", width: "52px" }}>
                     <div
                       style={{
                         position: "relative",
@@ -590,7 +592,7 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
                       )}
                     </div>
                   </td>
-                  <td style={{ padding: "10px 12px" }}>
+                  <td className='border-b border-(--gold)/40' style={{ padding: "10px 12px" }}>
                     <p
                       style={{
                         fontSize: "13px",
@@ -611,7 +613,7 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
                       {movie.runtime} min
                     </p>
                   </td>
-                  <td
+                  <td className='border-b border-(--gold)/40'
                     style={{
                       padding: "10px 12px",
                       fontSize: "13px",
@@ -621,7 +623,7 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
                   >
                     {formatPrice(movie.price)}
                   </td>
-                  <td
+                  <td className='border-b border-(--gold)/40'
                     style={{
                       padding: "10px 12px",
                       fontSize: "13px",
@@ -630,7 +632,7 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
                   >
                     {movie.stock}
                   </td>
-                  <td style={{ padding: "10px 12px" }}>
+                  <td className='border-b border-(--gold)/40' style={{ padding: "10px 12px" }}>
                     <div
                       style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}
                     >
@@ -650,7 +652,7 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
                       ))}
                     </div>
                   </td>
-                  <td style={{ padding: "10px 12px", textAlign: "right" }}>
+                  <td className='border-b border-r border-(--gold)/40' style={{ padding: "10px 12px", textAlign: "right" }}>
                     <div
                       style={{
                         display: "flex",

@@ -14,7 +14,7 @@ export default async function AdminCustomersPage() {
       <h1 className="font-display mb-1 text-3xl tracking-wide" style={{ color: "var(--text)" }}>
         <span style={{ color: "var(--gold)" }}>Customers</span>
       </h1>
-      <p className="mb-8 font-serif italic" style={{ color: "var(--text-muted)" }}>
+      <p className="mb-8  font-serif italic" style={{ color: "var(--text-muted)" }}>
         {customers.length} customers · {admins.length} admin{admins.length !== 1 ? "s" : ""}
       </p>
 

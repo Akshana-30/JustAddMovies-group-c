@@ -9,13 +9,13 @@ import { formatPrice } from "@/lib/format";
 
 export function UserSection({ title, people, count }: { title: string; people: typeof users; count: number }) {
     return (
-        <div className="mb-10">
+        <div className="mb-10 max-w-4xl">
             <h2 className="font-display text-xl tracking-wide mb-4 text-[(--gold)]">
                 {title.toUpperCase()} ({count})
             </h2>
             <div className="flex flex-col gap-3">
                 {people.map((user) => (
-                    <div key={user.id} className="rounded-xl border p-5 bg-[(--surface)] border-[(--border)]">
+                    <div key={user.id} className="rounded-xl border border-(--gold)/40 p-5 bg-sidebar-accent/50">
                         <div className="flex flex-wrap items-start justify-between gap-4">
 
                             {/* ── User info ─────────────────────────────────── */}

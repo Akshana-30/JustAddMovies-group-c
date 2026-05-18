@@ -45,11 +45,11 @@ export function AdminGenresTable({ genres }: { genres: Genre[] }) {
       {/* on the People tables so both pages render at the same width. */}
       <div style={{ maxWidth:"600px" }}>
       <div className="overflow-x-auto rounded-xl border" style={{ borderColor:"var(--border)" }}>
-        <table style={{ width:"100%", borderCollapse:"collapse", background:"var(--surface)" }}>
+        <table className="bg-sidebar-accent/40! border border-(--gold)/40 dark:bg-sidebar-accent/40!" style={{ width:"100%", borderCollapse:"collapse", background:"var(--surface)" }}>
           <thead>
             <tr style={{ borderBottom:"1px solid var(--border)" }}>
               {["Name","Movies",""].map((h) => (
-                <th key={h} style={{ textAlign: h === "Movies" ? "center" : "left", padding:"10px 14px", fontSize:"11px", letterSpacing:"0.1em", color:"var(--text-dim)" }}>{h}</th>
+                <th className="text-(--gold)/70!" key={h} style={{ textAlign: h === "Movies" ? "center" : "left", padding:"10px 14px", fontSize:"11px", letterSpacing:"0.1em", color:"var(--text-dim)" }}>{h}</th>
               ))}
             </tr>
           </thead>

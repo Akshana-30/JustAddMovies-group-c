@@ -292,7 +292,7 @@ export function TmdbImportClient() {
 
         {/* ── Bulk log ──────────────────────────────────────────── */}
         {bulkLog.length > 0 && (
-            <div style={{ marginBottom:"16px", background:"var(--surface2)", border:"1px solid var(--border)", borderRadius:"8px", padding:"14px 16px" }}>
+            <div  style={{ marginBottom:"16px", background:"var(--surface2)", border:"1px solid var(--border)", borderRadius:"8px", padding:"14px 16px" }}>
               <div style={{ fontSize:"12px", fontWeight:500, color:"var(--text-muted)", marginBottom:"8px", textTransform:"uppercase", letterSpacing:"0.08em" }}>Import Results</div>
               <div style={{ display:"flex", flexDirection:"column", gap:"4px", maxHeight:"180px", overflowY:"auto" }}>
                 {bulkLog.map((entry, i) => (
@@ -308,7 +308,7 @@ export function TmdbImportClient() {
 
         {/* ── Preview panel ─────────────────────────────────────── */}
         {preview && (
-            <div style={{ marginBottom:"20px", background:"var(--surface2)", border:"1px solid var(--border-strong)", borderRadius:"12px", overflow:"hidden" }}>
+            <div  style={{ marginBottom:"20px", background:"var(--surface2)", border:"1px solid var(--border-strong)", borderRadius:"12px", overflow:"hidden" }}>
               <div style={{ padding:"12px 18px", borderBottom:"1px solid var(--border)", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
                 <h3 style={{ fontFamily:"var(--font-display)", fontSize:"1rem", letterSpacing:"0.08em", color:"var(--gold)" }}>
                   PREVIEW: {preview.data.title}
@@ -391,7 +391,7 @@ export function TmdbImportClient() {
               </div>
 
               {/* Rows */}
-              <div style={{ display:"flex", flexDirection:"column", gap:"6px" }}>
+              <div  style={{ display:"flex", flexDirection:"column", gap:"8px" }}>
                 {results.map((movie) => {
                   const isSelected = selected.has(movie.id);
                   const isImported = imported.has(movie.id);
@@ -399,7 +399,7 @@ export function TmdbImportClient() {
                   const poster = POSTER_SM(movie.poster_path);
 
                   return (
-                    <div key={movie.id}>
+                    <div  className="bg-sidebar-accent/40! border-b-2 border-r-2 border-(--gold)/30" key={movie.id}>
                       <div
                            onClick={() => !isImported && toggleSelect(movie.id)}
                            style={{ display:"flex", alignItems:"center", gap:"12px", padding:"10px 14px", background: isSelected ? "rgba(232,160,48,0.08)" : "var(--surface)", border:`1px solid ${isSelected ? "var(--gold)" : isImported ? "rgba(74,222,128,0.3)" : "var(--border)"}`, borderRadius:"8px", cursor: isImported ? "default" : "pointer", transition:"all 0.15s", opacity: isImported ? 0.7 : 1 }}

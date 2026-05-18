@@ -175,6 +175,7 @@ export default async function AdminPage() {
 
       {/* ── Stats grid ─────────────────────────────────────────── */}
       <div
+      
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
@@ -184,6 +185,7 @@ export default async function AdminPage() {
       >
         {stats.map((s) => (
           <Link
+          
             key={s.label}
             href={s.href}
             style={{
@@ -196,7 +198,7 @@ export default async function AdminPage() {
               transition:
                 "border-color 0.15s, transform 0.15s, box-shadow 0.15s",
             }}
-            className="jam-card"
+            className="jam-card border-(--gold)/40! bg-sidebar-accent/30!"
           >
             <div style={{ fontSize: "1.8rem", marginBottom: "8px" }}>
               {s.emoji}
@@ -247,6 +249,7 @@ export default async function AdminPage() {
         }}
       >
         <div
+        className="border border-(--gold)/40! bg-sidebar-accent/30!"
           style={{
             padding: "16px 20px",
             borderBottom: "1px solid var(--border)",
@@ -273,7 +276,7 @@ export default async function AdminPage() {
               textDecoration: "none",
               transition: "color 0.15s",
             }}
-            className="back-link"
+            className="back-link "
           >
             View all →
           </Link>
@@ -284,6 +287,7 @@ export default async function AdminPage() {
               <tr>
                 {["Customer", "Items", "Total", "Date", "Status"].map((h) => (
                   <th
+                  className="bg-sidebar-accent/30! border-b border-(--gold)/30!"
                     key={h}
                     style={{
                       textAlign: "left",
@@ -302,6 +306,7 @@ export default async function AdminPage() {
             <tbody>
               {recentOrders.map((order) => (
                 <tr
+                className="bg-sidebar-accent/30! border-b border-(--gold)/30!"
                   key={order.id}
                   style={{ borderBottom: "1px solid var(--border)" }}
                 >
