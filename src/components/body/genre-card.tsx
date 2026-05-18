@@ -9,7 +9,7 @@ export function GenreCard({ id, name, ...props}:Props) {
   return (
       
         <Button
-          className="cursor-pointer"
+          className="cursor-pointer dark:text-inherit text-black"
           key={id}
           onClick={() => router.push(`/movies?genre=${name}`)}
         >

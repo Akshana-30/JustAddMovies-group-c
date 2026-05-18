@@ -1,6 +1,10 @@
 import FilterButton from "@/components/body/filter-button";
 import MovieCard from "@/components/body/movie-card";
 import prisma from "@/lib/prisma";
+import { GenreCard } from "@/components/body/genre-card";
+
+// inside the page function, before the return:
+const genres = await prisma.genre.findMany({ orderBy: { name: "asc" } });
 
 export default async function MoviesPage({
   searchParams,
@@ -56,10 +60,14 @@ export default async function MoviesPage({
           });
   return (
     <div className=" max-w-[90%] p-8 rounded-4xl m-auto bg-secondary-foreground/10">
-      <div className="flex justify-end pb-15">
-        {" "}
-        <FilterButton />
-      </div>
+        <div className="flex flex-col items-center gap-3 pb-6">
+            <div className="flex items-center gap-2 flex-wrap justify-center">
+                {genres.map((g) => (
+                    <GenreCard key={g.id} id={g.id} name={g.name} />
+                ))}
+            </div>
+            <FilterButton />
+        </div>
       <div className="grid grid-cols-5 gap-8 max-lg:grid-cols-2 max-sm:grid-cols-1">
         {movies.map((movie) => (
           <div className="pb-5" key={movie.id}>

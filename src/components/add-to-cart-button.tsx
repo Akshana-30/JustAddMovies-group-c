@@ -14,7 +14,7 @@ export default function AddToCartButton({ productId, productTitle }: Props) {
   return (
     <Button
       variant="default"
-      className="cursor-pointer "
+      className="cursor-pointer dark:text-inherit text-black"
       onClick={e => {
         startTransition(() =>
           addToCart({ id: productId, quantity: 1, title: productTitle }),

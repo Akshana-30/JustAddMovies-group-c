@@ -1,44 +1,41 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { useRouter, useSearchParams } from "next/navigation";
 
 export default function FilterButton() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const filterMenu = [
+  const currentSort = searchParams.get("sort");
+
+  const sortOptions = [
     "Date",
     "Price-high to low",
     "Price-low to high",
     "A-Ö",
   ];
-  const handleFilter = (menu: string) => {
+
+  const handleFilter = (option: string) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set("sort", menu);
+    params.set("sort", option);
     router.push(`/movies?${params.toString()}`);
   };
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="default">Sort by</Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-40 bg-background/80" align="start">
-        {filterMenu.map((menu) => (
-          <DropdownMenuGroup key={menu}>
-            <DropdownMenuItem onClick={() => handleFilter(menu)}>
-              {menu}
-            </DropdownMenuItem>
-          </DropdownMenuGroup>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <div className="flex items-center gap-2 flex-wrap justify-center">
+      {sortOptions.map((option) => (
+        <Button
+          key={option}
+          variant="ghost"
+          size="sm"
+          onClick={() => handleFilter(option)}
+          style={{
+            background: currentSort === option ? "var(--gold)" : undefined,
+            color: currentSort === option ? "#1a1a1a" : undefined,
+          }}
+        >
+          {option}
+        </Button>
+      ))}
+    </div>
   );
 }
-
