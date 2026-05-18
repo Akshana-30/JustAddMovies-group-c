@@ -27,7 +27,14 @@ export default async function EditOrderPage(
 
   return (
     <div>
-        
+      <div className="mb-6">
+          <h1
+            className="font-display text-3xl tracking-wide text-center"
+            style={{ color: "var(--text)" }}
+          >
+            Edit <span style={{ color: "var(--gold)" }}>Order</span>
+          </h1>
+      </div>
         <EditOrderForm data={order}></EditOrderForm>
     </div>
   )

@@ -96,7 +96,7 @@ export default function EditOrderForm({ data }: Props) {
   });
 
   return (
-    <div className="max-w-3xl mx-auto border border-(--gold) bg-sidebar-accent p-5 rounded-2xl">
+    <div className="max-w-3xl mx-auto border border-(--gold)/30 bg-sidebar-accent/40 p-5 rounded-2xl">
       <form
         onSubmit={(ev) => {
           ev.preventDefault();
@@ -125,6 +125,29 @@ export default function EditOrderForm({ data }: Props) {
               );
             }}
           </form.Field>
+
+          <form.Field name="userId">
+            {(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
+              return (
+                <Field data-invalid={isInvalid}>
+                  <FieldLabel htmlFor={field.name}>User ID</FieldLabel>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(ev) => field.handleChange(ev.target.value)}
+                    aria-invalid={isInvalid}
+                    disabled
+                  />
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              );
+            }}
+          </form.Field>
+
           <form.Field name="status">
             {(field) => {
               const isInvalid =
@@ -172,7 +195,7 @@ export default function EditOrderForm({ data }: Props) {
             {(field) => (
               <div className="space-y-4">
                 {field.state.value.map((item, index) => (
-                  <div key={item.id} className="space-y-4 border p-4">
+                  <div key={item.id} className="space-y-4 p-4 border border-(--gold)/30 ">
                     <form.Field name={`orderItem[${index}].quantity`}>
                       {(subField) => (
                         <Field>
@@ -228,28 +251,6 @@ export default function EditOrderForm({ data }: Props) {
             )}
           </form.Field>
 
-          <form.Field name="userId">
-            {(field) => {
-              const isInvalid =
-                field.state.meta.isTouched && !field.state.meta.isValid;
-              return (
-                <Field data-invalid={isInvalid}>
-                  <FieldLabel htmlFor={field.name}>User ID</FieldLabel>
-                  <Input
-                    id={field.name}
-                    name={field.name}
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(ev) => field.handleChange(ev.target.value)}
-                    aria-invalid={isInvalid}
-                    disabled
-                  />
-                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                </Field>
-              );
-            }}
-          </form.Field>
-
           <form.Field name="orderDate">
             {(field) => {
               const isInvalid =
@@ -273,7 +274,10 @@ export default function EditOrderForm({ data }: Props) {
           </form.Field>
 
           <Field orientation="horizontal">
-            <Button className="cursor-pointer bg(--gold)] hover:bg-(--gold)]/85" type="submit">
+            <Button
+              className="cursor-pointer bg(--gold)] hover:bg-(--gold)]/85"
+              type="submit"
+            >
               Submit
             </Button>
             <Button
@@ -284,7 +288,9 @@ export default function EditOrderForm({ data }: Props) {
             >
               Reset
             </Button>
-            <Button variant="outline" asChild><Link href="/admin-dashboard/admin/orders">Back to orders</Link></Button>
+            <Button variant="outline" asChild>
+              <Link href="/admin-dashboard/admin/orders">Back to orders</Link>
+            </Button>
           </Field>
         </FieldGroup>
       </form>

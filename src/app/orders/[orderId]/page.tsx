@@ -44,7 +44,7 @@ export default async function OrderPage(props: PageProps<"/orders/[orderId]">) {
 
     <div className="flex-row max-w-3xl mx-auto border border-(--gold)/30 bg-sidebar-accent/30 rounded-2xl p-4 mt-10">
       <div className="border-b-2  mb-10">
-        <h1 className="text-4xl font-bold m-4">{`ID: ${order.id}`}</h1>
+        <h1 className="text-center font-bold m-4">{`Order ID: ${order.id}`}</h1>
 
         <Table>
           <TableCaption>User ID: {order.user.id}</TableCaption>

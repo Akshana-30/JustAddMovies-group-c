@@ -75,7 +75,7 @@ export async function NavBar() {
           </Button>
         </li>
           <li>
-            <SignOutButton variant="ghost" className="text-lg" size="lg">
+            <SignOutButton variant="ghost" className="text-lg cursor-pointer" size="lg">
               Logout
             </SignOutButton>
           </li>

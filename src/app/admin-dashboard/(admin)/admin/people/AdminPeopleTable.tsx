@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Plus, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import Link from "next/link";
 import { deleteDirector, deleteActor } from "@/app/admin-dashboard/_actions/people-actions";
 
@@ -13,23 +13,21 @@ interface Person { id: string; name: string; _count: { movies: number } }
 // which URL query param is used when linking the movie count to the
 // filtered admin movies page.
 function PersonTable({
-  title, type, people, onCreate, onDelete, isPending,
+  title, type, people,  onDelete, isPending,
 }: {
   title: string;
   type: "director" | "actor";
   people: Person[];
-  onCreate: (name: string) => void;
   onDelete: (id: string) => void;
   isPending: boolean;
 }) {
-  const [newName, setNewName] = useState("");
 
   return (
     // ── Width constraint ───────────────────────────────────────────
     // maxWidth keeps the table at roughly half the page width so it
     // doesn't stretch uncomfortably across a wide viewport.
     <div style={{ maxWidth: "600px" }}>
-      <div className="rounded-xl border overflow-hidden mb-6 " style={{ borderColor:"var(--border)", background:"var(--surface)" }}>
+      <div className="rounded-xl border overflow-hidden mb-6">
         <div className=" border border-(--gold)/40 bg-sidebar-accent/40! dark:bg-sidebar-accent/30!" style={{ padding:"14px 16px", borderBottom:"1px solid var(--border)", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
           <h2 className="font-display text-lg tracking-wide" style={{ color:"var(--gold)" }}>{title.toUpperCase()}</h2>
 
@@ -98,10 +96,8 @@ export function AdminPeopleTable({ directors, actors }: { directors: Person[]; a
   const [isPending, startTransition] = useTransition();
   const [tab, setTab] = useState<"directors" | "actors">("directors");
 
-  const makeDirector = (name: string) => startTransition(async () => { await createDirector(name); window.location.reload(); });
-  const removeDirector = (id: string) => startTransition(async () => { await deleteDirector(id); window.location.reload(); });
-  const makeActor = (name: string) => startTransition(async () => { await createActor(name); window.location.reload(); });
-  const removeActor = (id: string) => startTransition(async () => { await deleteActor(id); window.location.reload(); });
+const removeDirector = (id: string) => startTransition(async () => { await deleteDirector(id); window.location.reload(); });
+ const removeActor = (id: string) => startTransition(async () => { await deleteActor(id); window.location.reload(); });
 
   return (
     <>
@@ -121,10 +117,10 @@ export function AdminPeopleTable({ directors, actors }: { directors: Person[]; a
       </div>
 
       {tab === "directors" && (
-        <PersonTable title="Directors" type="director" people={directors} onCreate={makeDirector} onDelete={removeDirector} isPending={isPending} />
+        <PersonTable title="Directors" type="director" people={directors} onDelete={removeDirector} isPending={isPending} />
       )}
       {tab === "actors" && (
-        <PersonTable title="Actors" type="actor" people={actors} onCreate={makeActor} onDelete={removeActor} isPending={isPending} />
+        <PersonTable title="Actors" type="actor" people={actors} onDelete={removeActor} isPending={isPending} />
       )}
     </>
   );
