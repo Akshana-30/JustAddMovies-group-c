@@ -1,4 +1,3 @@
-// src/app/admin-dashboard/(admin)/admin/customers/page.tsx
 import type { Metadata } from "next";
 import { users } from "./_actions/users";
 import { UserSection } from "./_components/user-section";

@@ -9,7 +9,6 @@ import {
   SortingState,
   flexRender,
   getPaginationRowModel,
-  ColumnFiltersState,
   getFilteredRowModel,
 } from "@tanstack/react-table";
 import {
@@ -30,11 +29,8 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { router } from "better-auth/api";
 import { useRouter } from "next/navigation";
 
 type OrderType = ({

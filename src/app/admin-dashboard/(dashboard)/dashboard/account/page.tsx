@@ -1,4 +1,3 @@
-// src/app/admin-dashboard/(dashboard)/dashboard/account/page.tsx
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { auth } from "@/lib/auth";

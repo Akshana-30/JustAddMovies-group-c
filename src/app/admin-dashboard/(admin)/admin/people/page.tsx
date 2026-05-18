@@ -1,4 +1,3 @@
-// src/app/admin-dashboard/(admin)/admin/people/page.tsx
 import type { Metadata } from "next";
 import prisma from "@/lib/prisma";
 import { AdminPeopleTable } from "./AdminPeopleTable";

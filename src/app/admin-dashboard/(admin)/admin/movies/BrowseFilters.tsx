@@ -17,15 +17,6 @@ interface Props {
   maxRuntime: number;
 }
 
-const RATINGS = [
-  { value: "",    label: "Any rating" },
-  { value: "9",   label: "★ 9.0+" },
-  { value: "8.5", label: "★ 8.5+" },
-  { value: "8",   label: "★ 8.0+" },
-  { value: "7.5", label: "★ 7.5+" },
-  { value: "7",   label: "★ 7.0+" },
-  { value: "6",   label: "★ 6.0+" },
-];
 
 export function BrowseFilters({ genres, directors, actors, maxPrice, maxRuntime }: Props) {
   const router       = useRouter();
@@ -78,12 +69,6 @@ export function BrowseFilters({ genres, directors, actors, maxPrice, maxRuntime 
           <option value="">All Genres</option>
           {genres.map((g) => <option key={g.id} value={g.id}>{g.name}</option>)}
         </select>
-
-        {/* Rating
-        <select title="rating" value={get("ratingMin")} onChange={(e) => update({ ratingMin: e.target.value })}
-          style={{ ...IS, minWidth:"130px" }}>
-          {RATINGS.map((r) => <option key={r.value} value={r.value}>{r.label}</option>)}
-        </select> */}
 
         {/* Sort */}
         <select title="sort" value={get("sort") || "title"} onChange={(e) => update({ sort: e.target.value })}
@@ -181,7 +166,6 @@ export function BrowseFilters({ genres, directors, actors, maxPrice, maxRuntime 
             get("genreId")    && { key:"genreId",     label:genres.find(g=>g.id===get("genreId"))?.name },
             get("directorId") && { key:"directorId",  label:directors.find(d=>d.id===get("directorId"))?.name },
             get("actorId")    && { key:"actorId",     label:actors.find(a=>a.id===get("actorId"))?.name },
-            get("ratingMin")  && { key:"ratingMin",   label:`★ ${get("ratingMin")}+` },
             get("yearMin")    && { key:"yearMin",      label:`From ${get("yearMin")}` },
             get("yearMax")    && { key:"yearMax",      label:`To ${get("yearMax")}` },
             get("runtimeMax") && { key:"runtimeMax",   label:`≤${get("runtimeMax")} min` },

@@ -1,4 +1,3 @@
-// src/app/admin-dashboard/(dashboard)/dashboard/layout.tsx
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
@@ -9,7 +8,6 @@ import { Package, Heart, User } from "lucide-react";
 async function getDashboardCounts(userId: string) {
   const orders = await prisma.order.count({ where: { userId } });
 
-  // wishlistItem table may not exist yet if migration hasn't run
   let wishlist = 0;
   try {
     wishlist = await prisma.wishlistItem.count({ where: { userId } });

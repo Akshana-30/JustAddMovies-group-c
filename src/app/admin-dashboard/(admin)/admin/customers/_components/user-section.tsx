@@ -1,7 +1,3 @@
-// ── Admin customer section ─────────────────────────────────────────
-// Renders a group of users (admins or customers) with their recent
-// orders. Receives pre-fetched data from the parent page so no
-// additional database calls are made here.
 import { formatDate } from "@/lib/utils";
 import { users } from "../_actions/users";
 import { StatusBadge } from "./status-badge";

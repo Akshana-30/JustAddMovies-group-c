@@ -1,4 +1,3 @@
-// src/app/admin-dashboard/(dashboard)/dashboard/account/account-actions.ts
 "use server";
 
 import { revalidatePath } from "next/cache";

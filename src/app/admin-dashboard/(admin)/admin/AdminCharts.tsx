@@ -1,4 +1,3 @@
-// src/app/admin-dashboard/(admin)/admin/AdminCharts.tsx
 "use client";
 
 import { formatPrice } from "@/lib/format";

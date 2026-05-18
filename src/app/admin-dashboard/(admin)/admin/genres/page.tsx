@@ -1,4 +1,3 @@
-// src/app/admin-dashboard/(admin)/admin/genres/page.tsx
 import type { Metadata } from "next";
 import prisma from "@/lib/prisma";
 import { AdminGenresTable } from "./AdminGenresTable";

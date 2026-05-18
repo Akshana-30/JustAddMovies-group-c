@@ -6,7 +6,6 @@ export const users = await prisma.user.findMany({
 		id: true,
 		name: true,
 		email: true,
-		// phone: true, shippingAddress: true,
 		role: true,
 		createdAt: true,
 		_count: { select: { orders: true } },

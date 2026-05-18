@@ -1,8 +1,7 @@
-// src/app/admin-dashboard/(admin)/admin/genres/AdminGenresTable.tsx
 "use client";
 
 import { useState, useTransition } from "react";
-import { Plus, Pencil, Trash2, Loader2, X } from "lucide-react";
+import { Pencil, Trash2, Loader2, X } from "lucide-react";
 import { updateGenre, deleteGenre } from "@/app/admin-dashboard/_actions/genre-actions";
 
 interface Genre { id: string; name: string; description: string | null; _count: { movies: number } }
@@ -18,21 +17,18 @@ export function AdminGenresTable({ genres }: { genres: Genre[] }) {
   const S: React.CSSProperties = { width:"100%", background:"var(--surface2)", border:"1px solid var(--border)", borderRadius:"4px", color:"var(--text)", fontSize:"13px", padding:"7px 10px", outline:"none" };
   const L: React.CSSProperties = { display:"block", fontSize:"11px", textTransform:"uppercase" as const, letterSpacing:"0.06em", color:"var(--text-muted)", marginBottom:"4px" };
 
-  function openAdd() { setEditing(null); setName(""); setDescription(""); setError(""); setShowForm(true); }
   function openEdit(g: Genre) { setEditing(g); setName(g.name); setDescription(g.description ?? ""); setError(""); setShowForm(true); }
 
-  function handleSubmit() {
-    if (!name.trim()) { setError("Name is required"); return; }
-    startTransition(async () => {
-      const result = editing
-        ? await updateGenre(editing.id, { name, description })
-        : await createGenre({ name, description });
-      if (!result.success) { setError(result.error ?? "Error"); return; }
-      setShowForm(false);
-      window.location.reload();
-    });
-  }
-
+function handleSubmit() {
+  if (!name.trim()) { setError("Name is required"); return; }
+  startTransition(async () => {
+    if (!editing) return;
+    const result = await updateGenre(editing.id, { name, description });
+    if (!result.success) { setError(result.error ?? "Error"); return; }
+    setShowForm(false);
+    window.location.reload();
+  });
+}
   function handleDelete(id: string, name: string) {
     if (!confirm(`Delete genre "${name}"?`)) return;
     startTransition(async () => { await deleteGenre(id); window.location.reload(); });
