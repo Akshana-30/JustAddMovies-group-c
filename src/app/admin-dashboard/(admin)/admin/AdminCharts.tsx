@@ -21,30 +21,32 @@ function BarChart({
   labelKey,
   color = "var(--gold)",
   formatValue = (v: number) => String(v),
+  showLabels = true,
 }: {
   data: Record<string, unknown>[];
   valueKey: string;
   labelKey: string;
   color?: string;
   formatValue?: (v: number) => string;
+  showLabels?: boolean;
 }) {
   const [hovered, setHovered] = useState<number | null>(null);
   const values = data.map((d) => Number(d[valueKey]));
   const max    = Math.max(...values, 1);
-  const W = 600; const H = 200; const PAD = 40; const GAP = 8;
-  const barW   = (W - PAD * 2 - GAP * (data.length - 1)) / data.length;
+  const W = 600; const H = 200; const PAD_LEFT = 80; const PAD_RIGHT = 20; const PAD_TOP = 40; const GAP = 8;
+  const barW   = (W - PAD_LEFT - PAD_RIGHT - GAP * (data.length - 1)) / data.length;
 
   return (
     <div style={{ overflowX: "auto" }}>
-      <svg viewBox={`0 0 ${W} ${H + 40}`} style={{ width: "100%", minWidth: "320px" }}>
+      <svg viewBox={`0 0 ${W} ${PAD_TOP + H + (showLabels ? 60 : 20)}`} style={{ width: "100%", minWidth: "320px" }}>
         {/* Grid lines */}
         {[0, 0.25, 0.5, 0.75, 1].map((frac) => {
-          const y = PAD + (1 - frac) * H;
+          const y = PAD_TOP + (1 - frac) * H;
           return (
             <g key={frac}>
-              <line x1={PAD} y1={y} x2={W - PAD} y2={y}
+              <line x1={PAD_LEFT} y1={y} x2={W - PAD_RIGHT} y2={y}
                 stroke="rgba(232,160,48,0.08)" strokeWidth="1" />
-              <text x={PAD - 6} y={y + 4} textAnchor="end"
+              <text x={PAD_LEFT - 6} y={y + 4} textAnchor="end"
                 fill="var(--text-dim)" fontSize="10">
                 {formatValue(Math.round(frac * max))}
               </text>
@@ -57,8 +59,8 @@ function BarChart({
           const val    = Number(d[valueKey]);
           const label  = String(d[labelKey]);
           const barH   = (val / max) * H;
-          const x      = PAD + i * (barW + GAP);
-          const y      = PAD + H - barH;
+          const x      = PAD_LEFT + i * (barW + GAP);
+          const y      = PAD_TOP + H - barH;
           const isHov  = hovered === i;
 
           return (
@@ -93,13 +95,15 @@ function BarChart({
                 </g>
               )}
 
-              {/* X-axis label — truncated for space */}
-              <text
-                x={x + barW / 2} y={PAD + H + 16}
-                textAnchor="middle" fill="var(--text-muted)" fontSize="10"
-              >
-                {label.length > 12 ? label.slice(0, 11) + "…" : label}
-              </text>
+              {/* X-axis label — shown only when showLabels is true */}
+              {showLabels && (
+                <text
+                  x={x + barW / 2} y={PAD_TOP + H + 16}
+                  textAnchor="middle" fill="var(--text-muted)" fontSize="10"
+                >
+                  {label.length > 12 ? label.slice(0, 11) + "…" : label}
+                </text>
+              )}
             </g>
           );
         })}
@@ -244,6 +248,7 @@ export function AdminCharts({
               labelKey="title"
               color="#4ade80"
               formatValue={(v) => `${v} sold`}
+              showLabels={false}
             />
           </div>
 
@@ -256,6 +261,7 @@ export function AdminCharts({
               labelKey="title"
               color="#a78bfa"
               formatValue={(v) => `${formatPrice(v)}`}
+              showLabels={false}
             />
           </div>
         </div>

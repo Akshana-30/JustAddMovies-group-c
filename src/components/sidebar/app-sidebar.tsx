@@ -113,7 +113,7 @@ export function AppSidebar({ items, title, subtitle }: AppSidebarProps) {
                   {/* badge nearly invisible in dark mode.             */}
                   {item.badge !== undefined && item.badge > 0 && (
                     <span
-                      className="ml-2 flex h-4 min-w-[1rem] items-center justify-center rounded-full px-1 text-[10px] font-bold"
+                      className="ml-2 inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full px-1.5 text-[11px] font-bold leading-none tabular-nums"
                       style={{ background: "var(--gold)", color: "#1a1a1a" }}
                     >
                       {item.badge}
