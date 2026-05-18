@@ -10,7 +10,7 @@ import {
   flexRender,
   getPaginationRowModel,
   ColumnFiltersState,
-  getFilteredRowModel
+  getFilteredRowModel,
 } from "@tanstack/react-table";
 import {
   Table,
@@ -23,9 +23,19 @@ import {
 import Link from "next/link";
 import { formatPrice } from "@/lib/format";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown, X } from "lucide-react";
-import { useTransition } from "react";
-import { Input } from "@/components/ui/input"
+import { ArrowUpDown, X, MoreHorizontal } from "lucide-react";
+import { useState, useTransition } from "react";
+import { Input } from "@/components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { router } from "better-auth/api";
+import { useRouter } from "next/navigation";
 
 type OrderType = ({
   orderItem: ({
@@ -63,11 +73,9 @@ export type Props = {
 
 export default function OrderTable({ data }: Props) {
   const [isPending, startTransition] = useTransition();
-  
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  )
+  const [globalFilter, setGlobalFilter] = useState([]);
+  const router = useRouter();
 
   const columns: ColumnDef<Order>[] = [
     {
@@ -77,13 +85,9 @@ export default function OrderTable({ data }: Props) {
       cell: (info) => {
         const id = info.getValue<string>();
         return (
-          <span><Button variant="outline" size="xs" asChild>
-              <Link href={`/orders/${id}/edit/`}>Edit</Link>
-            </Button>
           <Link className="text-blue-400 text-xs pl-2" href={`/orders/${id}`}>
             {id}
-          </Link></span>
-          
+          </Link>
         );
       },
     },
@@ -125,6 +129,7 @@ export default function OrderTable({ data }: Props) {
           </Button>
         );
       },
+      enableGlobalFilter: false,
       size: 160,
       cell: (info) => info.getValue<Date>().toDateString(),
       sortingFn: "datetime",
@@ -132,6 +137,7 @@ export default function OrderTable({ data }: Props) {
     {
       id: "quantity",
       header: "Qty",
+      enableGlobalFilter: false,
       size: 60,
       accessorFn: (row) =>
         row.orderItem.reduce((sum, oi) => sum + oi.quantity, 0),
@@ -139,7 +145,7 @@ export default function OrderTable({ data }: Props) {
     {
       accessorKey: "userId",
       header: "User ID",
-      size: 280,
+      size: 200,
       cell: (info) => {
         const uId = info.getValue<string>();
         return <span className="text-xs">{uId}</span>;
@@ -154,6 +160,33 @@ export default function OrderTable({ data }: Props) {
         return <span className="flex justify-end">{formatPrice(price)}</span>;
       },
     },
+    {
+      id: "actions",
+      header: () => <span className="flex justify-end">Actions</span>,
+      cell: ({ row }) => {
+        const id = row.original.id;
+        return (
+          <div className="flex justify-end">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
+                  <span className="sr-only">Open menu</span>
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => router.push(`/orders/${id}/edit`)}
+                >
+                  Edit order
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        );
+      },
+    },
   ];
 
   const table = useReactTable({
@@ -163,12 +196,12 @@ export default function OrderTable({ data }: Props) {
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
-    onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     columnResizeMode: "onChange",
+    onGlobalFilterChange: setGlobalFilter,
     state: {
       sorting,
-      columnFilters,
+      globalFilter,
     },
   });
 
@@ -176,89 +209,81 @@ export default function OrderTable({ data }: Props) {
     <div className="flex flex-col justify-between border border-(--gold)/30 bg-sidebar-accent/40 rounded-2xl mt-10 min-h-150">
       <div className="flex items-center py-4 ml-2">
         <div className="relative">
-        <Input
-          placeholder="Filter user id..."
-          value={(table.getColumn("userId")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("userId")?.setFilterValue(event.target.value)
-          }
-          className="bg-secondary/70 min-w-90 border-(--gold)/30"
-        />
-        
-    <button
-      onClick={() => table.getColumn("userId")?.setFilterValue("")}
-      className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-    >
-      <X className="h-4 w-4" />
-    </button>
-    </div>
+          <Input
+            placeholder="Filter..."
+            value={globalFilter ?? ""}
+            onChange={(e) => table.setGlobalFilter(String(e.target.value))}
+            className="bg-secondary/70 min-w-90 border-(--gold)/30"
+          />
+
+          <button
+            onClick={() => table.setGlobalFilter(String(""))}
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
       </div>
       <div className="flex-1">
-      <Table className="table-fixed w-full">
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
-                  </TableHead>
-                );
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
+        <Table className="table-fixed w-full">
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
+                    </TableHead>
+                  );
+                })}
               </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell
-                colSpan={columns.length}
-                className="h-24 text-center"
-              >
-                No results.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
       </div>
       <div className="flex justify-end space-x-2 py-4 mr-2">
         <Button
           size="sm"
           className="cursor-pointer"
-          onClick={() =>
-              startTransition(() =>
-                table.previousPage(),
-              )
-            }
-          
+          onClick={() => startTransition(() => table.previousPage())}
           disabled={!table.getCanPreviousPage() || isPending}
         >
           Previous
         </Button>
-        <Button       
+        <Button
           size="sm"
           className="cursor-pointer"
-          onClick={() =>
-              startTransition(() =>
-                table.nextPage(),
-              )
-            }
+          onClick={() => startTransition(() => table.nextPage())}
           disabled={!table.getCanNextPage() || isPending}
         >
           Next

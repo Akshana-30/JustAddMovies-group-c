@@ -19,11 +19,9 @@ export default function EditMovieButton({
     router.push(`/movies/${movieId}/edit`);
   }
   return (
-    <div className="border rounded ">
-      
     <Button
       className="cursor-pointer"
-      variant="ghost"
+      variant="outline"
       onClick={() => startTransition(() => handleClick())}
       disabled={isPending || disabled}
       {...props}
@@ -31,6 +29,5 @@ export default function EditMovieButton({
       <Pencil size={12} />
       {isPending ? "Edit.." : "Edit"}
     </Button>
-    </div>
   );
 }
