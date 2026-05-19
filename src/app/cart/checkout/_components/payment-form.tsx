@@ -20,7 +20,15 @@ import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { toast } from "sonner";
 
-export default function PaymentForm() {
+interface DefaultAddress {
+  street: string;
+  city: string;
+  state?: string | null;
+  zipCode: string;
+  country: string;
+}
+
+export default function PaymentForm({ defaultAddress }: { defaultAddress?: DefaultAddress | null }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
@@ -31,9 +39,9 @@ export default function PaymentForm() {
       card: "",
       expires: "",
       cvv: "",
-      streetAdress: "",
-      city: "",
-      zip: "",
+      streetAdress: defaultAddress?.street  ?? "",
+      city:         defaultAddress?.city    ?? "",
+      zip:          defaultAddress?.zipCode ?? "",
     },
     onSubmit: async () => {
       startTransition(() => handleCheckoutClick());
@@ -360,126 +368,61 @@ export default function PaymentForm() {
                   }}
                 </form.Field>
               </div>
-              <form.Field
-                name="streetAdress"
-                validators={{
-                  onChange: ({ value }) => {
-                    if (!value) return "Street is required";
-                    return undefined;
-                  },
-                }}
-              >
-                {(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid;
-                  return (
-                    <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>
-                        Street Adress
-                      </FieldLabel>
+              <form.Field name="streetAdress">
+                {(field) => (
+                  <Field>
+                    <FieldLabel htmlFor={field.name}>Street Address</FieldLabel>
+                    <Input
+                      className="border-(--gold)/40 opacity-60 cursor-not-allowed"
+                      id={field.name}
+                      name={field.name}
+                      value={field.state.value}
+                      readOnly
+                      disabled
+                      tabIndex={-1}
+                    />
+                    <p className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>
+                      Change your address in{" "}
+                      <a href="/admin-dashboard/dashboard/account" className="underline" style={{ color: "var(--gold)" }}>
+                        My Account
+                      </a>
+                    </p>
+                  </Field>
+                )}
+              </form.Field>
+              <div className="flex gap-12">
+                <form.Field name="zip">
+                  {(field) => (
+                    <Field className="flex-1">
+                      <FieldLabel htmlFor={field.name}>Zip</FieldLabel>
                       <Input
-                      className=" border-(--gold)/40"
+                        className="border-(--gold)/40 opacity-60 cursor-not-allowed"
                         id={field.name}
                         name={field.name}
                         value={field.state.value}
-                        onBlur={field.handleBlur}
-                        onChange={(ev) => field.handleChange(ev.target.value)}
-                        aria-invalid={isInvalid}
-                        aria-describedby={
-                          isInvalid ? `${field.name}-error` : undefined
-                        }
+                        readOnly
+                        disabled
+                        tabIndex={-1}
                       />
-                      {isInvalid && (
-                        <FieldError
-                          id={`${field.name}-error`}
-                          errors={field.state.meta.errors.map((e) => ({
-                            message: String(e),
-                          }))}
-                        />
-                      )}
                     </Field>
-                  );
-                }}
-              </form.Field>
-              <div className="flex gap-12">
-                <form.Field
-                  name="city"
-                  validators={{
-                    onChange: ({ value }) => {
-                      if (!value) return "City is required";
-                      return undefined;
-                    },
-                  }}
-                >
-                  {(field) => {
-                    const isInvalid =
-                      field.state.meta.isTouched && !field.state.meta.isValid;
-                    return (
-                      <Field data-invalid={isInvalid} className="flex-1">
-                        <FieldLabel htmlFor={field.name}>City</FieldLabel>
-                        <Input
-                        className=" border-(--gold)/40"
-                          id={field.name}
-                          name={field.name}
-                          value={field.state.value}
-                          onBlur={field.handleBlur}
-                          onChange={(ev) => field.handleChange(ev.target.value)}
-                          aria-invalid={isInvalid}
-                          aria-describedby={
-                            isInvalid ? `${field.name}-error` : undefined
-                          }
-                        />
-                        {isInvalid && (
-                          <FieldError
-                            id={`${field.name}-error`}
-                            errors={field.state.meta.errors.map((e) => ({
-                              message: String(e),
-                            }))}
-                          />
-                        )}
-                      </Field>
-                    );
-                  }}
+                  )}
                 </form.Field>
 
-                <form.Field
-                  name="zip"
-                  validators={{
-                    onChange: ({ value }) => {
-                      if (!value) return "Zip is required";
-                      return undefined;
-                    },
-                  }}
-                >
-                  {(field) => {
-                    const isInvalid =
-                      field.state.meta.isTouched && !field.state.meta.isValid;
-                    return (
-                      <Field data-invalid={isInvalid} className="flex-1">
-                        <FieldLabel htmlFor={field.name}>Zip</FieldLabel>
-                        <Input
-                        className=" border-(--gold)/40"
-                          id={field.name}
-                          name={field.name}
-                          value={field.state.value}
-                          onBlur={field.handleBlur}
-                          onChange={(ev) => field.handleChange(ev.target.value)}
-                          aria-invalid={isInvalid}
-                          aria-describedby={
-                            isInvalid ? `${field.name}-error` : undefined
-                          }
-                        />
-                        {isInvalid && (
-                          <FieldError
-                            id={`${field.name}-error`}
-                            errors={field.state.meta.errors.map((e) => ({
-                              message: String(e),
-                            }))}
-                          />
-                        )}
-                      </Field>
-                    );
-                  }}
+                <form.Field name="city">
+                  {(field) => (
+                    <Field className="flex-1">
+                      <FieldLabel htmlFor={field.name}>City</FieldLabel>
+                      <Input
+                        className="border-(--gold)/40 opacity-60 cursor-not-allowed"
+                        id={field.name}
+                        name={field.name}
+                        value={field.state.value}
+                        readOnly
+                        disabled
+                        tabIndex={-1}
+                      />
+                    </Field>
+                  )}
                 </form.Field>
               </div>
             </FieldGroup>

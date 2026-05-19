@@ -8,7 +8,7 @@ import { headers } from "next/headers";
 
 export async function updateProfile(
   userId: string,
-  data: { name?: string; phone?: string; shippingAddress?: string }
+  data: { name?: string }
 ) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session || session.user.id !== userId) return actionError("Unauthorized");
@@ -17,9 +17,7 @@ export async function updateProfile(
     await prisma.user.update({
       where: { id: userId },
       data: {
-        ...(data.name           && { name: data.name }),
-        phone:           data.phone           ?? null,
-        shippingAddress: data.shippingAddress ?? null,
+        ...(data.name && { name: data.name }),
       },
     });
     revalidatePath("/admin-dashboard/dashboard/account");
