@@ -79,7 +79,7 @@ export default async function DashboardPage() {
                   {/* panel and avoid confusion between the two views */}
                   <div>
                     <p className="font-mono text-xs text-muted-foreground">
-                      Order #{order.id}
+                      Order:<span className="block truncate max-w-20 md:max-w-full">{order.id}</span>
                     </p>
                     <p className="mt-0.5 text-sm text-muted-foreground">
                       {formatDate(order.orderDate)}

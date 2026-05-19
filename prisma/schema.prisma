@@ -70,7 +70,7 @@ model Order {
   totalAmount Int      @map("total_amount")
   status      String
   orderDate   DateTime @map("order_date")
-
+ 
   orderItem OrderItem[]
 
   userId String
@@ -93,6 +93,19 @@ model OrderItem {
   @@map("order_items")
 }
 
+model Address {
+  id  String @id
+  street String
+  city String
+  state String?
+  zipCode String
+  country String
+
+  users User[]
+
+  @@map("address")
+}
+
 model User {
   id            String    @id
   name          String
@@ -107,6 +120,7 @@ model User {
   orders        Order[]
   wishlistItems WishlistItem[]
   stockAlerts   StockAlert[]
+  address Address[]
 
 
   role       String?

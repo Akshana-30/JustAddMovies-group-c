@@ -41,50 +41,66 @@ export default async function OrderPage(props: PageProps<"/orders/[orderId]">) {
     return notFound();
   }
   return (
-
     <div className="flex-row max-w-3xl mx-auto border border-(--gold)/30 bg-sidebar-accent/30 rounded-2xl p-4 mt-10">
-      <div className="border-b-2  mb-10">
-        <h1 className="text-center font-bold m-4">{`Order ID: ${order.id}`}</h1>
-
-        <Table>
-          <TableCaption>User ID: {order.user.id}</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Status</TableHead>
-              <TableHead>Order Date</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead className="text-right">Total</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell>
-                <span
-                  style={{
-                    fontSize: "11px",
-                    padding: "2px 8px",
-                    borderRadius: "20px",
-                    background:
-                      order.status === "PAID"
-                        ? "rgba(34,197,94,0.15)"
-                        : "rgba(232,160,48,0.15)",
-                    color: order.status === "PAID" ? "#4ade80" : "var(--gold)",
-                  }}
-                >
-                  {order.status}
-                </span>
-              </TableCell>
-              <TableCell>{order.orderDate.toDateString()}</TableCell>
-              <TableCell>{order.user.name}</TableCell>
-              <TableCell>{order.user.email}</TableCell>
-              <TableCell className="text-right">
-                {formatPrice(order.totalAmount)}
-              </TableCell>
-            </TableRow>
-          </TableBody>
-          <TableFooter></TableFooter>
-        </Table>
+      <div className="mb-10">
+        <div className="flex items-center border-b border-(--gold)/30 mb-1">
+          <p
+            className="font-display text-3xl tracking-wide"
+            style={{ color: "var(--text)" }}
+          >
+            Order:
+          </p>
+          <p className="block truncate max-w-20 md:max-w-full ml-2">
+            {order.id}
+          </p>
+        </div>
+        <div className="flex items-center text-sm border-b border-(--gold)/30 mb-1">
+          <p style={{ color: "var(--text)" }}>Order date:</p>
+          <p className="block truncate max-w-20 md:max-w-full ml-2">
+            {new Intl.DateTimeFormat("sv-SE").format(order.orderDate)}
+          </p>
+        </div>
+        <div className="flex items-center text-sm border-b border-(--gold)/30 mb-1">
+          <p style={{ color: "var(--text)" }}>User ID:</p>
+          <p className="block truncate max-w-20 md:max-w-full ml-2">
+            {order.user.id}
+          </p>
+        </div>
+        <div className="flex items-center text-sm border-b border-(--gold)/30 mb-1">
+          <p style={{ color: "var(--text)" }}>User:</p>
+          <p className="block truncate max-w-20 md:max-w-full ml-2">
+            {order.user.name}
+          </p>
+        </div>
+        <div className="flex items-center text-sm border-b border-(--gold)/30 mb-1">
+          <p style={{ color: "var(--text)" }}>Email:</p>
+          <p className="block truncate max-w-20 md:max-w-full ml-2">
+            {order.user.email}
+          </p>
+        </div>
+        <div className="flex items-center text-sm border-b border-(--gold)/30 mb-1">
+          <p style={{ color: "var(--text)" }}>Total order cost:</p>
+          <p className="block truncate max-w-20 md:max-w-full ml-2">
+            {formatPrice(order.totalAmount)}
+          </p>
+        </div>
+        <div className="flex items-center text-sm border-b border-(--gold)/30 mb-1">
+          <p style={{ color: "var(--text)" }}>Status:</p>
+          <span
+            style={{
+              fontSize: "11px",
+              padding: "2px 8px",
+              borderRadius: "20px",
+              background:
+                order.status === "PAID"
+                  ? "rgba(34,197,94,0.15)"
+                  : "rgba(232,160,48,0.15)",
+              color: order.status === "PAID" ? "#4ade80" : "var(--gold)",
+            }}
+          >
+            {order.status}
+          </span>
+        </div>
       </div>
 
       <div className="border border-(--gold)/30 rounded-2xl p-2">

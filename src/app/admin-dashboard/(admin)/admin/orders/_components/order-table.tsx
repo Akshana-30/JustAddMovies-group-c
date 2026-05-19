@@ -80,7 +80,10 @@ export default function OrderTable({ data }: Props) {
       cell: (info) => {
         const id = info.getValue<string>();
         return (
-          <Link className="text-blue-400 text-xs pl-2 block truncate max-w-20 md:max-w-full" href={`/orders/${id}`}>
+          <Link
+            className="text-blue-400 text-xs pl-2 block truncate max-w-20 md:max-w-full"
+            href={`/orders/${id}`}
+          >
             {id}
           </Link>
         );
@@ -126,8 +129,12 @@ export default function OrderTable({ data }: Props) {
       enableGlobalFilter: false,
       cell: (info) => {
         const date = info.getValue<Date>();
-      return new Intl.DateTimeFormat("sv-SE").format(date);
-    }
+        return (
+          <span className="ml-3">
+            {new Intl.DateTimeFormat("sv-SE").format(date)}
+          </span>
+        );
+      },
     },
     {
       id: "quantity",
@@ -141,7 +148,11 @@ export default function OrderTable({ data }: Props) {
       header: () => <span className="block">User ID</span>,
       cell: (info) => {
         const uId = info.getValue<string>();
-        return <span className="text-xs block truncate max-w-20 md:max-w-full">{uId}</span>;
+        return (
+          <span className="text-xs block truncate max-w-20 md:max-w-full">
+            {uId}
+          </span>
+        );
       },
     },
     {
