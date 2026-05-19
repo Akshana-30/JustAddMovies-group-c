@@ -9,6 +9,7 @@ import { transport } from "./email";
 import VerifyEmail from "@/components/emails/verify-email";
 import NewEmail from "@/components/emails/new-email";
 import ExistingUser from "@/components/emails/existing-user-email";
+import { WelcomeEmail } from "@/components/emails/welcome-email";
 
 const appName = process.env.NEXT_PUBLIC_APP_NAME;
 
@@ -125,6 +126,19 @@ export const auth = betterAuth({
                 html,
                 text,
             });
+        },
+
+        async afterEmailVerification(user) {
+            const html = await pretty(await render(<WelcomeEmail userName={user.name} />))
+            const text = toPlainText(html);
+
+            void transport.sendMail({
+                from: process.env.SMTP_USER,
+                to: `${user.name} <${user.email}>`,
+                subject: `Welcome to ${appName || "Just Add Movies"}, ${user.name}!`,
+                html,
+                text,
+            })
         }
     },
 
