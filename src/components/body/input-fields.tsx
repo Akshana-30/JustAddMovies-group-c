@@ -17,6 +17,8 @@ interface InputFieldsProps {
     isPassword?: boolean;
     showPassword?: boolean;
     onTogglePassword?: () => void;
+    labelStyling?: string;
+    inputStyling?: string;
 }
 
 export function InputFields({
@@ -31,6 +33,8 @@ export function InputFields({
     isPassword,
     showPassword,
     onTogglePassword,
+    labelStyling,
+    inputStyling,
 }: InputFieldsProps) {
     const fieldErrors = field.state.meta.errors;
     const serverError = field.state.meta.errorMap?.onServer;
@@ -45,7 +49,7 @@ export function InputFields({
 
     return (
         <Field data-invalid={isInvalid}>
-            <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
+            <FieldLabel htmlFor={field.name} className={labelStyling}>{label}</FieldLabel>
 
             <div className="relative">
                 <Input
@@ -65,7 +69,7 @@ export function InputFields({
                     }}
                     aria-invalid={isInvalid}
                     type={type}
-                    className={isPassword ? "pr-10" : ""}
+                    className={`${isPassword ? "pr-10" : ""} ${inputStyling}`}
                     autoComplete={autocomplete}
                     placeholder={placeholder}
                     required={required}

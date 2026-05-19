@@ -17,7 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { registerSchema } from "@/app/(auth)/_helpers/form-schema";
-import { InputFields } from "../../_components/input-fields";
+import { InputFields } from "@/components/body/input-fields";
 import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
 import { useState } from "react";
@@ -55,7 +55,7 @@ export function RegisterForm() {
                     position: "top-center",
                 });
             }
-            
+
             toast.info("Check your email", {
                 description: `We sent a verification link to provided email.
                 The link will expire in 30 minutes.`,

@@ -1,6 +1,6 @@
 "use client";
 
-import { InputFields } from "@/app/(auth)/_components/input-fields";
+import { InputFields } from "@/components/body/input-fields";
 import { Button } from "@/components/ui/button";
 import {
     Dialog,

@@ -12,7 +12,7 @@ import { authClient } from "@/lib/auth-client";
 import { useForm } from "@tanstack/react-form";
 import { useRouter } from "next/navigation";
 import { resetPasswordSchema } from "@/app/(auth)/_helpers/form-schema";
-import { InputFields } from "../../../_components/input-fields";
+import { InputFields } from "../../../../../components/body/input-fields";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useState } from "react";

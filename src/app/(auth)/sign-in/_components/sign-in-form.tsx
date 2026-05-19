@@ -16,7 +16,7 @@ import { authClient } from "@/lib/auth-client";
 import { useForm } from "@tanstack/react-form";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { InputFields } from "../../_components/input-fields";
+import { InputFields } from "../../../../components/body/input-fields";
 import { setEmail } from "../../_helpers/session-email-storage";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
@@ -32,7 +32,7 @@ export function SignInForm() {
             email: "",
             password: "",
         },
-        
+
         onSubmit: async ({ value }) => {
             setLoading(true);
 

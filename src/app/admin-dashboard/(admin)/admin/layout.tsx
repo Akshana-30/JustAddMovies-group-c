@@ -3,18 +3,19 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import prisma from "@/lib/prisma";
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
-import { LayoutDashboard, Film, Users, ShoppingCart, UserCheck, Download, SquarePen, Tag } from "lucide-react";
+import { LayoutDashboard, Film, Users, ShoppingCart, UserCheck, Download, SquarePen, Tag, Mail } from "lucide-react";
 
 async function getAdminCounts() {
-  const [movies, genres, directors, actors, pendingOrders, customers] = await Promise.all([
+  const [movies, genres, directors, actors, pendingOrders, customers, messages] = await Promise.all([
     prisma.movie.count(),
     prisma.genre.count(),
     prisma.director.count(),
     prisma.actor.count(),
     prisma.order.count({ where: { status: "PENDING" } }),
     prisma.user.count({ where: { role: { not: "ADMIN" } } }),
+    prisma.contactMessage.count({ where: { read: false }}),
   ]);
-  return { movies, genres, people: directors + actors, pendingOrders, customers };
+  return { movies, genres, people: directors + actors, pendingOrders, customers, messages };
 }
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -35,6 +36,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     { label: "People",    href: "/admin-dashboard/admin/people",    icon: <Users size={16}/>,          badge: counts.people },
     { label: "Customers", href: "/admin-dashboard/admin/customers", icon: <UserCheck size={16}/>,      badge: counts.customers },
     { label: "Orders",    href: "/admin-dashboard/admin/orders",    icon: <ShoppingCart size={16}/>,   badge: counts.pendingOrders },
+    { label: "Messages", href: "/admin-dashboard/admin/messages", icon: <Mail size={16} />, badge: counts.messages },
     
   ];
 
