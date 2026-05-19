@@ -33,7 +33,7 @@ export default async function OrderPage(props: PageProps<"/orders/[orderId]">) {
     where: { id: params.orderId },
     include: {
       orderItem: { include: { movies: true } },
-      user: true,
+      user: { include: { address: { select: { street: true, city: true, zipCode: true, country: true, id: true}}}},
     },
   });
 
@@ -56,7 +56,7 @@ export default async function OrderPage(props: PageProps<"/orders/[orderId]">) {
         </div>
         <div className="flex items-center text-sm border-b border-(--gold)/30 mb-1">
           <p style={{ color: "var(--text)" }}>Order date:</p>
-          <p className="block truncate max-w-20 md:max-w-full ml-2">
+          <p className="ml-2">
             {new Intl.DateTimeFormat("sv-SE").format(order.orderDate)}
           </p>
         </div>
@@ -84,7 +84,7 @@ export default async function OrderPage(props: PageProps<"/orders/[orderId]">) {
             {formatPrice(order.totalAmount)}
           </p>
         </div>
-        <div className="flex items-center text-sm border-b border-(--gold)/30 mb-1">
+        <div className="flex items-center text-sm border-b border-(--gold)/30 mb-1 pb-1">
           <p style={{ color: "var(--text)" }}>Status:</p>
           <span
             style={{
@@ -100,6 +100,19 @@ export default async function OrderPage(props: PageProps<"/orders/[orderId]">) {
           >
             {order.status}
           </span>
+        </div>
+        <div className="flex text-sm border-b border-(--gold)/30 mb-1">
+          <p style={{ color: "var(--text)" }}>Shipping address:</p>
+          <p className="block truncate max-w-20 md:max-w-full ml-2">
+            {order.user.address.map((a) => (
+              <div className="text-xs" key={a.id}>
+                <p>{a.street}</p>
+                <p>{a.city}</p>
+                <p>{a.zipCode}</p>
+                <p>{a.country}</p>
+              </div>
+            ))}
+          </p>
         </div>
       </div>
 
@@ -120,7 +133,7 @@ export default async function OrderPage(props: PageProps<"/orders/[orderId]">) {
                 <TableCell>{formatPrice(item.priceAtPurchase)}</TableCell>
                 <TableCell className="text-center">{item.quantity}</TableCell>
                 <TableCell className="text-right text-blue-400">
-                  <Link href={`/movies/${item.movies.id}`}>
+                  <Link className="block truncate max-w-20 md:max-w-full text-xs" href={`/movies/${item.movies.id}`}>
                     {item.movies.id}
                   </Link>
                 </TableCell>
