@@ -73,9 +73,6 @@ https://github.com/gr-26-18/JustAddMovies-group-c/pull/72/conflict?name=src%252F
       <div className="flex justify-between gap-4 w-full flex-col lg:flex-row pb-5">
         {/* Banner Carousel */}
         <div className="w-full lg:w-[85%]">
-    <div className="pt-2 p-8">
-      <div className=" flex justify-between gap-4 w-full max-md:flex-col pb-5">
-        <div className="lg:w-[85%] max-lg: w-full">
           <BannerCarousel>
             {latestMovie.map((latest) => (
               <CarouselItem key={latest.id}>
@@ -103,13 +100,8 @@ https://github.com/gr-26-18/JustAddMovies-group-c/pull/72/conflict?name=src%252F
         </div>
 
         {/* Genre Card Panel */}
-        <div className="w-full lg:w-[40%]">
-          <Card className="border-amber-300/50 border flex-row! flex-wrap content-start gap-2 p-2 overflow-y-auto bg-primary/20 h-24 sm:h-32 md:h-40 lg:h-150">
-            {genres.map((genre) => (
-              <GenreCard key={genre.id} name={genre.name}></GenreCard>
-            ))}
-        <div className="lg:w-[40%] max-lg:w-full sticky top-4 self-start">
-          <Card className="border-amber-300/50 border p-2 overflow-y-auto bg-primary/20 h-150 max-md:h-25">
+        <div className="w-full lg:w-[40%] sticky top-4 self-start">
+          <Card className="border-amber-300/50 w-full lg:w-[40%] border flex-row! flex-wrap content-start gap-2 p-2 overflow-y-auto bg-primary/20 h-24 sm:h-32 md:h-40 lg:h-150">
             <div className="grid grid-cols-2 gap-2 w-full">
               {genres.map((genre) => (
                 <GenreCard key={genre.id} id={genre.id} name={genre.name} />
@@ -124,10 +116,9 @@ https://github.com/gr-26-18/JustAddMovies-group-c/pull/72/conflict?name=src%252F
       </Suspense>
 
       {/* Carousels Section */}
-      <div className="max-w-[98%] rounded-4xl m-auto p-3 sm:p-5 gap-4 bg-secondary-foreground/7">
+        <div className="max-w-[98%] rounded-4xl m-auto p-5 gap-4 bg-secondary-foreground/7 overflow-hidden">
         {/* New Releases */}
       {/* top ten newest */}
-      <div className="max-w-[98%] rounded-4xl m-auto p-5 gap-4 bg-secondary-foreground/7 overflow-hidden">
         <Carousel
           opts={{ align: "start", loop: true }}
           className="max-w-full px-8 sm:px-12 md:px-15"

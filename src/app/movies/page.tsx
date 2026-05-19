@@ -56,24 +56,13 @@ export default async function MoviesPage({
       <div className="flex justify-center py-3 px-8 shrink-0 bg-background/80 backdrop-blur-sm border-b border-border/30">
         <FilterButton />
       </div>
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-        {movies.map((movie) => (
-          <div className="pb-5" key={movie.id}>
-            <MovieCard
-              imageUrl={movie.imageUrl}
-              genres={movie.genres}
-              title={movie.title}
-              id={movie.id}
-              price={movie.price}
-              stock={movie.stock}
-            ></MovieCard>
 
       {/* Content row — fills remaining height, inner scroll only */}
       <div className="flex gap-6 flex-1 overflow-hidden px-8 py-6">
 
         {/* Movie grid — scrolls independently */}
         <div className="flex-1 overflow-y-auto pr-2">
-          <div className="grid grid-cols-4 gap-8 max-lg:grid-cols-2 max-sm:grid-cols-1 items-start">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 items-start">
             {movies.map((movie) => (
               <div className="pb-5 h-full" key={movie.id}>
                 <MovieCard
