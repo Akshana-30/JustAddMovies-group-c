@@ -1,67 +1,49 @@
 "use server";
-// ── Imports ───────────────────────────────────────────────────────
-// auth and headers are read together so the session is always fresh
-// and never served from a stale cache.
 import { auth } from "@/lib/auth";
 import { cartCookie, getCart } from "@/lib/cart";
 import { getCartProducts } from "@/lib/cart-types";
+import { formSchema } from "@/lib/payment-schema";
 import prisma from "@/lib/prisma";
 import { sendOrderConfirmation } from "@/lib/send-order-confirmation";
 import { revalidatePath } from "next/cache";
 import { cookies, headers } from "next/headers";
+import z from "zod";
 
-// ── Cart cleanup ───────────────────────────────────────────────────
-// Kept as a private helper so the main function stays readable.
-// revalidatePath ensures the cart icon in the navbar updates immediately
-// after the cookie is removed.
+type PaymentValues = z.infer<typeof formSchema>;
+
 async function clearCart() {
   const store = await cookies();
   store.delete(cartCookie);
   revalidatePath("/cart");
 }
 
-// ── Main server action ─────────────────────────────────────────────
-// Receives the shipping address captured in the payment form and uses
-// it both when creating the order and in the confirmation email.
-// The function is intentionally a default export so the client can
-// import it directly without a named import on every call site.
-export default async function handleCheckout(shippingAddress: {
-  street: string;
-  city: string;
-  zip: string;
-}) {
-  // ── Session guard ────────────────────────────────────────────────
-  // Throwing here causes the client-side try/catch in payment-form
-  // to display an error toast instead of silently failing.
+export default async function handleCheckout(values: PaymentValues) {
+  const data = formSchema.parse(values);
+
   const session = await auth.api.getSession({
     headers: await headers(),
   });
   if (!session) throw new Error("Not authenticated");
 
-  // ── Cart → products ──────────────────────────────────────────────
-  // getCartProducts enriches the raw cookie cart with full movie data
-  // (title, price, stock) fetched from the database.
   const cart = await getCart();
   const products = await getCartProducts(cart);
 
-  // ── Total ────────────────────────────────────────────────────────
-  // Prices are stored in öre (e.g. 8900 = 89 kr), so Number() is used
-  // to convert from Prisma's Decimal type before multiplying.
   const total = products.reduce(
     (sum, p) => sum + Number(p.price) * p.quantity,
     0,
   );
 
-  // ── Atomic transaction ───────────────────────────────────────────
-  // Order creation and stock decrement are wrapped in a single
-  // $transaction so that if either operation fails, neither is
-  // committed — preventing overselling or orphaned orders.
   const [order] = await prisma.$transaction([
     prisma.order.create({
       data: {
         orderDate: new Date(),
         status: "PAID",
         totalAmount: total,
+        shippingStreet: data.streetAddress,
+        shippingZip: data.zip,
+        shippingCity: data.city,
+        shippingCountry: data.country,
+
         user: {
           connect: { id: session.user.id },
         },
@@ -104,7 +86,12 @@ export default async function handleCheckout(shippingAddress: {
         price: Number(p.price),
       })),
       total,
-      shippingAddress,
+      shippingAddress: {
+        street: data.streetAddress,
+        city: data.city,
+        zip: data.zip,
+        country: data.country,
+      },
     });
   } catch (err) {
     console.error("Order confirmation email failed:", err);

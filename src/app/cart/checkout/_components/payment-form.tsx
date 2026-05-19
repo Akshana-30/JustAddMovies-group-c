@@ -19,6 +19,7 @@ import handleCheckout from "./handleCheckout";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { toast } from "sonner";
+import { formSchema } from "@/lib/payment-schema";
 
 interface DefaultAddress {
   street: string;
@@ -28,7 +29,13 @@ interface DefaultAddress {
   country: string;
 }
 
-export default function PaymentForm({ defaultAddress }: { defaultAddress?: DefaultAddress | null }) {
+
+
+export default function PaymentForm({
+  defaultAddress,
+}: {
+  defaultAddress?: DefaultAddress | null;
+}) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
@@ -39,38 +46,40 @@ export default function PaymentForm({ defaultAddress }: { defaultAddress?: Defau
       card: "",
       expires: "",
       cvv: "",
-      streetAdress: defaultAddress?.street  ?? "",
-      city:         defaultAddress?.city    ?? "",
-      zip:          defaultAddress?.zipCode ?? "",
+      streetAddress: defaultAddress?.street ?? "",
+      city: defaultAddress?.city ?? "",
+      zip: defaultAddress?.zipCode ?? "",
+      country: defaultAddress?.country ?? "",
     },
-    onSubmit: async () => {
-      startTransition(() => handleCheckoutClick());
+    validators: {
+      onSubmit: formSchema,
+    },
+    onSubmit: async ({ value }) => {
+      startTransition(async () => {
+        try {
+          await handleCheckout(value);
+          toast.success("Your order has been placed!", {
+            position: "top-center",
+          });
+          router.push("/");
+        } catch (err) {
+          console.error("Checkout error:", err);
+          toast.error(
+            err instanceof Error
+              ? err.message
+              : "Checkout failed. Please try again.",
+            { position: "top-center" },
+          );
+        }
+      });
     },
   });
-
-  async function handleCheckoutClick() {
-    const { streetAdress, city, zip } = form.state.values;
-    try {
-      await handleCheckout({ street: streetAdress, city, zip });
-      toast.success("Your order has been placed!", {
-        position: "top-center",
-      });
-      router.push("/");
-    } catch (err) {
-      console.error("Checkout error:", err);
-      toast.error(
-        err instanceof Error ? err.message : "Checkout failed. Please try again.",
-        { position: "top-center" }
-      );
-    }
-  }
 
   function handleCartClick() {
     router.push("/cart");
   }
-  
-  return (
 
+  return (
     <div className="w-full max-w-md">
       <Card className="max-lg:rounded-t-none lg:rounded-l-none border-r max-lg:border-l lg:border-t border-b border-(--gold)/30 bg-sidebar-accent/40 dark:bg-sidebar-accent/40">
         <CardHeader>
@@ -87,15 +96,7 @@ export default function PaymentForm({ defaultAddress }: { defaultAddress?: Defau
             }}
           >
             <FieldGroup>
-              <form.Field
-                name="name"
-                validators={{
-                  onChange: ({ value }) => {
-                    if (!value) return "Name is required";
-                    return undefined;
-                  },
-                }}
-              >
+              <form.Field name="name">
                 {(field) => {
                   const isInvalid =
                     field.state.meta.isTouched && !field.state.meta.isValid;
@@ -103,39 +104,23 @@ export default function PaymentForm({ defaultAddress }: { defaultAddress?: Defau
                     <Field data-invalid={isInvalid}>
                       <FieldLabel htmlFor={field.name}>Name</FieldLabel>
                       <Input
-                      className=" border-(--gold)/40"
+                        className=" border-(--gold)/40"
                         id={field.name}
                         name={field.name}
                         value={field.state.value}
                         onBlur={field.handleBlur}
                         onChange={(ev) => field.handleChange(ev.target.value)}
                         aria-invalid={isInvalid}
-                        aria-describedby={
-                          isInvalid ? `${field.name}-error` : undefined
-                        }
                       />
                       {isInvalid && (
-                        <FieldError
-                          id={`${field.name}-error`}
-                          errors={field.state.meta.errors.map((e) => ({
-                            message: String(e),
-                          }))}
-                        />
+                        <FieldError errors={field.state.meta.errors} />
                       )}
                     </Field>
                   );
                 }}
               </form.Field>
 
-              <form.Field
-                name="email"
-                validators={{
-                  onChange: ({ value }) => {
-                    if (!value) return "Email is required";
-                    return undefined;
-                  },
-                }}
-              >
+              <form.Field name="email">
                 {(field) => {
                   const isInvalid =
                     field.state.meta.isTouched && !field.state.meta.isValid;
@@ -143,7 +128,7 @@ export default function PaymentForm({ defaultAddress }: { defaultAddress?: Defau
                     <Field data-invalid={isInvalid}>
                       <FieldLabel htmlFor={field.name}>Email</FieldLabel>
                       <Input
-                      className=" border-(--gold)/40"
+                        className=" border-(--gold)/40"
                         id={field.name}
                         name={field.name}
                         value={field.state.value}
@@ -151,37 +136,16 @@ export default function PaymentForm({ defaultAddress }: { defaultAddress?: Defau
                         onChange={(ev) => field.handleChange(ev.target.value)}
                         aria-invalid={isInvalid}
                         type="email"
-                        aria-describedby={
-                          isInvalid ? `${field.name}-error` : undefined
-                        }
                       />
                       {isInvalid && (
-                        <FieldError
-                          id={`${field.name}-error`}
-                          errors={field.state.meta.errors.map((e) => ({
-                            message: String(e),
-                          }))}
-                        />
+                        <FieldError errors={field.state.meta.errors} />
                       )}
                     </Field>
                   );
                 }}
               </form.Field>
 
-              <form.Field
-                name="card"
-                validators={{
-                  onChange: ({ value }) => {
-                    const digits = value.replace(/\s/g, "");
-                    if (!digits) return "Card number is required";
-                    if (!/^\d+$/.test(digits))
-                      return "Card number must contain only digits";
-                    if (digits.length < 13 || digits.length > 16)
-                      return "Enter a valid card number";
-                    return undefined;
-                  },
-                }}
-              >
+              <form.Field name="card">
                 {(field) => {
                   const isInvalid =
                     field.state.meta.isTouched && !field.state.meta.isValid;
@@ -192,36 +156,11 @@ export default function PaymentForm({ defaultAddress }: { defaultAddress?: Defau
                       .slice(0, 16)
                       .replace(/(.{4})/g, "$1 ")
                       .trim();
-
-                  const detectCardType = (value: string) => {
-                    const n = value.replace(/\s/g, "");
-                    if (/^4/.test(n)) return "Visa";
-                    if (/^5[1-5]/.test(n)) return "Mastercard";
-                    if (/^3[47]/.test(n)) return "Amex";
-                    if (/^6/.test(n)) return "Discover";
-                    return null;
-                  };
-
-                  const cardType = detectCardType(field.state.value ?? "");
-
                   return (
                     <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>
-                        Credit Card
-                        {cardType && (
-                          <span
-                            style={{
-                              marginLeft: 8,
-                              fontWeight: 400,
-                              opacity: 0.7,
-                            }}
-                          >
-                            · {cardType}
-                          </span>
-                        )}
-                      </FieldLabel>
+                      <FieldLabel htmlFor={field.name}>Credit Card</FieldLabel>
                       <Input
-                      className=" border-(--gold)/40"
+                        className=" border-(--gold)/40"
                         id={field.name}
                         name={field.name}
                         value={field.state.value ?? ""}
@@ -233,17 +172,9 @@ export default function PaymentForm({ defaultAddress }: { defaultAddress?: Defau
                         inputMode="numeric"
                         maxLength={19}
                         aria-invalid={isInvalid}
-                        aria-describedby={
-                          isInvalid ? `${field.name}-error` : undefined
-                        }
                       />
                       {isInvalid && (
-                        <FieldError
-                          id={`${field.name}-error`}
-                          errors={field.state.meta.errors.map((e) => ({
-                            message: String(e),
-                          }))}
-                        />
+                        <FieldError errors={field.state.meta.errors} />
                       )}
                     </Field>
                   );
@@ -251,27 +182,7 @@ export default function PaymentForm({ defaultAddress }: { defaultAddress?: Defau
               </form.Field>
 
               <div className="flex gap-12">
-                <form.Field
-                  name="expires"
-                  validators={{
-                    onChange: ({ value }) => {
-                      const now = new Date();
-                      if (!value) return "Expiry is required";
-                      if (!/^\d{2}\/\d{2}$/.test(value))
-                        return "Use MM/YY format";
-                      const [mm, yy] = value.split("/").map(Number);
-                      const currentYY = now.getFullYear() % 100;
-                      if (mm < 1 || mm > 12) return "Invalid month";
-                      if(yy > currentYY + 5) return "Invalid year";
-                      const expDate = new Date(2000 + yy, mm - 1, 1);
-                      if (
-                        expDate < new Date(now.getFullYear(), now.getMonth(), 1)
-                      )
-                        return "Card has expired";
-                      return undefined;
-                    },
-                  }}
-                >
+                <form.Field name="expires">
                   {(field) => {
                     const isInvalid =
                       field.state.meta.isTouched && !field.state.meta.isValid;
@@ -287,7 +198,7 @@ export default function PaymentForm({ defaultAddress }: { defaultAddress?: Defau
                       <Field data-invalid={isInvalid} className="flex-1">
                         <FieldLabel htmlFor={field.name}>Expiry</FieldLabel>
                         <Input
-                        className=" border-(--gold)/40"
+                          className=" border-(--gold)/40"
                           id={field.name}
                           name={field.name}
                           value={field.state.value ?? ""}
@@ -299,35 +210,16 @@ export default function PaymentForm({ defaultAddress }: { defaultAddress?: Defau
                           inputMode="numeric"
                           maxLength={5}
                           aria-invalid={isInvalid}
-                          aria-describedby={
-                            isInvalid ? `${field.name}-error` : undefined
-                          }
                         />
                         {isInvalid && (
-                          <FieldError
-                            id={`${field.name}-error`}
-                            errors={field.state.meta.errors.map((e) => ({
-                              message: String(e),
-                            }))}
-                          />
+                          <FieldError errors={field.state.meta.errors} />
                         )}
                       </Field>
                     );
                   }}
                 </form.Field>
 
-                <form.Field
-                  name="cvv"
-                  validators={{
-                    onChange: ({ value }) => {
-                      if (!value) return "CVV is required";
-                      if (!/^\d+$/.test(value)) return "CVV must be numeric";
-                      if (value.length < 3 || value.length > 4)
-                        return "CVV must be 3 or 4 digits";
-                      return undefined;
-                    },
-                  }}
-                >
+                <form.Field name="cvv">
                   {(field) => {
                     const isInvalid =
                       field.state.meta.isTouched && !field.state.meta.isValid;
@@ -336,7 +228,7 @@ export default function PaymentForm({ defaultAddress }: { defaultAddress?: Defau
                       <Field data-invalid={isInvalid} className="flex-1">
                         <FieldLabel htmlFor={field.name}>CVV</FieldLabel>
                         <Input
-                        className=" border-(--gold)/40"
+                          className=" border-(--gold)/40"
                           id={field.name}
                           name={field.name}
                           value={field.state.value ?? ""}
@@ -351,78 +243,123 @@ export default function PaymentForm({ defaultAddress }: { defaultAddress?: Defau
                           maxLength={4}
                           type="password"
                           aria-invalid={isInvalid}
-                          aria-describedby={
-                            isInvalid ? `${field.name}-error` : undefined
-                          }
                         />
                         {isInvalid && (
-                          <FieldError
-                            id={`${field.name}-error`}
-                            errors={field.state.meta.errors.map((e) => ({
-                              message: String(e),
-                            }))}
-                          />
+                          <FieldError errors={field.state.meta.errors} />
                         )}
                       </Field>
                     );
                   }}
                 </form.Field>
               </div>
-              <form.Field name="streetAdress">
-                {(field) => (
-                  <Field>
-                    <FieldLabel htmlFor={field.name}>Street Address</FieldLabel>
-                    <Input
-                      className="border-(--gold)/40 opacity-60 cursor-not-allowed"
-                      id={field.name}
-                      name={field.name}
-                      value={field.state.value}
-                      readOnly
-                      disabled
-                      tabIndex={-1}
-                    />
-                    <p className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>
-                      Change your address in{" "}
-                      <a href="/admin-dashboard/dashboard/account" className="underline" style={{ color: "var(--gold)" }}>
-                        My Account
-                      </a>
-                    </p>
-                  </Field>
-                )}
+
+              <form.Field name="streetAddress">
+                {(field) => {
+                  const isInvalid =
+                    field.state.meta.isTouched && !field.state.meta.isValid;
+                  return (
+                    <Field data-invalid={isInvalid} className="flex-1">
+                      <FieldLabel htmlFor={field.name}>Street</FieldLabel>
+                      <Input
+                        className=" border-(--gold)/40"
+                        id={field.name}
+                        name={field.name}
+                        value={field.state.value}
+                        onBlur={field.handleBlur}
+                        onChange={(ev) => field.handleChange(ev.target.value)}
+                        aria-invalid={isInvalid}
+                      />
+                      <p
+                        className="text-xs mt-1"
+                        style={{ color: "var(--text-muted)" }}
+                      >
+                        Change your address in{" "}
+                        <a
+                          href="/admin-dashboard/dashboard/account"
+                          className="underline"
+                          style={{ color: "var(--gold)" }}
+                        >
+                          My Account
+                        </a>
+                      </p>
+                      {isInvalid && (
+                        <FieldError errors={field.state.meta.errors} />
+                      )}
+                    </Field>
+                  );
+                }}
               </form.Field>
               <div className="flex gap-12">
                 <form.Field name="zip">
-                  {(field) => (
-                    <Field className="flex-1">
-                      <FieldLabel htmlFor={field.name}>Zip</FieldLabel>
-                      <Input
-                        className="border-(--gold)/40 opacity-60 cursor-not-allowed"
-                        id={field.name}
-                        name={field.name}
-                        value={field.state.value}
-                        readOnly
-                        disabled
-                        tabIndex={-1}
-                      />
-                    </Field>
-                  )}
+                  {(field) => {
+                    const isInvalid =
+                      field.state.meta.isTouched && !field.state.meta.isValid;
+                    return (
+                      <Field data-invalid={isInvalid} className="flex-1">
+                        <FieldLabel htmlFor={field.name}>Zip</FieldLabel>
+                        <Input
+                          className=" border-(--gold)/40"
+                          id={field.name}
+                          name={field.name}
+                          value={field.state.value}
+                          onBlur={field.handleBlur}
+                          onChange={(ev) => field.handleChange(ev.target.value)}
+                          aria-invalid={isInvalid}
+                        />
+                        {isInvalid && (
+                          <FieldError errors={field.state.meta.errors} />
+                        )}
+                      </Field>
+                    );
+                  }}
                 </form.Field>
 
                 <form.Field name="city">
-                  {(field) => (
-                    <Field className="flex-1">
-                      <FieldLabel htmlFor={field.name}>City</FieldLabel>
-                      <Input
-                        className="border-(--gold)/40 opacity-60 cursor-not-allowed"
-                        id={field.name}
-                        name={field.name}
-                        value={field.state.value}
-                        readOnly
-                        disabled
-                        tabIndex={-1}
-                      />
-                    </Field>
-                  )}
+                  {(field) => {
+                    const isInvalid =
+                      field.state.meta.isTouched && !field.state.meta.isValid;
+                    return (
+                      <Field data-invalid={isInvalid} className="flex-1">
+                        <FieldLabel htmlFor={field.name}>City</FieldLabel>
+                        <Input
+                          className=" border-(--gold)/40"
+                          id={field.name}
+                          name={field.name}
+                          value={field.state.value}
+                          onBlur={field.handleBlur}
+                          onChange={(ev) => field.handleChange(ev.target.value)}
+                          aria-invalid={isInvalid}
+                        />
+                        {isInvalid && (
+                          <FieldError errors={field.state.meta.errors} />
+                        )}
+                      </Field>
+                    );
+                  }}
+                </form.Field>
+
+                <form.Field name="country">
+                  {(field) => {
+                    const isInvalid =
+                      field.state.meta.isTouched && !field.state.meta.isValid;
+                    return (
+                      <Field data-invalid={isInvalid} className="flex-1">
+                        <FieldLabel htmlFor={field.name}>Country</FieldLabel>
+                        <Input
+                          className=" border-(--gold)/40"
+                          id={field.name}
+                          name={field.name}
+                          value={field.state.value}
+                          onBlur={field.handleBlur}
+                          onChange={(ev) => field.handleChange(ev.target.value)}
+                          aria-invalid={isInvalid}
+                        />
+                        {isInvalid && (
+                          <FieldError errors={field.state.meta.errors} />
+                        )}
+                      </Field>
+                    );
+                  }}
                 </form.Field>
               </div>
             </FieldGroup>
@@ -434,7 +371,6 @@ export default function PaymentForm({ defaultAddress }: { defaultAddress?: Defau
               {isPending ? "Validating payment.." : "Checkout"}
             </Button>
           </form>
-           
 
           <Button
             type="button"
@@ -444,8 +380,8 @@ export default function PaymentForm({ defaultAddress }: { defaultAddress?: Defau
           >
             Back To Cart
           </Button>
-          </CardContent>
-          </Card>
-          </div>
-)
+        </CardContent>
+      </Card>
+    </div>
+  );
 }

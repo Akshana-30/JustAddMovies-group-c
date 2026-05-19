@@ -42,16 +42,19 @@ export default async function OrderPage(props: PageProps<"/orders/[orderId]">) {
   }
   return (
     <div className="flex-row max-w-3xl mx-auto border border-(--gold)/30 bg-sidebar-accent/30 rounded-2xl p-4 mt-10">
-      <div className="mb-10">
-        <div className="flex items-center border-b border-(--gold)/30 mb-1">
+      <div className="flex items-center mb-1">
           <p
             className="font-display text-3xl tracking-wide"
             style={{ color: "var(--text)" }}
           >
-            Order:
+            Order details
           </p>
-          <p className="block truncate max-w-20 md:max-w-full ml-2">
-            {order.id}
+        </div>
+      <div className="border border-(--gold)/30 mb-10 rounded-2xl p-2">
+        <div className="flex items-center text-sm border-b border-(--gold)/30 mb-1">
+          <p style={{ color: "var(--text)" }}>Order ID:</p>
+          <p className="ml-2">
+           {order.id}
           </p>
         </div>
         <div className="flex items-center text-sm border-b border-(--gold)/30 mb-1">
@@ -101,18 +104,16 @@ export default async function OrderPage(props: PageProps<"/orders/[orderId]">) {
             {order.status}
           </span>
         </div>
-        <div className="flex text-sm border-b border-(--gold)/30 mb-1">
+        <div className="flex text-sm mt-1 mb-1">
           <p style={{ color: "var(--text)" }}>Shipping address:</p>
-          <p className="block truncate max-w-20 md:max-w-full ml-2">
-            {order.user.address.map((a) => (
-              <div className="text-xs" key={a.id}>
-                <p>{a.street}</p>
-                <p>{a.city}</p>
-                <p>{a.zipCode}</p>
-                <p>{a.country}</p>
+              <div className="text-xs block truncate max-w-20 md:max-w-full ml-2">
+                <p>{order.shippingStreet}</p>
+                <p>{order.shippingZip}</p>
+                <p>{order.shippingCity}</p>
+                <p>{order.shippingCountry}</p>
               </div>
-            ))}
-          </p>
+           
+          
         </div>
       </div>
 

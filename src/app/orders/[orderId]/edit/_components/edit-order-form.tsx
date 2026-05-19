@@ -34,6 +34,11 @@ type Order = {
   totalAmount: number;
   status: string;
   orderDate: Date;
+  shippingStreet: string;
+    shippingState: string | null;
+    shippingZip: string;
+    shippingCity: string;
+    shippingCountry: string;
   user: {
     name: string;
   };
@@ -65,6 +70,10 @@ export const formSchema = z.object({
   status: z.string(),
   orderDate: z.iso.date(),
   user: z.string(),
+  streetAddress: z.string().min(1, "Street is required"),
+  zip: z.string().min(1, "Zip is required"),
+  city: z.string().min(1, "City is required"),
+  country: z.string().min(1, "Country is required"),
 
   orderItem: z.array(orderItemSchema),
 });
@@ -81,6 +90,10 @@ export default function EditOrderForm({ data }: Props) {
       orderItem: data?.orderItem ?? [],
       user: data?.user?.name ?? "",
       userId: data?.userId ?? "",
+      streetAddress: data?.shippingStreet ?? "",
+      zip: data?.shippingZip ?? "",
+      city: data?.shippingCity ?? "",
+      country: data?.shippingCountry ?? "",
     },
     validators: {
       onSubmit: formSchema,
@@ -148,6 +161,28 @@ export default function EditOrderForm({ data }: Props) {
             }}
           </form.Field>
 
+          <form.Field name="orderDate">
+            {(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
+              return (
+                <Field data-invalid={isInvalid}>
+                  <FieldLabel htmlFor={field.name}>Order Date</FieldLabel>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    type="date"
+                    value={String(field.state.value)}
+                    onBlur={field.handleBlur}
+                    onChange={(ev) => field.handleChange(ev.target.value)}
+                    aria-invalid={isInvalid}
+                  />
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              );
+            }}
+          </form.Field>
+
           <form.Field name="status">
             {(field) => {
               const isInvalid =
@@ -195,7 +230,10 @@ export default function EditOrderForm({ data }: Props) {
             {(field) => (
               <div className="space-y-4">
                 {field.state.value.map((item, index) => (
-                  <div key={item.id} className="space-y-4 p-4 border border-(--gold)/30 ">
+                  <div
+                    key={item.id}
+                    className="space-y-4 p-4 border border-(--gold)/30 "
+                  >
                     <form.Field name={`orderItem[${index}].quantity`}>
                       {(subField) => (
                         <Field>
@@ -251,18 +289,20 @@ export default function EditOrderForm({ data }: Props) {
             )}
           </form.Field>
 
-          <form.Field name="orderDate">
+            <div className="space-y-4 p-4 border border-(--gold)/30 ">
+              <p>Delivery details</p>
+            
+          <form.Field name="streetAddress">
             {(field) => {
               const isInvalid =
                 field.state.meta.isTouched && !field.state.meta.isValid;
               return (
-                <Field data-invalid={isInvalid}>
-                  <FieldLabel htmlFor={field.name}>Order Date</FieldLabel>
+                <Field data-invalid={isInvalid} className="flex-1 pb-2">
+                  <FieldLabel htmlFor={field.name}>Street</FieldLabel>
                   <Input
                     id={field.name}
                     name={field.name}
-                    type="date"
-                    value={String(field.state.value)}
+                    value={field.state.value}
                     onBlur={field.handleBlur}
                     onChange={(ev) => field.handleChange(ev.target.value)}
                     aria-invalid={isInvalid}
@@ -272,6 +312,73 @@ export default function EditOrderForm({ data }: Props) {
               );
             }}
           </form.Field>
+
+          <div className="flex gap-12">
+
+          <form.Field name="zip">
+            {(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
+              return (
+                <Field data-invalid={isInvalid} className="flex-1">
+                  <FieldLabel htmlFor={field.name}>Zip</FieldLabel>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(ev) => field.handleChange(ev.target.value)}
+                    aria-invalid={isInvalid}
+                  />
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              );
+            }}
+          </form.Field>
+
+          <form.Field name="city">
+            {(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
+              return (
+                <Field data-invalid={isInvalid} className="flex-1">
+                  <FieldLabel htmlFor={field.name}>City</FieldLabel>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(ev) => field.handleChange(ev.target.value)}
+                    aria-invalid={isInvalid}
+                  />
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              );
+            }}
+          </form.Field>
+
+          <form.Field name="country">
+            {(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
+              return (
+                <Field data-invalid={isInvalid} className="flex-1">
+                  <FieldLabel htmlFor={field.name}>Country</FieldLabel>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(ev) => field.handleChange(ev.target.value)}
+                    aria-invalid={isInvalid}
+                  />
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              );
+            }}
+          </form.Field>
+          </div>
+          </div>
 
           <Field orientation="horizontal">
             <Button

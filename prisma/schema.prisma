@@ -70,6 +70,11 @@ model Order {
   totalAmount Int      @map("total_amount")
   status      String
   orderDate   DateTime @map("order_date")
+  shippingStreet String @map("shipping_street")
+  shippingState String? @map("shipping_state")
+  shippingZip String  @map("shipping_zip")
+  shippingCity String @map("shipping_city")
+  shippingCountry String @map("shipping_country")
  
   orderItem OrderItem[]
 
