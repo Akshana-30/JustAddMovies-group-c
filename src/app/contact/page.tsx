@@ -9,10 +9,10 @@ export default function ContactPage() {
   return (
     <div className="mx-auto w-full max-w-5xl px-6 py-14">
       <div className="mb-10">
-        <h1 className="font-display text-4xl tracking-wide" style={{ color: "var(--text)" }}>
-          Get in <span style={{ color: "var(--gold)" }}>Touch</span>
+        <h1 className="font-display text-4xl text-(--text) tracking-wide">
+          Get in <span className="text-(--gold)">Touch</span>
         </h1>
-        <p className="mt-2 font-serif italic" style={{ color: "var(--text-muted)" }}>
+        <p className="mt-2 font-serif italic text-(--text-muted)">
           Questions about an order, a missing title, or just want to talk films?
         </p>
       </div>
@@ -28,16 +28,14 @@ export default function ContactPage() {
           ].map((item) => (
             <div
               key={item.title}
-              className="rounded-xl border p-4 mt-7"
-              style={{ background: "var(--popover)", borderColor: "var(--border-strong)", boxShadow: "0 2px 12px rgba(0,0,0,0.07)" }}
+              className="rounded-xl border p-4 mt-7 bg-popover border-(--border-strong) shadow-[0px_2px_12px] shadow-black/7"
             >
-              <div className="mb-2 flex items-center gap-2 font-display text-sm tracking-widest"
-                style={{ color: "var(--gold)" }}>
+              <div className="mb-2 flex items-center gap-2 font-display text-sm text-(--gold) tracking-widest">
                 {item.icon}
                 {item.title.toUpperCase()}
               </div>
               {item.lines.map((line) => (
-                <p key={line} className="text-sm" style={{ color: "var(--text-muted)" }}>{line}</p>
+                <p key={line} className="text-sm text-(--text-muted)">{line}</p>
               ))}
             </div>
           ))}

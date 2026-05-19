@@ -191,3 +191,16 @@ model StockAlert {
   @@unique([userId, movieId])
   @@map("stock_alerts")
 }
+
+model ContactMessage {
+  id String @id @default(cuid(2))
+
+  name      String
+  email     String
+  subject   String
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@map("contact_messages")
+}

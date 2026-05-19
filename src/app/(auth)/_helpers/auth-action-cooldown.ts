@@ -18,19 +18,22 @@ const getRemainingCooldown = () => {
 }
 
 export function useCooldown() {
-	const [countdown, setCountdown] = useState<number>(getRemainingCooldown);
-
-	const isTimerActive = countdown > 0;
+	const [countdown, setCountdown] = useState<number>(0);
 
 	useEffect(() => {
-		if (!isTimerActive) return;
+		queueMicrotask(() => setCountdown(getRemainingCooldown()));
+	}, [setCountdown]);
+
+	useEffect(() => {
+		if (countdown <= 0) return;
 
 		const interval = setInterval(() => {
-			setCountdown((prev) => (prev <= 1 ? 0 : prev - 1));
+			const remaining = getRemainingCooldown();
+			setCountdown(remaining);
 		}, 1000);
 
 		return () => clearInterval(interval);
-	}, [isTimerActive]);
+	}, [countdown]);
 
 	return { countdown, setCountdown };
 }

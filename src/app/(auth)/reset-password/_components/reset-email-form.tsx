@@ -12,7 +12,7 @@ import { Field, FieldGroup } from "@/components/ui/field";
 import { authClient } from "@/lib/auth-client";
 import { useForm } from "@tanstack/react-form";
 import { resetEmailSchema } from "@/app/(auth)/_helpers/form-schema";
-import { InputFields } from "../../_components/input-fields";
+import { InputFields } from "../../../../components/body/input-fields";
 import { setCooldown, useCooldown } from "../../_helpers/auth-action-cooldown";
 import { toast } from "sonner";
 import { useState } from "react";
