@@ -109,7 +109,7 @@ export default function EditMovieForm({ movie }: Props) {
   });
   return (
 
-    <Card className="max-w-3xl mx-auto bg-sidebar-accent/40 border-(--gold)/30 border">
+    <Card className="max-w-3xl mx-auto bg-sidebar-accent/40 border-(--gold)/30 border overflow-auto">
       <CardHeader>
         <CardDescription className="text-lg font-semibold ">Edit movie</CardDescription>
       </CardHeader>
@@ -221,7 +221,7 @@ export default function EditMovieForm({ movie }: Props) {
                   const isInvalid =
                     field.state.meta.isTouched && !field.state.meta.isValid;
                   return (
-                    <Field data-invalid={isInvalid} className="flex 1">
+                    <Field data-invalid={isInvalid} className="mt-auto flex 1">
                       <FieldLabel htmlFor={field.name}>Price</FieldLabel>
                       <Input
                       className="border border-(--gold)/40"
@@ -246,7 +246,7 @@ export default function EditMovieForm({ movie }: Props) {
                   const isInvalid =
                     field.state.meta.isTouched && !field.state.meta.isValid;
                   return (
-                    <Field data-invalid={isInvalid} className="flex 1">
+                    <Field data-invalid={isInvalid} className=" mt-auto flex 1">
                       <FieldLabel htmlFor={field.name}>Stock</FieldLabel>
                       <Input
                       className="border border-(--gold)/40"
@@ -273,7 +273,7 @@ export default function EditMovieForm({ movie }: Props) {
                   const isInvalid =
                     field.state.meta.isTouched && !field.state.meta.isValid;
                   return (
-                    <Field data-invalid={isInvalid} className="flex 1">
+                    <Field data-invalid={isInvalid} className="mt-auto flex 1">
                       <FieldLabel htmlFor={field.name} >
                         Runtime in minutes
                       </FieldLabel>

@@ -35,72 +35,138 @@ export default async function CartPage() {
 
   if (products.length === 0) {
     return (
-      <div className="flex-row max-w-6xl mx-auto border rounded-2xl p-4 bg-secondary">
-        <h1 className="font-bold text-2xl">Your cart is empty</h1>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Product</TableHead>
-              <TableHead>Qty</TableHead>
-              <TableHead>Price</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody></TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell>Total price: {total} SEK</TableCell>
-              <TableCell>
-                <BackToStore />
-              </TableCell>
-              <TableCell>
-                <Checkout disabled={true} />
-              </TableCell>
-            </TableRow>
-          </TableFooter>
-        </Table>
+      <div className="h-screen px-4 py-8 flex flex-col">
+        <div className="max-w-5xl mx-auto border border-(--gold)/40! rounded-2xl p-5 bg-sidebar-accent/40 w-full">
+          <h1 className="font-bold text-2xl mb-4">Your cart is empty</h1>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Product</TableHead>
+                <TableHead className="hidden lg:table-cell">Qty</TableHead>
+                <TableHead className="text-center">Price</TableHead>
+                <TableHead className="text-center hidden lg:table-cell">
+                  Total Price
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody />
+            <TableFooter>
+              <TableRow>
+                <TableCell>Total price: {formatPrice(total)}</TableCell>
+                <TableCell className="hidden lg:table-cell" />
+                <TableCell className="text-right">
+                  <BackToStore />
+                </TableCell>
+                <TableCell className="text-right hidden lg:table-cell">
+                  <Checkout disabled={true} />
+                </TableCell>
+              </TableRow>
+            </TableFooter>
+          </Table>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className=" flex-row max-w-5xl mx-auto border border-(--gold)/40! rounded-2xl p-5 bg-sidebar-accent/40 ">
-      <h1 className="font-bold text-2xl">Cart</h1>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Product</TableHead>
-            <TableHead>Qty</TableHead>
-            <TableHead>Price</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {products.map((product) => (
-            <TableRow key={product.id}>
-              <TableCell className="flex flex-row">
-                <Link href={`/movies/${product.id}`}><Image src={product.imageUrl} height={60} width={60} alt={product.title}/> </Link> 
-                <Link className='my-auto' href={`/movies/${product.id}`}>&emsp; {product.title}</Link>
+    <div className="min-h-screen flex flex-col overflow-auto px-4 py-8">
+      <div className="max-w-5xl w-full mx-auto border border-(--gold)/40! rounded-2xl p-5 bg-sidebar-accent/40">
+        <h1 className="font-bold text-2xl mb-4">Cart</h1>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Product</TableHead>
+              <TableHead className="text-center hidden lg:table-cell">
+                Qty
+              </TableHead>
+              <TableHead className="text-center">Price</TableHead>
+              <TableHead className="text-center hidden lg:table-cell">
+                Total Price
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {products.map((product) => (
+              <TableRow key={product.id}>
+                <TableCell className="flex flex-row items-center gap-4">
+                  <div className="flex flex-col">
+                    <div className= "flex flex-row gap-4" >
+                      <Link href={`/movies/${product.id}`} className="shrink-0">
+                        <Image
+                          src={product.imageUrl}
+                          height={70}
+                          width={70}
+                          alt={product.title}
+                          className="rounded"
+                        />
+                      </Link>
+                      <Link href={`/movies/${product.id}`}>
+                        <p className=" text-wrap">{product.title}</p>
+                      </Link>
+                    </div>
+
+                    <div className="lg:hidden">
+                      <CartItemControls
+                        id={product.id}
+                        quantity={product.quantity}
+                      />
+                    </div>
+                  </div>
+                </TableCell>
+
+                <TableCell className="text-center hidden lg:table-cell">
+                  <CartItemControls
+                    id={product.id}
+                    quantity={product.quantity}
+                  />
+                </TableCell>
+
+                <TableCell className="text-center">
+                  <p className=" max-sm:hidden">{formatPrice(product.price)}</p>
+                  <p className="pt-10 lg:hidden text-muted-foreground text-sm mt-1">
+                    Total: {formatPrice(product.price * product.quantity)}
+                  </p>
+                </TableCell>
+
+                <TableCell className="text-center hidden lg:table-cell">
+                  {formatPrice(product.price * product.quantity)}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+
+          <TableFooter>
+            {/* Desktop footer: 4 cells matching 4 columns */}
+            <TableRow className="hidden lg:table-row">
+              <TableCell className="font-semibold">
+                Total price: {formatPrice(total)}
               </TableCell>
-              <TableCell>{product.quantity}</TableCell>
-              <TableCell>{formatPrice(product.price)}</TableCell>
-              <TableCell className="border-(--gold)/40">
-                <CartItemControls id={product.id} quantity={product.quantity} />
+              <TableCell />
+              <TableCell className="text-right">
+                <BackToStore />
+              </TableCell>
+              <TableCell className="text-right">
+                <Checkout />
               </TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-        <TableFooter>
-          <TableRow >
-            <TableCell>Total price: {formatPrice(total)}</TableCell>
-            <TableCell className="text-right">
-              <BackToStore />
-            </TableCell>
-            <TableCell></TableCell>
-            <TableCell className="text-right ">
-              <Checkout />
-            </TableCell>
-          </TableRow>
-        </TableFooter>
-      </Table>
+
+            {/* Mobile footer: single row spanning all columns */}
+            <TableRow className="lg:hidden">
+              <TableCell colSpan={3}>
+                <div className="flex flex-col gap-3">
+                  <span className="font-semibold">
+                    Total price: {formatPrice(total)}
+                  </span>
+                  <div className="flex">
+                    <BackToStore />
+                    <Checkout />
+                  </div>
+                </div>
+              </TableCell>
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </div>
     </div>
   );
 }

@@ -64,7 +64,7 @@ export default function PaymentForm() {
   return (
 
     <div className="w-full max-w-md">
-      <Card className="rounded-l-none border-r border-t border-b border-(--gold)/30 bg-sidebar-accent dark:bg-sidebar-accent/60">
+      <Card className="max-lg:rounded-t-none lg:rounded-l-none border-r max-lg:border-l lg:border-t border-b border-(--gold)/30 bg-sidebar-accent/40 dark:bg-sidebar-accent/40">
         <CardHeader>
           <CardTitle>
             Payment Details

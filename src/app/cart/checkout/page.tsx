@@ -11,11 +11,11 @@ export default async function CheckOutPage() {
 
   return (
 
-    <div className="flex justify-center mt-10 px-4">
-      <div className="bg-sidebar-accent dark:bg-sidebar-accent/60 w-full max-w-md p-5 border-l border-t border-b border-(--gold)/30 rounded-l-2xl">
+    <div className="flex flex-col max-lg:items-center lg:justify-center lg:flex-row mt-10 px-4">
+      <div className="bg-sidebar-accent/40 dark:bg-sidebar-accent/40 w-full max-w-md p-5 border-l border-t max-lg:border-r lg:border-b border-(--gold)/30 max-lg:rounded-t-2xl lg:rounded-l-2xl">
         <div>{products.map((p) => (
             <div key={p.id} className="border-b border-(--gold)/40 p-4">
-                <div className="flex justify-between"><span >{p.title} x {p.quantity}</span> : <span className="font-bold text-yellow-500">{formatPrice(p.price)}</span></div>
+                <div className="flex justify-between"><span >{p.title} x {p.quantity}</span> : <span className="font-bold text-(--gold)">{formatPrice(p.price)}</span></div>
             </div>
         ))}</div> 
         <div className="border-b border-r border-l border-(--gold)/40 p-4 font-bold text-right text-(--gold) rounded-md">Total Order Cost: {formatPrice(total)}</div>

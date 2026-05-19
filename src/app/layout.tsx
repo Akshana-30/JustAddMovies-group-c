@@ -35,10 +35,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fontSans.variable} ${fontSerif.variable} ${fontMono.variable} antialiased`}
+      className={`h-full ${fontSans.variable} ${fontSerif.variable} ${fontMono.variable} antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-screen sm:h-full flex flex-col">
+      <body className="h-full flex flex-col">
         <ThemeProvider attribute="class"
             defaultTheme="system"
             enableSystem
