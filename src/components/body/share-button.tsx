@@ -21,10 +21,10 @@ export function ShareButton({
 
         startTransition(async () => {
             if (typeof window !== "undefined") {
-                const currentUrl = window.location.href;
-                const url = movieId && !currentUrl.includes(movieId)
-                    ? `${currentUrl}/${movieId}`
-                    : currentUrl;
+                const targetUrl = "http://localhost:3000/movies";
+                const url = movieId && !targetUrl.includes(movieId)
+                    ? `${targetUrl}/${movieId}`
+                    : window.location.href;
 
                 await navigator.clipboard.writeText(url);
 

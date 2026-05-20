@@ -6,6 +6,9 @@ import Image from "next/image";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
 import { formatPrice } from "@/lib/format";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { WishlistButton } from "@/components/body/wishlist-button";
+import { ShareButton } from "@/components/body/share-button";
 
 export const metadata: Metadata = { title: "My Wishlist" };
 
@@ -78,6 +81,20 @@ export default async function WishlistPage() {
 
                 {/* Actions */}
                 <div style={{ display: "flex", gap: "8px" }}>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <span><WishlistButton movieId={movie.id} /></span>
+                      </TooltipTrigger>
+                      <TooltipContent>Remove from wishlist</TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <span><ShareButton movieId={movie.id}/></span>
+                      </TooltipTrigger>
+                      <TooltipContent>Share</TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                   {inStock && (
                     <Link href={`/movies/${movie.id}`} className="jam-btn-gold"
                       style={{ fontSize: "12px", padding: "6px 14px" }}>

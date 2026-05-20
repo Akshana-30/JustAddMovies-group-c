@@ -72,7 +72,7 @@ export default function MovieCard({
                   </Tooltip>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <span><ShareButton /></span>
+                      <span><ShareButton movieId={id}/></span>
                     </TooltipTrigger>
                     <TooltipContent>Share</TooltipContent>
                   </Tooltip>
