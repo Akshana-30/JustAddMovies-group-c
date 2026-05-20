@@ -12,6 +12,8 @@ export default function Footer() {
         <span className="mx-2 opacity-40">·</span>
         <Link href="/contact" className="transition-colors hover:text-primary">Contact</Link>
         <span className="mx-2 opacity-40">·</span>
+        <Link href="/about#cookies" className="transition-colors hover:text-primary">Cookie Policy</Link>
+        <span className="mx-2 opacity-40">·</span>
         Powered by Next.js &amp; Prisma
       </p>
     </footer>

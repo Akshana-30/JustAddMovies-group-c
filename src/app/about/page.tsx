@@ -49,10 +49,10 @@ export default function AboutPage() {
 
             <div className="team-grid">
                 {[
-                    { name: "Per",     role: "Database/Backend", emoji: "👨‍💻" },
-                    { name: "Akshana", role: "Frontend/UI/UX", emoji: "👩‍💻" },
-                    { name: "Tobias",  role: "Backend/Database",  emoji: "🧑‍💻" },
-                    { name: "Peter",   role: "UI/UX",    emoji: "👨‍🎨" },
+                    { name: "Per",     role: "Developer", emoji: "👨‍💻" },
+                    { name: "Akshana", role: "Developer", emoji: "👩‍💻" },
+                    { name: "Tobias",  role: "Developer",  emoji: "🧑‍💻" },
+                    { name: "Peter",   role: "Developer",    emoji: "👨‍🎨" },
                 ].map((member, i) => (
                     <div key={i} className="team-card" style={{ background: "var(--surface2)", borderColor: "var(--border-strong)" }}>
                         <div className="team-avatar">{member.emoji}</div>
@@ -68,6 +68,55 @@ export default function AboutPage() {
                 ))}
             </div>
         </div>
+      <hr className="divider" />
+
+      {/* Cookie Policy */}
+      <div className="about-block" id="cookies">
+        <h2>Cookie Policy</h2>
+        <p className="mb-4">
+          Just Add Movies uses cookies to make the site work and, with your permission, to help us
+          understand how people use it. Below is a full list of every cookie we set.
+        </p>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm border-collapse">
+            <thead>
+              <tr style={{ borderBottom: "1px solid var(--border)" }}>
+                <th className="text-left py-2 pr-4 font-semibold" style={{ color: "var(--gold)" }}>Cookie</th>
+                <th className="text-left py-2 pr-4 font-semibold" style={{ color: "var(--gold)" }}>Type</th>
+                <th className="text-left py-2 pr-4 font-semibold" style={{ color: "var(--gold)" }}>Duration</th>
+                <th className="text-left py-2 font-semibold" style={{ color: "var(--gold)" }}>Purpose</th>
+              </tr>
+            </thead>
+            <tbody style={{ color: "var(--text-muted)" }}>
+              {[
+                { name: "cart",             type: "Essential",  duration: "7 days",  purpose: "Stores your shopping cart items so they persist across page loads and sessions." },
+                { name: "cookie_consent",   type: "Essential",  duration: "1 year",  purpose: "Remembers your cookie preference so we do not ask again on every visit." },
+                { name: "better-auth.*",    type: "Essential",  duration: "Session", purpose: "Session and authentication tokens required to keep you signed in." },
+              ].map((row) => (
+                <tr key={row.name} style={{ borderBottom: "1px solid var(--border)" }}>
+                  <td className="py-2 pr-4 font-mono text-xs" style={{ color: "var(--text)" }}>{row.name}</td>
+                  <td className="py-2 pr-4 whitespace-nowrap">
+                    <span
+                      className="text-xs px-2 py-0.5 rounded-full font-medium"
+                      style={{ background: "rgba(232,160,48,0.15)", color: "var(--gold)" }}
+                    >
+                      {row.type}
+                    </span>
+                  </td>
+                  <td className="py-2 pr-4 whitespace-nowrap">{row.duration}</td>
+                  <td className="py-2 leading-relaxed">{row.purpose}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-4 text-sm" style={{ color: "var(--text-muted)" }}>
+          <strong style={{ color: "var(--text)" }}>Essential cookies</strong> are set under the legitimate-interest
+          basis of GDPR Article 6(1)(b) (necessary for the performance of a contract) and cannot be disabled without
+          breaking core site functionality. You can clear all cookies at any time through your browser settings.
+        </p>
+      </div>
+
       <hr className="divider" />
 
       {/* Tech Stack */}
