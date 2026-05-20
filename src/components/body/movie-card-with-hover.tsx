@@ -18,14 +18,13 @@ type Props = React.ComponentProps<typeof Card> & {
 
 export default function MovieCardWithHover({ imageUrl, title, genres, description, id, className, ...props }: Props) {
   const [hovered, setHovered] = useState(false);
-  const [click, setClick] = useState(false)
 
-  const shortDesc = description.split(" ").slice(0, 15).join(" ") + "..";
+  const shortDesc = description.split(" ").slice(0, 15).join(" ") + "...";
 
   return (
     <Link href={`/movies/${id}`}><Card
       className={cn(
-        "border-amber-300 border relative overflow-hidden w-50 h-70 transition-transform duration-300 hover:scale-125",
+        "border-amber-300 border relative overflow-hidden h-[clamp(8rem,15vw,30rem)]! w-[clamp(4.5rem,10vw,15rem)]! transition-transform duration-300 hover:scale-125 ",
         className
       )}
       onMouseEnter={() => setHovered(true)}

@@ -33,21 +33,21 @@ async function LandingPage({
     },
   });
 
-const mostPurchased = await prisma.movie.findMany({
-  take: 10,
-  orderBy: {
-    orderItem: {
-      _count: "desc",
+  const mostPurchased = await prisma.movie.findMany({
+    take: 10,
+    orderBy: {
+      orderItem: {
+        _count: "desc",
+      },
     },
-  },
-  select: {
-    id: true,
-    title: true,
-    description: true,
-    imageUrl: true,
-    genres: { select: { name: true } },
-  },
-});
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      imageUrl: true,
+      genres: { select: { name: true } },
+    },
+  });
 
   const oldMovies = await prisma.movie.findMany({
     take: 10,
@@ -63,31 +63,30 @@ const mostPurchased = await prisma.movie.findMany({
   const genres = await prisma.genre.findMany({
     select: { id: true, name: true },
   });
-https://github.com/gr-26-18/JustAddMovies-group-c/pull/72/conflict?name=src%252Fapp%252Fpage.tsx&ancestor_oid=03615b2dacd14f762a8e8fcda30cb9bccba1952b&base_oid=c788658e8d8a07f68a5b2c9ba08970a9c9ed8bff&head_oid=1933f454572b29c9acb31ea1520f663350e116f9
-  if (!latestMovie) {
+  //github.com/gr-26-18/JustAddMovies-group-c/pull/72/conflict?name=src%252Fapp%252Fpage.tsx&ancestor_oid=03615b2dacd14f762a8e8fcda30cb9bccba1952b&base_oid=c788658e8d8a07f68a5b2c9ba08970a9c9ed8bff&head_oid=1933f454572b29c9acb31ea1520f663350e116f9
+  https: if (!latestMovie) {
     notFound();
   }
 
   return (
     <div className="pt-2 overflow-hidden p-4 sm:p-6 md:p-8">
-      <div className="flex justify-between gap-4 w-full flex-col lg:flex-row pb-5">
+      <div className="flex justify-between gap-4 w-full flex-col xl:flex-row pb-5">
         {/* Banner Carousel */}
-        <div className="w-full lg:w-[85%]">
+        <div className="w-full xl:w-[85%]">
           <BannerCarousel>
             {latestMovie.map((latest) => (
               <CarouselItem key={latest.id}>
                 <MovBanner imageUrl={latest.imageUrl} className="relative p-0">
                   <div className="bg-linear-to-r from-black via-black/10 to-transparent rounded-3xl h-150">
-                    <div className="pt-82 lg:pt-94 p-4 sm:p-6 md:p-10 flex text-left flex-col max-w-xs sm:max-w-sm md:max-w-150">
+                    <div className="pt-96 md:pt-90 lg:pt-94 p-4 sm:p-6 md:p-10 flex text-left flex-col max-w-xs sm:max-w-sm md:max-w-150">
                       <h1 className="text-2xl sm:text-3xl md:text-4xl text-white font-bold z-10">
                         {latest.title}
                       </h1>
                       <br />
                       <p className="text-white/70 text-sm sm:text-base hidden sm:block">
                         {latest.description.split(" ").slice(0, 15).join(" ") +
-                          ".."}
+                          "..."}
                       </p>
-                      <br />
                       <Button asChild className="cursor-pointer w-20">
                         <Link href={`/movies/${latest.id}`}>View</Link>
                       </Button>
@@ -100,9 +99,9 @@ https://github.com/gr-26-18/JustAddMovies-group-c/pull/72/conflict?name=src%252F
         </div>
 
         {/* Genre Card Panel */}
-        <div className="w-full lg:w-[40%] sticky top-4 self-start">
-          <Card className="border-amber-300/50 w-full lg:w-[40%] border flex-row! flex-wrap content-start gap-2 p-2 overflow-y-auto bg-primary/20 h-24 sm:h-32 md:h-40 lg:h-150">
-            <div className="grid grid-cols-2 gap-2 w-full">
+        <div className="w-full xl:w-[40%] sticky top-4 self-start">
+          <Card className="border-amber-300/50 border flex-row! flex-wrap content-start gap-2 p-2 overflow-y-auto bg-primary/20 h-24 sm:h-32 md:h-40 lg:h-50 xl:h-150 ">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-2  gap-2 w-full">
               {genres.map((genre) => (
                 <GenreCard key={genre.id} id={genre.id} name={genre.name} />
               ))}
@@ -116,9 +115,9 @@ https://github.com/gr-26-18/JustAddMovies-group-c/pull/72/conflict?name=src%252F
       </Suspense>
 
       {/* Carousels Section */}
-        <div className="max-w-[98%] rounded-4xl m-auto p-5 gap-4 bg-secondary-foreground/7 overflow-hidden">
+      <div className="max-w-[98%] rounded-4xl m-auto py-5 gap-4 bg-secondary-foreground/7 overflow-hidden">
         {/* New Releases */}
-      {/* top ten newest */}
+        {/* top ten newest */}
         <Carousel
           opts={{ align: "start", loop: true }}
           className="max-w-full px-8 sm:px-12 md:px-15"
@@ -130,25 +129,24 @@ https://github.com/gr-26-18/JustAddMovies-group-c/pull/72/conflict?name=src%252F
               className="hover:bg-blue-200/10!"
               size="icon-lg"
             >
-               <ArrowBigRight />
+              <ArrowBigRight />
             </Button>
           </h1>
-          <CarouselContent className="h-70 sm:h-80 md:h-90">
+
+          <CarouselContent className="  pt-10 sm:pt-4 pb-10 sm:pb-4 h-[clamp(12rem,20vw,40rem)]! -ml-2 md:-ml-4">
             {latestMovie.map((movies) => (
               <CarouselItem
                 key={movies.id}
-                className="my-auto basis-full sm:basis-1/2 lg:basis-1/4 xl:basis-1/5"
+                className=" box-border my-auto basis-1/6 max-[550px]:basis-1/5 max-[450px]:basis-1/3 md:basis-1/7 pl-3 md:pl-4 xl:pl-10"
               >
-                <div className="p-0">
-                  <div className="flex justify-evenly gap-0">
-                    <MovieCardWithHover
-                      imageUrl={movies.imageUrl}
-                      description={movies.description}
-                      genres={movies.genres}
-                      title={movies.title}
-                      id={movies.id}
-                    />
-                  </div>
+                <div className="">
+                  <MovieCardWithHover
+                    imageUrl={movies.imageUrl}
+                    description={movies.description}
+                    genres={movies.genres}
+                    title={movies.title}
+                    id={movies.id}
+                  />
                 </div>
               </CarouselItem>
             ))}
@@ -156,11 +154,11 @@ https://github.com/gr-26-18/JustAddMovies-group-c/pull/72/conflict?name=src%252F
           <CarouselPrevious
             variant="outline"
             size="icon-lg"
-            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-10"
+            className="absolute left-0 top-[calc(((clamp(12rem,20vw,40rem)/2)+2.5rem))] max:md:top-[calc(((clamp(12rem,20vw,40rem)/2)+ 3rem))] -translate-y-1/2 z-10"
           />
           <CarouselNext
             size="icon-lg"
-            className="absolute right-2 sm:right-5 top-1/2 -translate-y-1/2"
+            className="absolute right-0 top-[calc(((clamp(12rem,20vw,40rem)/2)+2.5rem))] -translate-y-1/2"
           />
         </Carousel>
 
@@ -169,23 +167,31 @@ https://github.com/gr-26-18/JustAddMovies-group-c/pull/72/conflict?name=src%252F
           opts={{ align: "start", loop: true }}
           className="max-w-full px-8 sm:px-12 md:px-15"
         >
-          <h1 className="px-5 pt-2 text-xl sm:text-2xl">Crowd Favorites</h1>
-          <CarouselContent className="h-70 sm:h-80 md:h-90">
+          <h1 className="px-5 pt-2 text-xl sm:text-2xl">
+            Crowd Favorites
+            <Button
+              variant="ghost"
+              className="hover:bg-blue-200/10!"
+              size="icon-lg"
+            >
+              <ArrowBigRight />
+            </Button>
+          </h1>
+
+          <CarouselContent className="  pt-10 sm:pt-4 pb-10 sm:pb-4 h-[clamp(12rem,20vw,40rem)]! -ml-2 md:-ml-4">
             {mostPurchased.map((movies) => (
               <CarouselItem
                 key={movies.id}
-                className="my-auto basis-full sm:basis-1/2 lg:basis-1/4 xl:basis-1/5"
+                className=" box-border my-auto basis-1/6 max-[550px]:basis-1/5 max-[450px]:basis-1/3 md:basis-1/7 pl-3 md:pl-4 xl:pl-10"
               >
-                <div className="p-0">
-                  <div className="flex justify-evenly gap-0">
-                    <MovieCardWithHover
-                      imageUrl={movies.imageUrl}
-                      description={movies.description}
-                      genres={movies.genres}
-                      title={movies.title}
-                      id={movies.id}
-                    />
-                  </div>
+                <div className="">
+                  <MovieCardWithHover
+                    imageUrl={movies.imageUrl}
+                    description={movies.description}
+                    genres={movies.genres}
+                    title={movies.title}
+                    id={movies.id}
+                  />
                 </div>
               </CarouselItem>
             ))}
@@ -193,36 +199,43 @@ https://github.com/gr-26-18/JustAddMovies-group-c/pull/72/conflict?name=src%252F
           <CarouselPrevious
             variant="outline"
             size="icon-lg"
-            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-10"
+            className="absolute left-0 top-[calc(((clamp(12rem,20vw,40rem)/2)+2.5rem))] max:md:top-[calc(((clamp(12rem,20vw,40rem)/2)+ 3rem))] -translate-y-1/2 z-10"
           />
           <CarouselNext
             size="icon-lg"
-            className="absolute right-2 sm:right-5 top-1/2 -translate-y-1/2"
+            className="absolute right-0 top-[calc(((clamp(12rem,20vw,40rem)/2)+2.5rem))] -translate-y-1/2"
           />
         </Carousel>
 
-        {/* Timeless Classics */}
         <Carousel
           opts={{ align: "start", loop: true }}
           className="max-w-full px-8 sm:px-12 md:px-15"
         >
-          <h1 className="px-5 pt-2 text-xl sm:text-2xl">Timeless Classics</h1>
-          <CarouselContent className="h-70 sm:h-80 md:h-90">
+          <h1 className="px-5 pt-2 text-xl sm:text-2xl">
+            Timeless Classics
+            <Button
+              variant="ghost"
+              className="hover:bg-blue-200/10!"
+              size="icon-lg"
+            >
+              <ArrowBigRight />
+            </Button>
+          </h1>
+
+          <CarouselContent className="  pt-10 sm:pt-4 pb-10 sm:pb-4 h-[clamp(12rem,20vw,40rem)]! -ml-2 md:-ml-4">
             {oldMovies.map((movies) => (
               <CarouselItem
                 key={movies.id}
-                className="my-auto basis-full sm:basis-1/2 lg:basis-1/4 xl:basis-1/5"
+                className=" box-border my-auto basis-1/6 max-[550px]:basis-1/5 max-[450px]:basis-1/3 md:basis-1/7 pl-3 md:pl-4 xl:pl-10"
               >
-                <div className="p-0">
-                  <div className="flex justify-evenly gap-0">
-                    <MovieCardWithHover
-                      imageUrl={movies.imageUrl}
-                      description={movies.description}
-                      genres={movies.genres}
-                      title={movies.title}
-                      id={movies.id}
-                    />
-                  </div>
+                <div className="">
+                  <MovieCardWithHover
+                    imageUrl={movies.imageUrl}
+                    description={movies.description}
+                    genres={movies.genres}
+                    title={movies.title}
+                    id={movies.id}
+                  />
                 </div>
               </CarouselItem>
             ))}
@@ -230,11 +243,11 @@ https://github.com/gr-26-18/JustAddMovies-group-c/pull/72/conflict?name=src%252F
           <CarouselPrevious
             variant="outline"
             size="icon-lg"
-            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-10"
+            className="absolute left-0 top-[calc(((clamp(12rem,20vw,40rem)/2)+2.5rem))] max:md:top-[calc(((clamp(12rem,20vw,40rem)/2)+ 3rem))] -translate-y-1/2 z-10"
           />
           <CarouselNext
             size="icon-lg"
-            className="absolute right-2 sm:right-5 top-1/2 -translate-y-1/2"
+            className="absolute right-0 top-[calc(((clamp(12rem,20vw,40rem)/2)+2.5rem))] -translate-y-1/2"
           />
         </Carousel>
 
@@ -243,23 +256,31 @@ https://github.com/gr-26-18/JustAddMovies-group-c/pull/72/conflict?name=src%252F
           opts={{ align: "start", loop: true }}
           className="max-w-full px-8 sm:px-12 md:px-15"
         >
-          <h1 className="px-5 pt-2 text-xl sm:text-2xl">Happy Wallet</h1>
-          <CarouselContent className="h-70 sm:h-80 md:h-90">
+          <h1 className="px-5 pt-2 text-xl sm:text-2xl">
+            Happy Wallet
+            <Button
+              variant="ghost"
+              className="hover:bg-blue-200/10!"
+              size="icon-lg"
+            >
+              <ArrowBigRight />
+            </Button>
+          </h1>
+
+          <CarouselContent className="pt-10 sm:pt-4 pb-10 sm:pb-4 h-[clamp(12rem,20vw,40rem)]! -ml-2 md:-ml-4">
             {cheapestMovies.map((movies) => (
               <CarouselItem
                 key={movies.id}
-                className="my-auto basis-full sm:basis-1/2 lg:basis-1/4 xl:basis-1/5"
+                className=" box-border my-auto basis-1/6 max-[550px]:basis-1/5 max-[450px]:basis-1/3 md:basis-1/7 pl-3 md:pl-4 xl:pl-10"
               >
-                <div className="p-0">
-                  <div className="flex justify-evenly gap-0">
-                    <MovieCardWithHover
-                      imageUrl={movies.imageUrl}
-                      description={movies.description}
-                      genres={movies.genres}
-                      title={movies.title}
-                      id={movies.id}
-                    />
-                  </div>
+                <div className="">
+                  <MovieCardWithHover
+                    imageUrl={movies.imageUrl}
+                    description={movies.description}
+                    genres={movies.genres}
+                    title={movies.title}
+                    id={movies.id}
+                  />
                 </div>
               </CarouselItem>
             ))}
@@ -267,11 +288,11 @@ https://github.com/gr-26-18/JustAddMovies-group-c/pull/72/conflict?name=src%252F
           <CarouselPrevious
             variant="outline"
             size="icon-lg"
-            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-10"
+            className="absolute left-0 top-[calc(((clamp(12rem,20vw,40rem)/2)+2.5rem))] max:md:top-[calc(((clamp(12rem,20vw,40rem)/2)+ 3rem))] -translate-y-1/2 z-10"
           />
           <CarouselNext
             size="icon-lg"
-            className="absolute right-2 sm:right-5 top-1/2 -translate-y-1/2"
+            className="absolute right-0 top-[calc(((clamp(12rem,20vw,40rem)/2)+2.5rem))] -translate-y-1/2"
           />
         </Carousel>
       </div>

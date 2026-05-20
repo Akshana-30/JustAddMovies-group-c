@@ -3,12 +3,14 @@ import MovieCard from "@/components/body/movie-card";
 import { GenreCard } from "@/components/body/genre-card";
 import prisma from "@/lib/prisma";
 
+
 export default async function MoviesPage({
   searchParams,
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const { title, genre, sort } = await searchParams;
+
 
   const orderBy =
     sort === "Price-high to low"
@@ -19,7 +21,9 @@ export default async function MoviesPage({
           ? { releaseDate: "desc" as const }
           : sort === "A-Ö"
             ? { title: "asc" as const }
-            : undefined;
+            : sort === "Ö-A"
+              ? { title: "desc" as const }
+              : undefined;
 
   const [movies, genres] = await Promise.all([
     typeof genre === "string"
@@ -34,7 +38,11 @@ export default async function MoviesPage({
               deletedAt: { equals: null },
               OR: [
                 { title: { contains: title, mode: "insensitive" } },
-                { actors: { some: { name: { contains: title, mode: "insensitive" } } } },
+                {
+                  actors: {
+                    some: { name: { contains: title, mode: "insensitive" } },
+                  },
+                },
               ],
             },
             include: { genres: { select: { name: true, id: true } } },
@@ -51,7 +59,6 @@ export default async function MoviesPage({
   return (
     // calc(100vh - 6rem) = viewport minus navbar height (~96px)
     <div className="flex flex-col" style={{ height: "calc(100vh - 6rem)" }}>
-
       {/* Sort bar — never scrolls, always visible at top */}
       <div className="flex justify-center py-3 px-8 shrink-0 bg-background/80 backdrop-blur-sm border-b border-border/30">
         <FilterButton />
@@ -59,12 +66,11 @@ export default async function MoviesPage({
 
       {/* Content row — fills remaining height, inner scroll only */}
       <div className="flex gap-6 flex-1 overflow-hidden px-8 py-6">
-
         {/* Movie grid — scrolls independently */}
         <div className="flex-1 overflow-y-auto pr-2">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 items-start">
             {movies.map((movie) => (
-              <div className="pb-5 h-full" key={movie.id}>
+              <div className="pb-5 h-full  " key={movie.id}>
                 <MovieCard
                   imageUrl={movie.imageUrl}
                   genres={movie.genres}
@@ -79,14 +85,19 @@ export default async function MoviesPage({
         </div>
 
         {/* Genre sidebar — never scrolls */}
-        <div className="w-56 shrink-0">
-          <div className="grid grid-cols-2 gap-2 w-full">
+        <div className="w-[clamp(3rem,25vw,20rem)] overflow-y-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full ">
             {genres.map((g) => (
-              <GenreCard key={g.id} id={g.id} name={g.name} active={genre === g.name} />
+              
+              <GenreCard
+                key={g.id}
+                id={g.id}
+                name={g.name}
+                active={genre === g.name}
+              />
             ))}
           </div>
         </div>
-
       </div>
     </div>
   );

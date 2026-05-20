@@ -13,6 +13,7 @@ export default function FilterButton() {
     "Price-high to low",
     "Price-low to high",
     "A-Ö",
+    "Ö-A",
   ];
 
   const handleFilter = (option: string) => {
