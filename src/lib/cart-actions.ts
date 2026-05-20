@@ -1,15 +1,13 @@
 "use server";
 
-import { cookies } from "next/headers";
-import { cartCookie, getCart } from "./cart";
+import { cartCookie, cartCookieOptions, getCart, setCart } from "./cart";
 import { CartItem } from "./cart-types";
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 
-const cookieOptions = {
-  httpOnly: true,
-  sameSite: "lax" as const,
-};
-
+// ── Add ───────────────────────────────────────────────────────────
+// If the movie is already in the cart its quantity is incremented;
+// otherwise a new item is appended.
 export async function addToCart(item: CartItem) {
   const cart = await getCart();
   const existing = cart.find((i) => i.id === item.id);
@@ -20,37 +18,48 @@ export async function addToCart(item: CartItem) {
     cart.push(item);
   }
 
-  const store = await cookies();
-  store.set(cartCookie, JSON.stringify(cart), cookieOptions);
+  await setCart(cart);
   revalidatePath("/");
   revalidatePath("/cart");
 }
 
+// ── Remove ────────────────────────────────────────────────────────
 export async function removeFromCart(id: string) {
   const cart = await getCart();
-  const updated = cart.filter((item) => item.id !== id);
-
-  const store = await cookies();
-  store.set(cartCookie, JSON.stringify(updated));
-
+  await setCart(cart.filter((item) => item.id !== id));
   revalidatePath("/cart");
 }
 
+// ── Update quantity ───────────────────────────────────────────────
+// Automatically removes the item when quantity drops to zero or below
+// so ghost items never linger in the cookie.
 export async function updateQuantity(id: string, quantity: number) {
   const cart = await getCart();
 
-  const item = cart.find((i) => i.id === id);
-  if (item) {
-    item.quantity = quantity;
+  if (quantity <= 0) {
+    await setCart(cart.filter((item) => item.id !== id));
+  } else {
+    const item = cart.find((i) => i.id === id);
+    if (item) item.quantity = quantity;
+    await setCart(cart);
   }
-
-  const store = await cookies();
-  store.set(cartCookie, JSON.stringify(cart));
 
   revalidatePath("/cart");
 }
 
-export async function getCartCount(){
-    const cart = await getCart();
-    return cart.reduce((sum, item) => sum + item.quantity, 0)
+// ── Clear ─────────────────────────────────────────────────────────
+// Used by handleCheckout after a successful order. Deletes the cookie
+// entirely (rather than setting it to "[]") to keep things clean.
+export async function clearCart() {
+  const store = await cookies();
+  store.delete({ name: cartCookie, path: cartCookieOptions.path });
+  revalidatePath("/cart");
+  revalidatePath("/");
+}
+
+// ── Count ─────────────────────────────────────────────────────────
+// Total number of individual items across all lines.
+export async function getCartCount() {
+  const cart = await getCart();
+  return cart.reduce((sum, item) => sum + item.quantity, 0);
 }

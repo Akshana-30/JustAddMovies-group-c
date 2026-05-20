@@ -1,21 +1,15 @@
 "use server";
 import { auth } from "@/lib/auth";
-import { cartCookie, getCart } from "@/lib/cart";
+import { getCart } from "@/lib/cart";
+import { clearCart } from "@/lib/cart-actions";
 import { getCartProducts } from "@/lib/cart-types";
 import { formSchema } from "@/lib/payment-schema";
 import prisma from "@/lib/prisma";
 import { sendOrderConfirmation } from "@/lib/send-order-confirmation";
-import { revalidatePath } from "next/cache";
-import { cookies, headers } from "next/headers";
+import { headers } from "next/headers";
 import z from "zod";
 
 type PaymentValues = z.infer<typeof formSchema>;
-
-async function clearCart() {
-  const store = await cookies();
-  store.delete(cartCookie);
-  revalidatePath("/cart");
-}
 
 export default async function handleCheckout(values: PaymentValues) {
   const data = formSchema.parse(values);
@@ -67,12 +61,10 @@ export default async function handleCheckout(values: PaymentValues) {
     ),
   ]);
 
-  // ── Clear cart ───────────────────────────────────────────────────
   // Only runs after the transaction succeeds, so the cart is never
   // cleared if the order failed to save.
   await clearCart();
 
-  // ── Confirmation email ───────────────────────────────────────────
   // Wrapped in try/catch so a mail server outage never rolls back an
   // already-completed order. Failures are logged server-side only.
   try {
