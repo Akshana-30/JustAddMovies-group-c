@@ -3,7 +3,6 @@ import { notFound, redirect } from "next/navigation";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableFooter,
   TableHead,
@@ -16,7 +15,9 @@ import { Button } from "@/components/ui/button";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
-export default async function OrderPage(props: PageProps<"/orders/[orderId]">) {
+export default async function OrderPage(
+  props: PageProps<"/admin-dashboard/admin/orders/[orderId]">,
+) {
   const params = await props.params;
   const session = await auth.api.getSession({ headers: await headers() });
 
@@ -33,7 +34,19 @@ export default async function OrderPage(props: PageProps<"/orders/[orderId]">) {
     where: { id: params.orderId },
     include: {
       orderItem: { include: { movies: true } },
-      user: { include: { address: { select: { street: true, city: true, zipCode: true, country: true, id: true}}}},
+      user: {
+        include: {
+          address: {
+            select: {
+              street: true,
+              city: true,
+              zipCode: true,
+              country: true,
+              id: true,
+            },
+          },
+        },
+      },
     },
   });
 
@@ -43,19 +56,17 @@ export default async function OrderPage(props: PageProps<"/orders/[orderId]">) {
   return (
     <div className="flex-row max-w-3xl mx-auto border border-(--gold)/30 bg-sidebar-accent/30 rounded-2xl p-4 mt-10">
       <div className="flex items-center mb-1">
-          <p
-            className="font-display text-3xl tracking-wide"
-            style={{ color: "var(--text)" }}
-          >
-            Order details
-          </p>
-        </div>
+        <p
+          className="font-display text-3xl tracking-wide"
+          style={{ color: "var(--text)" }}
+        >
+          Order details
+        </p>
+      </div>
       <div className="border border-(--gold)/30 mb-10 rounded-2xl p-2">
         <div className="flex items-center text-sm border-b border-(--gold)/30 mb-1">
           <p style={{ color: "var(--text)" }}>Order ID:</p>
-          <p className="ml-2">
-           {order.id}
-          </p>
+          <p className="ml-2">{order.id}</p>
         </div>
         <div className="flex items-center text-sm border-b border-(--gold)/30 mb-1">
           <p style={{ color: "var(--text)" }}>Order date:</p>
@@ -106,14 +117,12 @@ export default async function OrderPage(props: PageProps<"/orders/[orderId]">) {
         </div>
         <div className="flex text-sm mt-1 mb-1">
           <p style={{ color: "var(--text)" }}>Shipping address:</p>
-              <div className="text-xs block truncate max-w-20 md:max-w-full ml-2">
-                <p>{order.shippingStreet}</p>
-                <p>{order.shippingZip}</p>
-                <p>{order.shippingCity}</p>
-                <p>{order.shippingCountry}</p>
-              </div>
-           
-          
+          <div className="text-xs block truncate max-w-20 md:max-w-full ml-2">
+            <p>{order.shippingStreet}</p>
+            <p>{order.shippingZip}</p>
+            <p>{order.shippingCity}</p>
+            <p>{order.shippingCountry}</p>
+          </div>
         </div>
       </div>
 
@@ -134,7 +143,10 @@ export default async function OrderPage(props: PageProps<"/orders/[orderId]">) {
                 <TableCell>{formatPrice(item.priceAtPurchase)}</TableCell>
                 <TableCell className="text-center">{item.quantity}</TableCell>
                 <TableCell className="text-right text-blue-400">
-                  <Link className="block truncate max-w-20 md:max-w-full text-xs" href={`/movies/${item.movies.id}`}>
+                  <Link
+                    className="block truncate max-w-20 md:max-w-full text-xs"
+                    href={`/movies/${item.movies.id}`}
+                  >
                     {item.movies.id}
                   </Link>
                 </TableCell>
@@ -149,7 +161,7 @@ export default async function OrderPage(props: PageProps<"/orders/[orderId]">) {
           <Link href={`/admin-dashboard/admin/orders`}>Back to orders</Link>
         </Button>
         <Button variant="outline" size="xs" asChild>
-          <Link href={`/orders/${order.id}/edit/`}>Edit</Link>
+          <Link href={`/admin-dashboard/admin/orders/${order.id}/edit`}>Edit</Link>
         </Button>
       </div>
     </div>

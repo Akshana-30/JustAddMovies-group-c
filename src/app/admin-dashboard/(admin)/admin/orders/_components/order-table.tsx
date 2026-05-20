@@ -82,7 +82,7 @@ export default function OrderTable({ data }: Props) {
         return (
           <Link
             className="text-blue-400 text-xs pl-2 block truncate max-w-20 md:max-w-full"
-            href={`/orders/${id}`}
+            href={`/admin-dashboard/admin/orders/${id}`}
           >
             {id}
           </Link>
@@ -180,7 +180,9 @@ export default function OrderTable({ data }: Props) {
               <DropdownMenuContent align="end">
                 <DropdownMenuItem
                   className="cursor-pointer"
-                  onClick={() => router.push(`/orders/${id}/edit`)}
+                  onClick={() =>
+                    router.push(`/admin-dashboard/admin/orders/${id}/edit`)
+                  }
                 >
                   Edit order
                 </DropdownMenuItem>

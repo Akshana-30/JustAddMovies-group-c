@@ -85,6 +85,12 @@ export default async function DashboardPage() {
                       {formatDate(order.orderDate)}
                     </p>
                   </div>
+                  <div>
+                    <p className="font-mono text-xs text-muted-foreground">{order.shippingStreet}</p>
+                    <p className="font-mono text-xs text-muted-foreground">{order.shippingZip}</p>
+                    <p className="font-mono text-xs text-muted-foreground">{order.shippingCity}</p>
+                    <p className="font-mono text-xs text-muted-foreground">{order.shippingCountry}</p>
+                    </div>
 
                   <div className="flex items-center gap-3">
                     {/* ── Status badge ────────────────────────────── */}
