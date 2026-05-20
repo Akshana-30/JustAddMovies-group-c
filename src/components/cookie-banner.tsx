@@ -36,7 +36,7 @@ export function CookieBanner() {
     >
       <div
         style={{
-          maxWidth: "1200px",
+          maxWidth: "800px",
           margin: "0 auto",
           padding: "16px 24px",
           display: "flex",
@@ -46,7 +46,7 @@ export function CookieBanner() {
         }}
       >
         {/* Icon + text */}
-        <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", flex: 1, minWidth: "280px" }}>
+        <div style={{ display: "flex", flex: 1, alignItems: "flex-start", gap: "12px" }}>
           <Image
             src="/icons8-cookie-100.png"
             alt="Cookie"
