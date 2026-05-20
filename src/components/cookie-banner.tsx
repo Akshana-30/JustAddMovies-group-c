@@ -59,11 +59,10 @@ export function CookieBanner() {
               We use cookies
             </p>
             <p style={{ fontSize: "12px", color: "var(--text-muted, hsl(var(--muted-foreground)))", lineHeight: 1.5 }}>
-              <strong style={{ color: "var(--gold, #e8a030)" }}>Essential cookies</strong> (shopping cart, session) are
-              always active — they are strictly necessary for the site to work and cannot be turned off under GDPR
-              Article 6(1)(b). We may also use optional cookies to analyse site usage and improve your experience.{" "}
+              This site uses <strong style={{ color: "var(--gold, #e8a030)" }}>essential cookies only</strong> — for
+              your shopping cart and session. No tracking or analytics cookies are used.{" "}
               <Link
-                href="/about"
+                href="/about#cookies"
                 style={{ color: "var(--gold, #e8a030)", textDecoration: "underline" }}
               >
                 Learn more
@@ -72,31 +71,13 @@ export function CookieBanner() {
           </div>
         </div>
 
-        {/* Buttons */}
-        <div style={{ display: "flex", gap: "10px", flexShrink: 0, flexWrap: "wrap" }}>
+        {/* Button */}
+        <div style={{ flexShrink: 0 }}>
           <button
             onClick={() => handleChoice("essential_only")}
             disabled={isPending}
             style={{
-              padding: "8px 18px",
-              borderRadius: "6px",
-              border: "1px solid var(--border, hsl(var(--border)))",
-              background: "transparent",
-              color: "var(--text-muted, hsl(var(--muted-foreground)))",
-              fontSize: "13px",
-              fontWeight: 500,
-              cursor: "pointer",
-              opacity: isPending ? 0.6 : 1,
-              whiteSpace: "nowrap",
-            }}
-          >
-            Essential only
-          </button>
-          <button
-            onClick={() => handleChoice("accepted")}
-            disabled={isPending}
-            style={{
-              padding: "8px 18px",
+              padding: "8px 24px",
               borderRadius: "6px",
               border: "none",
               background: "var(--gold, #e8a030)",
@@ -108,7 +89,7 @@ export function CookieBanner() {
               whiteSpace: "nowrap",
             }}
           >
-            Accept all
+            {isPending ? "…" : "Understood"}
           </button>
         </div>
       </div>
