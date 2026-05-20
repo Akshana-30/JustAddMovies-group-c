@@ -1,96 +1,67 @@
+import { Section } from "react-email";
+import { EmailLayout } from "./_components/email-layout";
 import {
-    Body,
-    Button,
-    Container,
-    Head,
-    Html,
-    Img,
-    pixelBasedPreset,
-    Preview,
-    Row,
-    Section,
-    Tailwind,
-    Text
-} from "react-email";
+    ContentText,
+    DisclaimerText,
+    NavButton,
+    SloganHeading,
+    GoldText,
+    TitleHeading,
+    SecurityTipsLink
+} from "./_components/custom-components";
+import { WebsiteProp } from "./_types/interfaces";
 
-// Some of the components can be moved into their own tsx file
-
-interface VerifyEmailProps {
-    userName: string;
-    websiteName: string;
+interface VerifyEmailProps extends WebsiteProp {
     verificationLink: string;
 }
 
-const baseUrl = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : "";
-
-export const VerifyEmail = ({
+const VerifyEmail = ({
     userName,
     websiteName,
     verificationLink,
 }: VerifyEmailProps) => (
-    <Tailwind
-        config={{
-            presets: [pixelBasedPreset],
-        }}
-    >
-        <Html>
-            <Head />
+    <EmailLayout title="Verify Your Email" previewText="Verify your email address to complete your registration.">
+        <Section>
+            <TitleHeading>Almost There!</TitleHeading>
+        </Section>
 
-            <Body className="bg-[#f6f9fc] py-2.5 font-sans">
-                <Preview>Confirm your email address</Preview>
+        <Section>
+            <ContentText>
+                Hi <GoldText>{userName}</GoldText>,
+            </ContentText>
 
-                <Container className="bg-white border border-solid border-[#f0f0f0] p-11.25">
-                    <Img
-                        src={`${baseUrl}/static/JAM.png`}
-                        width="40"
-                        height="33"
-                        alt="Just Add Movies logo"
-                    />
+            <ContentText>
+                Thank you for signing up for <GoldText>{websiteName}</GoldText>!
+            </ContentText>
+        </Section>
 
-                    <Section>
-                        <Text className="text-base font-light text-[#404040] leading-6.5">
-                            Almost there
-                        </Text>
+        <Section>
+            <ContentText>
+                To finish setting up your account,
+                please click the button below
+                to verify your email address.
+            </ContentText>
 
-                        <Text className="text-base font-light text-[#404040] leading-6.5">
-                            Hi {userName}, thank you for signing up for {websiteName}
-                        </Text>
+            <NavButton href={verificationLink}>Verify Email</NavButton>
+        </Section>
 
-                        <Text className="text-base font-light text-[#404040] leading-6.5">
-                            To verify your account, we just need to confirm your email
-                        </Text>
+        <Section>
+            <DisclaimerText>
+                If you didn&apos;t create an account, you can safely ignore
+                this email.
+            </DisclaimerText>
 
-                        <Button
-                            className="bg-[#007ee6] rounded text-white text-[15px] no-underline text-center block w-52.5 py-3.5 px-1.75"
-                            href={verificationLink}
-                        >
-                            Verify email
-                        </Button>
+            <DisclaimerText>
+                To keep your account secure, please do not forward this
+                email to anyone. Visit our Help Center for{' '}
+                <SecurityTipsLink>
+                    more security tips.
+                </SecurityTipsLink>
+            </DisclaimerText>
 
-                        <Text className="text-base font-light text-[#404040] leading-6.5">
-                            If you didn&apos;t create an account, you can safely ignore
-                            this email.
-                        </Text>
-
-                        <Text className="text-base font-light text-[#404040] leading-6.5">
-                            Happy movie time!
-                        </Text>
-                    </Section>
-                </Container>
-
-                <Section className="max-w-145 mx-auto">
-                    <Row>
-                        <Text className="text-center text-[#706a7b]">
-                            © 2026 Just Add Movies, All Rights Reserved <br />
-                            Teknikringen 10, 2nd Floor, Linköping, 58330 - Sweden
-                        </Text>
-                    </Row>
-                </Section>
-            </Body>
-        </Html>
-    </Tailwind>
+            <SloganHeading>Happy movie time!</SloganHeading>
+        </Section>
+    </EmailLayout>
 );
 
 VerifyEmail.PreviewProps = {

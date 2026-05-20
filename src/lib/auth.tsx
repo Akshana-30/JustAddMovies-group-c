@@ -4,12 +4,12 @@ import prisma from "./prisma";
 import { nextCookies } from "better-auth/next-js";
 import { admin } from "better-auth/plugins";
 import { pretty, render, toPlainText } from "react-email";
-import { ResetPasswordEmail } from "@/components/emails/reset-password-email";
 import { transport } from "./email";
 import VerifyEmail from "@/components/emails/verify-email";
-import NewEmail from "@/components/emails/new-email";
-import ExistingUser from "@/components/emails/existing-user-email";
-import { WelcomeEmail } from "@/components/emails/welcome-email";
+import EmailChange from "@/components/emails/email-change-confirmation";
+import RegisterAttempt from "@/components/emails/register-attempt-email";
+import WelcomeEmail from "@/components/emails/welcome-email";
+import ResetPasswordEmail from "@/components/emails/reset-password-email";
 
 const appName = process.env.NEXT_PUBLIC_APP_NAME;
 
@@ -51,13 +51,13 @@ export const auth = betterAuth({
             const manualUrl = `${process.env.BETTER_AUTH_URL}/reset-password/${token}`;
 
             const html = await pretty(
-                await render(<ResetPasswordEmail resetPasswordLink={manualUrl} userName={user.name} />)
+                await render(<ResetPasswordEmail resetPasswordLink={manualUrl} userName={user.name} websiteName={appName || "Just Add Movies"} />)
             );
 
             const text = toPlainText(html);
 
-            void transport.sendMail({
-                from: process.env.SMTP_USER,
+            await transport.sendMail({
+                from: '"Just Add Movies" <noreply@justaddmovies.se>',
                 to: `${user.name} <${user.email}>`,
                 subject: "Reset your password",
                 html,
@@ -67,13 +67,13 @@ export const auth = betterAuth({
 
         onExistingUserSignUp: async ({ user }) => {
             const html = await pretty(
-                await render(<ExistingUser userName={user.name} />)
+                await render(<RegisterAttempt userName={user.name} userEmail={user.email} />)
             );
 
             const text = toPlainText(html);
 
-            void transport.sendMail({
-                from: process.env.SMTP_USER,
+            await transport.sendMail({
+                from: '"Just Add Movies" <noreply@justaddmovies.se>',
                 to: `${user.name} <${user.email}>`,
                 subject: "Register attempt with your email",
                 html,
@@ -92,19 +92,19 @@ export const auth = betterAuth({
                 const manualUrl = `${process.env.BETTER_AUTH_URL}/?email_approval=success`;
 
                 const html = await pretty(
-                    await render(<NewEmail newEmailLink={manualUrl} newEmailName={newEmail} userName={user.name} />)
+                    await render(<EmailChange confirmEmailLink={manualUrl} newEmailName={newEmail} userName={user.name} />)
                 );
 
                 const text = toPlainText(html);
 
-                void transport.sendMail({
-                    from: process.env.SMTP_USER,
+                await transport.sendMail({
+                    from: '"Just Add Movies" <noreply@justaddmovies.se>',
                     to: `${user.name} <${user.email}>`,
                     subject: "Approve email change",
                     html,
                     text,
                 });
-            } 
+            }
         },
     },
 
@@ -119,8 +119,8 @@ export const auth = betterAuth({
 
             const text = toPlainText(html);
 
-            void transport.sendMail({
-                from: process.env.SMTP_USER,
+            await transport.sendMail({
+                from: '"Just Add Movies" <noreply@justaddmovies.se>',
                 to: `${user.name} <${user.email}>`,
                 subject: "Verify your email",
                 html,
@@ -129,11 +129,14 @@ export const auth = betterAuth({
         },
 
         async afterEmailVerification(user) {
-            const html = await pretty(await render(<WelcomeEmail userName={user.name} />))
+            const moviesPageUrl = "http://localhost:3000/movies";
+            const dashboardPageUrl = "http://localhost:3000/admin-dashboard/dashboard";
+
+            const html = await pretty(await render(<WelcomeEmail userName={user.name} websiteName={appName || "Just Add Movies"} moviesPageLink={moviesPageUrl} dashboardPageLink={dashboardPageUrl} />))
             const text = toPlainText(html);
 
-            void transport.sendMail({
-                from: process.env.SMTP_USER,
+            await transport.sendMail({
+                from: '"Just Add Movies" <noreply@justaddmovies.se>',
                 to: `${user.name} <${user.email}>`,
                 subject: `Welcome to ${appName || "Just Add Movies"}, ${user.name}!`,
                 html,

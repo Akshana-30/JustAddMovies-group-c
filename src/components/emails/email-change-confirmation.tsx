@@ -9,20 +9,21 @@ import {
     SloganHeading,
     TitleHeading
 } from "./_components/custom-components";
-import { WebsiteProp } from "./_types/interfaces";
+import { UserProp } from "./_types/interfaces";
 
-interface ResetPasswordProps extends WebsiteProp {
-    resetPasswordLink: string;
+interface EmailChangeProps extends UserProp {
+    newEmailName: string;
+    confirmEmailLink: string;
 }
 
-const ResetPasswordEmail = ({
+const EmailChange = ({
     userName,
-    websiteName,
-    resetPasswordLink,
-}: ResetPasswordProps) => (
-    <EmailLayout title="Reset Your Password" previewText="Click here to reset your account password.">
+    newEmailName,
+    confirmEmailLink,
+}: EmailChangeProps) => (
+    <EmailLayout title="Confirm Your New Email" previewText="Please confirm your request to change your email address.">
         <Section>
-            <TitleHeading>Reset Password</TitleHeading>
+            <TitleHeading>Confirm Your New Email</TitleHeading>
         </Section>
 
         <Section>
@@ -33,18 +34,17 @@ const ResetPasswordEmail = ({
 
         <Section>
             <ContentText>
-                Someone recently requested a password reset
-                for your <GoldText>{websiteName}</GoldText> account.
-                If this was you, you can set a new password here:
+                Please click the button below to approve
+                changing your email address to <GoldText>{newEmailName}</GoldText>.
             </ContentText>
 
-            <NavButton href={resetPasswordLink}>Reset Password</NavButton>
+            <NavButton href={confirmEmailLink}>Change Email</NavButton>
         </Section>
 
         <Section>
             <DisclaimerText>
-                If you didn&apos;t request this change,
-                you can safely ignore and delete this email.
+                If you didn&apos;t request this change, you can safely ignore
+                this email.
             </DisclaimerText>
 
             <DisclaimerText>
@@ -60,10 +60,10 @@ const ResetPasswordEmail = ({
     </EmailLayout>
 );
 
-ResetPasswordEmail.PreviewProps = {
+EmailChange.PreviewProps = {
     userName: "Alan",
-    websiteName: "Just Add Movies",
-    resetPasswordLink: "http://localhost:3000",
-} as ResetPasswordProps;
+    newEmailName: "test@example.com",
+    confirmEmailLink: "http://localhost:3000",
+} as EmailChangeProps;
 
-export default ResetPasswordEmail;
+export default EmailChange;
