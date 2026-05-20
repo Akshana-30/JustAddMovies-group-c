@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { saveConsent } from "@/lib/consent";
 import Link from "next/link";
-import { Cookie } from "lucide-react";
+import Image from "next/image";
 
 export function CookieBanner() {
   const [visible, setVisible] = useState(true);
@@ -47,9 +47,12 @@ export function CookieBanner() {
       >
         {/* Icon + text */}
         <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", flex: 1, minWidth: "280px" }}>
-          <Cookie
-            size={20}
-            style={{ color: "var(--gold, #e8a030)", flexShrink: 0, marginTop: "2px" }}
+          <Image
+            src="/icons8-cookie-100.png"
+            alt="Cookie"
+            width={32}
+            height={32}
+            style={{ flexShrink: 0 }}
           />
           <div>
             <p style={{ fontSize: "14px", fontWeight: 600, color: "var(--text, inherit)", marginBottom: "4px" }}>
