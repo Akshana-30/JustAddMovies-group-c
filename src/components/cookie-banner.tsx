@@ -42,7 +42,7 @@ export function CookieBanner() {
           display: "flex",
           flexWrap: "wrap",
           alignItems: "center",
-          gap: "16px",
+          gap: "10px",
         }}
       >
         {/* Icon + text */}
