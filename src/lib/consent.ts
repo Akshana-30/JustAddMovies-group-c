@@ -1,13 +1,12 @@
-"use server";
-
+// Shared consent constants and types — no "use server" directive so
+// constants and types can be imported by both server and client code.
 import { cookies } from "next/headers";
-import { revalidatePath } from "next/cache";
 
 export const CONSENT_COOKIE = "cookie_consent";
 
 export type ConsentValue = "accepted" | "essential_only" | null;
 
-const CONSENT_OPTIONS = {
+export const CONSENT_OPTIONS = {
   httpOnly: false,          // must be readable client-side so analytics libs can check it
   sameSite: "lax" as const,
   path: "/",
@@ -22,12 +21,4 @@ export async function getConsentStatus(): Promise<ConsentValue> {
   const value = store.get(CONSENT_COOKIE)?.value;
   if (value === "accepted" || value === "essential_only") return value;
   return null;
-}
-
-// ── Write (server action) ─────────────────────────────────────────
-// Called by the Accept / Essential-only buttons in CookieBanner.
-export async function saveConsent(choice: "accepted" | "essential_only") {
-  const store = await cookies();
-  store.set(CONSENT_COOKIE, choice, CONSENT_OPTIONS);
-  revalidatePath("/");
 }

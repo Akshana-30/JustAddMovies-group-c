@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { saveConsent } from "@/lib/consent";
+import { saveConsent } from "@/lib/consent-actions";
 import Link from "next/link";
 import Image from "next/image";
 

@@ -1,5 +1,6 @@
 // src/app/about/page.tsx
 import type { Metadata } from "next";
+import Image from "next/image";
 
 export const metadata: Metadata = { title: "About Us" };
 
@@ -49,13 +50,21 @@ export default function AboutPage() {
 
             <div className="team-grid">
                 {[
-                    { name: "Per",     role: "Developer", emoji: "👨‍💻" },
-                    { name: "Akshana", role: "Developer", emoji: "👩‍💻" },
-                    { name: "Tobias",  role: "Developer",  emoji: "🧑‍💻" },
-                    { name: "Peter",   role: "Developer",    emoji: "👨‍🎨" },
-                ].map((member, i) => (
-                    <div key={i} className="team-card" style={{ background: "var(--surface2)", borderColor: "var(--border-strong)" }}>
-                        <div className="team-avatar">{member.emoji}</div>
+                    { name: "Per",     role: "Developer", avatar: "/Iconshock-Super-Heroes-Sigma-Batman.256.png",       hero: "Batman"       },
+                    { name: "Akshana", role: "Developer", avatar: "/Iconshock-Super-Heroes-Sigma-Wonder-Woman.256.png", hero: "Wonder Woman" },
+                    { name: "Tobias",  role: "Developer", avatar: "/Iconshock-Super-Heroes-Sigma-Flash.256.png",        hero: "The Flash"    },
+                    { name: "Peter",   role: "Developer", avatar: "/Iconshock-Super-Heroes-Sigma-Superman.256.png",     hero: "Superman"     },
+                ].map((member) => (
+                    <div key={member.name} className="team-card" style={{ background: "var(--surface2)", borderColor: "var(--border-strong)" }}>
+                        <div className="team-avatar">
+                            <Image
+                                src={member.avatar}
+                                alt={member.hero}
+                                width={80}
+                                height={80}
+                                className="mx-auto"
+                            />
+                        </div>
 
                         <div className="team-name">
                             {member.name}
