@@ -1,7 +1,7 @@
 // src/app/admin-dashboard/(admin)/admin/people/AdminPeopleTable.tsx
 "use client";
 
-import { useState, useTransition, useEffect } from "react";
+import { useState, useTransition } from "react";
 import { Trash2, Search } from "lucide-react";
 import Link from "next/link";
 import { deleteDirector, deleteActor } from "@/app/admin-dashboard/_actions/people-actions";
@@ -35,8 +35,6 @@ function PersonTable({
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Reset page when search changes
-  useEffect(() => { setCurrentPage(1); }, [search]);
 
   const filtered = search.trim()
     ? people.filter(p => p.name.toLowerCase().includes(search.trim().toLowerCase()))
@@ -72,7 +70,7 @@ function PersonTable({
             <Search size={13} style={{ position:"absolute", left:"9px", top:"50%", transform:"translateY(-50%)", color:"var(--text-muted)", pointerEvents:"none" }} />
             <input
               value={search}
-              onChange={e => setSearch(e.target.value)}
+              onChange={e => { setSearch(e.target.value); setCurrentPage(1); }}
               placeholder={`Search ${title.toLowerCase()}…`}
               style={{ width:"100%", background:"var(--surface2)", border:"1px solid var(--border)", borderRadius:"6px", color:"var(--text)", fontSize:"13px", padding:"6px 10px 6px 28px", outline:"none" }}
             />
