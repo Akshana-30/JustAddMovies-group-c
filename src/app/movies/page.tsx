@@ -1,6 +1,7 @@
 import FilterButton from "@/components/body/filter-button";
 import MovieCard from "@/components/body/movie-card";
 import { GenreCard } from "@/components/body/genre-card";
+import { MoviePagination } from "@/components/body/movie-pagination";
 import prisma from "@/lib/prisma";
 import {
   Sidebar,
@@ -13,12 +14,17 @@ import {
 } from "@/components/ui/sidebar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
+const PAGE_SIZE = 15; // 3 rows × 5 columns
+
 export default async function MoviesPage({
   searchParams,
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const { title, genre, sort } = await searchParams;
+  const { title, genre, sort, page: pageParam } = await searchParams;
+
+  const currentPage = Math.max(1, parseInt(String(pageParam ?? "1"), 10) || 1);
+  const skip = (currentPage - 1) * PAGE_SIZE;
 
   const orderBy =
     sort === "Price-high to low"
@@ -33,54 +39,44 @@ export default async function MoviesPage({
               ? { title: "desc" as const }
               : undefined;
 
-  const [movies, genres] = await Promise.all([
+  const where =
     typeof genre === "string"
-      ? prisma.movie.findMany({
-          where: { genres: { some: { name: genre } } },
-          include: { genres: { select: { name: true, id: true } } },
-          orderBy,
-        })
+      ? { genres: { some: { name: genre } } }
       : typeof title === "string"
-        ? prisma.movie.findMany({
-            where: {
-              deletedAt: { equals: null },
-              OR: [
-                { title: { contains: title, mode: "insensitive" } },
-                {
-                  actors: {
-                    some: { name: { contains: title, mode: "insensitive" } },
-                  },
-                },
-                {
-                  directors: {
-                    some: { name: { contains: title, mode: "insensitive" } },
-                  },
-                },
-              ],
-            },
-            include: { genres: { select: { name: true, id: true } } },
-            orderBy,
-          })
-        : prisma.movie.findMany({
-            where: { deletedAt: { equals: null } },
-            include: { genres: { select: { name: true, id: true } } },
-            orderBy,
-          }),
+        ? {
+            deletedAt: { equals: null },
+            OR: [
+              { title: { contains: title, mode: "insensitive" as const } },
+              { actors: { some: { name: { contains: title, mode: "insensitive" as const } } } },
+              { directors: { some: { name: { contains: title, mode: "insensitive" as const } } } },
+            ],
+          }
+        : { deletedAt: { equals: null } };
+
+  const [movies, totalCount, genres] = await Promise.all([
+    prisma.movie.findMany({
+      where,
+      include: { genres: { select: { name: true, id: true } } },
+      orderBy,
+      skip,
+      take: PAGE_SIZE,
+    }),
+    prisma.movie.count({ where }),
     prisma.genre.findMany({ orderBy: { name: "asc" } }),
   ]);
 
+  const totalPages = Math.ceil(totalCount / PAGE_SIZE);
+
   return (
     <SidebarProvider className=" bg-background!">
-      <div
-        className="flex flex-col w-full h-full"
-      >
-        <div className="flex flex-1 pl-5 overflow-hidden ">
+      <div className="flex flex-col w-full h-full">
+        <div className="flex flex-1 pl-5 overflow-hidden">
 
-          {/* Left column: filter bar + movies */}
+          {/* Left column: filter bar + movies + pagination */}
           <div className="flex flex-col flex-1 overflow-hidden">
 
             {/* Filter bar */}
-            <div className="relative flex items-center  py-3 px-8 shrink-0 bg-background/80 backdrop-blur-sm border-b border-border/30">
+            <div className="relative flex items-center py-3 px-8 shrink-0 bg-background/80 backdrop-blur-sm border-b border-border/30">
               <div className="absolute md:left-1/2 md:-translate-x-1/2">
                 <FilterButton />
               </div>
@@ -89,7 +85,7 @@ export default async function MoviesPage({
               </div>
             </div>
 
-            {/* Movie grid */}
+            {/* Movie grid + pagination */}
             <div className="flex-1 overflow-y-auto py-6 pr-2">
               <div className="grid max-[425]:grid-cols-1! max-[630]:grid-cols-2! max-[765]:grid-cols-3! max-[940px]:grid-cols-2 max-[1150px]:grid-cols-3 max-[1500px]:grid-cols-4  max-[1800px]:grid-cols-5 min-[1800px]:grid-cols-6 gap-8 items-start">
                 {movies.map((movie) => (
@@ -105,6 +101,9 @@ export default async function MoviesPage({
                   </div>
                 ))}
               </div>
+
+              {/* Pagination — below the grid, inside the scroll area */}
+              <MoviePagination currentPage={currentPage} totalPages={totalPages} />
             </div>
 
           </div>
