@@ -45,9 +45,9 @@ export default function MovieCardWithHover({ imageUrl, title, genres, descriptio
           hovered ? "opacity-100" : "opacity-0"
         )}
       >
-        <h2 className={cn("text-white font-bold text-sm mb-1")}>{title}</h2>
+        <h2 className={cn("text-white font-bold text-sm mb-1 max-md:hidden")}>{title}</h2>
 
-        <div className={cn("flex flex-wrap gap-1 mb-2")}>
+        <div className={cn("flex flex-wrap gap-1 mb-2 max-md:hidden")}>
           {genres.map((g) => (
             <span
               key={g.name}
@@ -58,7 +58,7 @@ export default function MovieCardWithHover({ imageUrl, title, genres, descriptio
           ))}
         </div>
 
-        <p className={cn("text-white/80 text-[10px] leading-snug")}>{shortDesc}</p>
+        <p className={cn("text-white/80 text-[10px] leading-snug max-md:hidden")}>{shortDesc}</p>
       </div>
     </Card></Link>
     

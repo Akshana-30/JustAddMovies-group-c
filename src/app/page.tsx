@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowBigRight } from "lucide-react";
 
+
 async function LandingPage({
   searchParams,
 }: {
@@ -100,12 +101,12 @@ async function LandingPage({
 
         {/* Genre Card Panel */}
         <div className="w-full xl:w-[40%] sticky top-4 self-start">
-          <Card className="border-amber-300/50 border flex-row! flex-wrap content-start gap-2 p-2 overflow-y-auto bg-primary/20 h-24 sm:h-32 md:h-40 lg:h-50 xl:h-150 ">
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-2  gap-2 w-full">
+          <Card className="border-amber-300/50 hover:border-(--gold)/70 border flex-row! bg-sidebar-accent/50! flex-wrap content-start gap-2 pl-2 overflow-y-auto h-25 xl:h-150 ">
+            
               {genres.map((genre) => (
                 <GenreCard key={genre.id} id={genre.id} name={genre.name} />
               ))}
-            </div>
+            
           </Card>
         </div>
       </div>

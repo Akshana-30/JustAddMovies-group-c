@@ -37,7 +37,7 @@ export default function MovieCard({
   return (
     <Link href={`/movies/${id}`}>
       <Card
-        className="bg-background h-full flex "
+        className="bg-background h-full"
         size="default"
         {...props}
       >
@@ -54,7 +54,7 @@ export default function MovieCard({
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <span className="[800]:hidden">
+                    <span className="min-[1800]:hidden">
                       <WishlistButton movieId={id} />
                     </span>
                   </TooltipTrigger>

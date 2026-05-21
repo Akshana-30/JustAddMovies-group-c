@@ -1,41 +1,27 @@
 "use client";
 import { useRouter } from "next/navigation";
+import { Button } from "../ui/button";
 
-interface Props {
+type Props = {
   id: string;
   name: string;
-  active?: boolean;
-}
+};
 
-export function GenreCard({ id, name, active }: Props) {
+
+export function GenreCard({ id, name }: Props) {
   const router = useRouter();
 
   // Display name mapping
   const displayName = name === "Science Fiction" ? "Sci-Fi" : name;
 
   return (
-    <button
-      key={id}
-      onClick={() => router.push(active ? "/movies" : `/movies?genre=${name}`)}
-      style={{
-        background: active ? "var(--gold-light, #f5a623)" : "var(--gold, #e8a030)",
-        color: "var(--genre-text, #000000)",
-        border: "none",
-        borderRadius: "10px",
-        padding: "0 8px",
-        width: "100%",
-        height: "36px",
-        cursor: "pointer",
-        fontSize: "14px",
-        fontWeight: "500",
-        textAlign: "center",
-        boxShadow: active ? "0 0 0 2px #fff inset" : "none",
-        transition: "opacity 0.15s, box-shadow 0.15s",
-      }}
-      onMouseEnter={e => (e.currentTarget.style.opacity = "0.85")}
-      onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
-    >
-      {displayName}
-    </button>
+    <Button
+         data-tooltip-target = 'Select genre'
+          className="cursor-pointer bg-accent/70! hover:bg-(--gold)/15! border-(--gold) dark:hover:border-(--gold) dark:border-(--gold)/50 border-2 text-(--gold) dark:text-(--gold)/80 hover:text-(--gold)"
+          key={id}
+          onClick={() => router.push(`/movies?genre=${name}`)}
+        >
+     {displayName}
+    </Button>
   );
 }

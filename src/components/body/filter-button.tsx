@@ -1,6 +1,14 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ArrowDownUp } from "lucide-react";
 
 export default function FilterButton() {
   const router = useRouter();
@@ -27,29 +35,56 @@ export default function FilterButton() {
   };
 
   return (
-    <div className="flex items-center gap-2 flex-wrap justify-center">
-      {sortOptions.map((option) => (
+    <div className="flex flex-row ">
+      <div className="max-md:hidden flex items-center gap-2 flex-wrap justify-center">
+        {sortOptions.map((option) => (
+          <Button
+            key={option}
+            variant="ghost"
+            size="sm"
+            onClick={() => handleFilter(option)}
+            style={{
+              background: currentSort === option ? "var(--gold)" : undefined,
+              color: currentSort === option ? "#1a1a1a" : undefined,
+            }}
+          >
+            {option}
+          </Button>
+        ))}
         <Button
-          key={option}
           variant="ghost"
           size="sm"
-          onClick={() => handleFilter(option)}
-          style={{
-            background: currentSort === option ? "var(--gold)" : undefined,
-            color: currentSort === option ? "#1a1a1a" : undefined,
-          }}
+          onClick={handleReset}
+          className="text-muted-foreground hover:text-red-400"
         >
-          {option}
+          ✕ Reset
         </Button>
-      ))}
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={handleReset}
-        className="text-muted-foreground hover:text-red-400"
-      >
-        ✕ Reset
-      </Button>
+      </div>
+
+      <div className="md:hidden">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="destructive" size='sm' className="border-2 border-(--gold)/50 text-(--gold)/80 bg-background"> <ArrowDownUp />Sort by</Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-40 bg-background" align="start">
+              <DropdownMenuGroup >
+                {sortOptions.map((menu) => (
+                <DropdownMenuItem key={menu} onClick={() => handleFilter(menu)}>
+                  {menu}
+                </DropdownMenuItem>
+                ))}
+              </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+            <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleReset}
+          className="text-muted-foreground hover:text-red-400 md:hidden"
+        >
+          ✕ Reset
+        </Button>
     </div>
   );
 }
