@@ -9,6 +9,7 @@ import { formatPrice } from "@/lib/format";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { WishlistButton } from "@/components/body/wishlist-button";
 import { ShareButton } from "@/components/body/share-button";
+import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = { title: "My Wishlist" };
 
@@ -37,9 +38,9 @@ export default async function WishlistPage() {
           <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", color: "var(--text-muted)", marginTop: "12px" }}>
             Your wishlist is empty. Browse movies and click &#34;Add to Wishlist&#34; to save films here.
           </p>
-          <Link href="/movies" className="jam-btn-gold" style={{ display: "inline-block", marginTop: "20px" }}>
-            Browse Movies
-          </Link>
+           <Button asChild className="mt-5">
+            <Link href="/movies">Browse Movies</Link>
+          </Button>
         </div>
       ) : (
         <div style={{ display: "grid", gap: "12px" }}>
