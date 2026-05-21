@@ -84,7 +84,7 @@ export default function AboutPage() {
         <h2>Cookie Policy</h2>
         <p className="mb-4">
           Just Add Movies uses cookies to make the site work and, with your permission, to help us
-          understand how people use it. Below is a full list of every cookie we set.
+          understand how people use it. Below is a full list of every cookie we set. We do not share cookies with any third party company.
         </p>
         <div className="overflow-x-auto">
           <table className="w-full text-sm border-collapse">
