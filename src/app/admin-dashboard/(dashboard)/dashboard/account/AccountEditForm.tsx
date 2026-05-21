@@ -57,8 +57,6 @@ export function AccountEditForm({ userId, initialName, defaultAddress }: Props) 
   async function handleChangePassword() {
     setPwError(""); setPwSaved(false);
     if (newPw.length < 8)     { setPwError("Password must be at least 8 characters"); return; }
-    if (!/[A-Z]/.test(newPw)) { setPwError("Must contain at least one uppercase letter"); return; }
-    if (!/[0-9]/.test(newPw)) { setPwError("Must contain at least one number"); return; }
     if (newPw !== confirmPw)  { setPwError("Passwords do not match"); return; }
     setPwLoading(true);
     const { error } = await authClient.changePassword({
@@ -224,13 +222,14 @@ export function AccountEditForm({ userId, initialName, defaultAddress }: Props) 
               <label style={LS}>New password</label>
               <input style={IS} type="password" autoComplete="new-password" value={newPw} onChange={(e) => setNewPw(e.target.value)} placeholder="••••••••" />
               <p style={{ fontSize: "11px", color: "var(--text-dim)", marginTop: "4px" }}>
-                Min 8 characters, one uppercase letter, one number.
+                Min 8 characters.
               </p>
             </div>
             <div>
               <label style={LS}>Confirm new password</label>
               <input style={IS} type="password" autoComplete="new-password" value={confirmPw} onChange={(e) => setConfirmPw(e.target.value)} placeholder="••••••••" />
             </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "12px", marginTop: "18px" }}>
             <button
               type="button"
               onClick={handleChangePassword}
@@ -253,11 +252,11 @@ export function AccountEditForm({ userId, initialName, defaultAddress }: Props) 
               {pwLoading ? <><Loader2 size={14} className="animate-spin" /> Updating…</> : "Update password"}
             </button>
           </div>
+          </div>
         )}
       </div>
 
       <p style={{ fontSize: "11px", color: "var(--text-dim)", marginTop: "14px" }}>
-        To change your email, please contact support.
       </p>
     </div>
   );
