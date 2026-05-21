@@ -51,7 +51,7 @@ interface Props {
 }
 
 
-const PAGE_SIZE = 20;
+const PAGE_SIZE = 10;
 
 export function AdminMoviesTable({ movies, archived, genres }: Props) {
   const [isPending, startTransition] = useTransition();
