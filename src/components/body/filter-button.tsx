@@ -17,7 +17,9 @@ export default function FilterButton() {
   const currentSort = searchParams.get("sort");
 
   const sortOptions = [
-    "Date",
+    "New to old",
+    "Old to new",
+    'Popularity',
     "Price-high to low",
     "Price-low to high",
     "A-Ö",
@@ -35,7 +37,7 @@ export default function FilterButton() {
   };
 
   return (
-    <div className="flex flex-row ">
+    <div className="flex justify-between w-full">
       <div className="max-md:hidden flex items-center gap-2 flex-wrap justify-center">
         {sortOptions.map((option) => (
           <Button
@@ -61,10 +63,10 @@ export default function FilterButton() {
         </Button>
       </div>
 
-      <div className="md:hidden">
+      <div className="md:hidden flex items-center gap-2">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="destructive" size='sm' className="border-2 border-(--gold)/50 text-(--gold)/80 bg-background"> <ArrowDownUp />Sort by</Button>
+            <Button variant="destructive" size='sm' className="border-2 border-(--gold)/50 text-(--gold)/80 bg-background!"> <ArrowDownUp />Sort by</Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-40 bg-background" align="start">
               <DropdownMenuGroup >
@@ -77,14 +79,14 @@ export default function FilterButton() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-            <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleReset}
-          className="text-muted-foreground hover:text-red-400 md:hidden"
-        >
-          ✕ Reset
-        </Button>
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={handleReset}
+      className="text-muted-foreground hover:text-red-400 md:hidden "
+    >
+      ✕ Reset
+    </Button>
     </div>
   );
 }

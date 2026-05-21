@@ -8,7 +8,7 @@ import { CollapsibleMessage } from "./collapsible-message";
 import { MessageProp } from "../_types/message-prop";
 
 export const ContactMessagesTable = ({ msg }: { msg: MessageProp[] }) => (
-    <div className="m-auto xl:w-[calc(100%-1/2)] w-[calc(100%-5rem)] rounded-xl border border-border overflow-x-auto">
+    <div className="m-auto xl:w-[calc(100%-1/2)] w-[calc(100%-5rem)] rounded-xl border border-(--gold)/40 overflow-x-auto">
         <Table className="border-collapse bg-(--surface) table-fixed min-w-175 [&_td]:truncate">
             <TableHeader className="bg-(--surface2)">
                 <TableRow className="xl:[&_th]:w-full hover:bg-transparent!">

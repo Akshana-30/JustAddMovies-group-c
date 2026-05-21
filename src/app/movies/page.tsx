@@ -31,13 +31,17 @@ export default async function MoviesPage({
       ? { price: "desc" as const }
       : sort === "Price-low to high"
         ? { price: "asc" as const }
-        : sort === "Date"
+        : sort === "New to old"
           ? { releaseDate: "desc" as const }
-          : sort === "A-Ö"
-            ? { title: "asc" as const }
-            : sort === "Ö-A"
-              ? { title: "desc" as const }
-              : undefined;
+          : sort === "Popularity"
+          ? { orderItem: { _count: "desc" as const } }
+          : sort === "Old to new"
+            ? { releaseDate: "asc" as const }
+            : sort === "A-Ö"
+              ? { title: "asc" as const }
+              : sort === "Ö-A"
+                ? { title: "desc" as const }
+                : undefined;
 
   const where =
     typeof genre === "string"
@@ -47,8 +51,20 @@ export default async function MoviesPage({
             deletedAt: { equals: null },
             OR: [
               { title: { contains: title, mode: "insensitive" as const } },
-              { actors: { some: { name: { contains: title, mode: "insensitive" as const } } } },
-              { directors: { some: { name: { contains: title, mode: "insensitive" as const } } } },
+              {
+                actors: {
+                  some: {
+                    name: { contains: title, mode: "insensitive" as const },
+                  },
+                },
+              },
+              {
+                directors: {
+                  some: {
+                    name: { contains: title, mode: "insensitive" as const },
+                  },
+                },
+              },
             ],
           }
         : { deletedAt: { equals: null } };
@@ -71,10 +87,8 @@ export default async function MoviesPage({
     <SidebarProvider className=" bg-background!">
       <div className="flex flex-col w-full h-full">
         <div className="flex flex-1 pl-5 overflow-hidden">
-
           {/* Left column: filter bar + movies + pagination */}
           <div className="flex flex-col flex-1 overflow-hidden">
-
             {/* Filter bar */}
             <div className="relative flex items-center py-3 px-8 shrink-0 bg-background/80 backdrop-blur-sm border-b border-border/30">
               <div className="absolute md:left-1/2 md:-translate-x-1/2">
@@ -103,9 +117,11 @@ export default async function MoviesPage({
               </div>
 
               {/* Pagination — below the grid, inside the scroll area */}
-              <MoviePagination currentPage={currentPage} totalPages={totalPages} />
+              <MoviePagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+              />
             </div>
-
           </div>
 
           {/* Sidebar */}
@@ -132,7 +148,6 @@ export default async function MoviesPage({
               </ScrollArea>
             </SidebarContent>
           </Sidebar>
-
         </div>
       </div>
     </SidebarProvider>

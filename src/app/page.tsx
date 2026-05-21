@@ -100,8 +100,8 @@ async function LandingPage({
         </div>
 
         {/* Genre Card Panel */}
-        <div className="w-full xl:w-[40%] sticky top-4 self-start">
-          <Card className="border-amber-300/50 hover:border-(--gold)/70 border flex-row! bg-sidebar-accent/50! flex-wrap content-start gap-2 pl-2 overflow-y-auto h-25 xl:h-150 ">
+        <div className="max-md:hidden w-full xl:w-[40%] sticky top-4 self-start">
+          <Card className="mr-1.5 border-amber-300/50 hover:border-(--gold)/70 border flex-row! bg-sidebar-accent/50! flex-wrap content-start gap-2 pl-1.5 overflow-y-auto h-50 xl:h-150 ">
             
               {genres.map((genre) => (
                 <GenreCard key={genre.id} id={genre.id} name={genre.name} />
@@ -125,6 +125,7 @@ async function LandingPage({
         >
           <h1 className="px-5 pt-2 text-xl sm:text-2xl">
             New Releases
+            <Link href='http://localhost:3000/movies?sort=New+to+old'>
             <Button
               variant="ghost"
               className="hover:bg-blue-200/10!"
@@ -132,6 +133,7 @@ async function LandingPage({
             >
               <ArrowBigRight />
             </Button>
+            </Link>
           </h1>
 
           <CarouselContent className="  pt-10 sm:pt-4 pb-10 sm:pb-4 h-[clamp(12rem,20vw,40rem)]! -ml-2 md:-ml-4">
@@ -170,13 +172,14 @@ async function LandingPage({
         >
           <h1 className="px-5 pt-2 text-xl sm:text-2xl">
             Crowd Favorites
+            <Link href='http://localhost:3000/movies?sort=Popularity'>
             <Button
               variant="ghost"
               className="hover:bg-blue-200/10!"
               size="icon-lg"
             >
               <ArrowBigRight />
-            </Button>
+            </Button></Link>
           </h1>
 
           <CarouselContent className="  pt-10 sm:pt-4 pb-10 sm:pb-4 h-[clamp(12rem,20vw,40rem)]! -ml-2 md:-ml-4">
@@ -214,6 +217,7 @@ async function LandingPage({
         >
           <h1 className="px-5 pt-2 text-xl sm:text-2xl">
             Timeless Classics
+             <Link href='http://localhost:3000/movies?sort=Old+to+new'>
             <Button
               variant="ghost"
               className="hover:bg-blue-200/10!"
@@ -221,6 +225,7 @@ async function LandingPage({
             >
               <ArrowBigRight />
             </Button>
+            </Link>
           </h1>
 
           <CarouselContent className="  pt-10 sm:pt-4 pb-10 sm:pb-4 h-[clamp(12rem,20vw,40rem)]! -ml-2 md:-ml-4">
@@ -259,6 +264,7 @@ async function LandingPage({
         >
           <h1 className="px-5 pt-2 text-xl sm:text-2xl">
             Happy Wallet
+            <Link href='http://localhost:3000/movies?sort=Price-low+to+high'>
             <Button
               variant="ghost"
               className="hover:bg-blue-200/10!"
@@ -266,6 +272,7 @@ async function LandingPage({
             >
               <ArrowBigRight />
             </Button>
+            </Link>
           </h1>
 
           <CarouselContent className="pt-10 sm:pt-4 pb-10 sm:pb-4 h-[clamp(12rem,20vw,40rem)]! -ml-2 md:-ml-4">
