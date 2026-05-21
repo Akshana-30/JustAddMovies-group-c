@@ -29,9 +29,9 @@ export function HamburgerButton({ children }: { children: React.ReactNode }) {
             <svg
                 ref={buttonRef}
                 onClick={() => setIsOpen(!isOpen)}
-                className="absolute right-3 xl:hidden block text-5xl cursor-pointer"
+                className="absolute right-12 xl:hidden block text-5xl cursor-pointer"
                 xmlns="http://www.w3.org/2000/svg"
-                width={100}
+                width={50}
                 height={25}
                 fill={"currentColor"}
                 viewBox={"0 0 24 24"}
