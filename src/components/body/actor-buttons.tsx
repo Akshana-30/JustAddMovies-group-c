@@ -8,21 +8,20 @@ type Props = {
 };
 
 
-export function GenreCard({ id, name }: Props) {
+export function ActorCard({ id, name }: Props) {
   const router = useRouter();
 
   // Display name mapping
-  const displayName = name === "Science Fiction" ? "Sci-Fi" : name;
+ 
 
   return (
     <Button
-    size='xs'
-         data-tooltip-target = 'Select genre'
+        size='xs'
+         data-tooltip-target = 'Select actor'
           className="cursor-pointer bg-accent/70! hover:bg-(--gold)/15! border-(--gold) dark:hover:border-(--gold) dark:border-(--gold)/50 border-2 text-(--gold) dark:text-(--gold)/80 hover:text-(--gold)"
           key={id}
-          onClick={() => router.push(`/movies?genre=${name}`)}
-        >
-     {displayName}
+          onClick={() => router.push(`/movies?search=${name}`)}
+        >{name}
     </Button>
   );
 }

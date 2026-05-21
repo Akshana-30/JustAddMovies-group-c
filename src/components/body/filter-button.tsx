@@ -37,8 +37,8 @@ export default function FilterButton() {
   };
 
   return (
-    <div className="flex justify-between w-full">
-      <div className="max-md:hidden flex items-center gap-2 flex-wrap justify-center">
+    <div className="flex justify-start w-full">
+      <div className="max-[1250]:hidden flex items-center gap-2 flex-wrap justify-center">
         {sortOptions.map((option) => (
           <Button
             key={option}
@@ -63,7 +63,7 @@ export default function FilterButton() {
         </Button>
       </div>
 
-      <div className="md:hidden flex items-center gap-2">
+      <div className="min-[1250]:hidden flex justify-start bg-amber-700 gap-2">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="destructive" size='sm' className="border-2 border-(--gold)/50 text-(--gold)/80 bg-background!"> <ArrowDownUp />Sort by</Button>
@@ -83,7 +83,7 @@ export default function FilterButton() {
       variant="ghost"
       size="sm"
       onClick={handleReset}
-      className="text-muted-foreground hover:text-red-400 md:hidden "
+      className="text-muted-foreground hover:text-red-400 min-[1250]:hidden "
     >
       ✕ Reset
     </Button>

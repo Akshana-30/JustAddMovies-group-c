@@ -12,12 +12,12 @@ import { Suspense } from "react";
 import { EmailApprovedToast } from "@/components/auth/email-approved-toast";
 import MovieCardWithHover from "@/components/body/movie-card-with-hover";
 import { GenreCard } from "@/components/body/genre-card";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import BannerCarousel from "@/components/body/banner-carousel";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowBigRight } from "lucide-react";
-
+import { ActorCard } from "@/components/body/actor-buttons";
 
 async function LandingPage({
   searchParams,
@@ -64,7 +64,12 @@ async function LandingPage({
   const genres = await prisma.genre.findMany({
     select: { id: true, name: true },
   });
-  //github.com/gr-26-18/JustAddMovies-group-c/pull/72/conflict?name=src%252Fapp%252Fpage.tsx&ancestor_oid=03615b2dacd14f762a8e8fcda30cb9bccba1952b&base_oid=c788658e8d8a07f68a5b2c9ba08970a9c9ed8bff&head_oid=1933f454572b29c9acb31ea1520f663350e116f9
+   const actors = await prisma.actor.findMany({
+    take: 10,
+    orderBy: {movies: {_count : 'desc'}} ,
+    select: { name:true, id:true },
+  });
+
   https: if (!latestMovie) {
     notFound();
   }
@@ -101,12 +106,21 @@ async function LandingPage({
 
         {/* Genre Card Panel */}
         <div className="max-md:hidden w-full xl:w-[40%] sticky top-4 self-start">
-          <Card className="mr-1.5 border-amber-300/50 hover:border-(--gold)/70 border flex-row! bg-sidebar-accent/50! flex-wrap content-start gap-2 pl-1.5 overflow-y-auto h-50 xl:h-150 ">
-            
+          <Card className="mr-1.5 border-amber-300/50 hover:border-(--gold)/70 border bg-sidebar-accent/50! overflow-y-auto h-50 xl:h-150 ">
+          <div className="flex flex-col ">
+            <CardHeader className="text-(--gold) pb-0! border-b border-(--gold)/30 dark:text-(--gold)/80 text-lg font-semibold font-lg"> GENRES </CardHeader>
+            <CardContent className="flex flex-row! pt-1 pb-5 flex-wrap content-start gap-2 overflow-y-auto">
               {genres.map((genre) => (
                 <GenreCard key={genre.id} id={genre.id} name={genre.name} />
               ))}
-            
+            </CardContent>
+            <CardHeader className=" rounded-t-none! pb-0! border-b border-(--gold)/30 text-(--gold) dark:text-(--gold)/80 text-lg font-semibold font-lg">POPULAR ACTORS </CardHeader>
+            <CardContent className="flex flex-row! pt-1 flex-wrap content-start gap-2 overflow-y-auto">
+              {actors.map((actor) => (
+                <ActorCard key={actor.id} id={actor.id} name={actor.name} />
+              ))}
+            </CardContent>
+            </div>
           </Card>
         </div>
       </div>
@@ -125,14 +139,14 @@ async function LandingPage({
         >
           <h1 className="px-5 pt-2 text-xl sm:text-2xl">
             New Releases
-            <Link href='http://localhost:3000/movies?sort=New+to+old'>
-            <Button
-              variant="ghost"
-              className="hover:bg-blue-200/10!"
-              size="icon-lg"
-            >
-              <ArrowBigRight />
-            </Button>
+            <Link href="http://localhost:3000/movies?sort=New+to+old">
+              <Button
+                variant="ghost"
+                className="hover:bg-blue-200/10!"
+                size="icon-lg"
+              >
+                <ArrowBigRight />
+              </Button>
             </Link>
           </h1>
 
@@ -172,14 +186,15 @@ async function LandingPage({
         >
           <h1 className="px-5 pt-2 text-xl sm:text-2xl">
             Crowd Favorites
-            <Link href='http://localhost:3000/movies?sort=Popularity'>
-            <Button
-              variant="ghost"
-              className="hover:bg-blue-200/10!"
-              size="icon-lg"
-            >
-              <ArrowBigRight />
-            </Button></Link>
+            <Link href="http://localhost:3000/movies?sort=Popularity">
+              <Button
+                variant="ghost"
+                className="hover:bg-blue-200/10!"
+                size="icon-lg"
+              >
+                <ArrowBigRight />
+              </Button>
+            </Link>
           </h1>
 
           <CarouselContent className="  pt-10 sm:pt-4 pb-10 sm:pb-4 h-[clamp(12rem,20vw,40rem)]! -ml-2 md:-ml-4">
@@ -217,14 +232,14 @@ async function LandingPage({
         >
           <h1 className="px-5 pt-2 text-xl sm:text-2xl">
             Timeless Classics
-             <Link href='http://localhost:3000/movies?sort=Old+to+new'>
-            <Button
-              variant="ghost"
-              className="hover:bg-blue-200/10!"
-              size="icon-lg"
-            >
-              <ArrowBigRight />
-            </Button>
+            <Link href="http://localhost:3000/movies?sort=Old+to+new">
+              <Button
+                variant="ghost"
+                className="hover:bg-blue-200/10!"
+                size="icon-lg"
+              >
+                <ArrowBigRight />
+              </Button>
             </Link>
           </h1>
 
@@ -264,14 +279,14 @@ async function LandingPage({
         >
           <h1 className="px-5 pt-2 text-xl sm:text-2xl">
             Happy Wallet
-            <Link href='http://localhost:3000/movies?sort=Price-low+to+high'>
-            <Button
-              variant="ghost"
-              className="hover:bg-blue-200/10!"
-              size="icon-lg"
-            >
-              <ArrowBigRight />
-            </Button>
+            <Link href="http://localhost:3000/movies?sort=Price-low+to+high">
+              <Button
+                variant="ghost"
+                className="hover:bg-blue-200/10!"
+                size="icon-lg"
+              >
+                <ArrowBigRight />
+              </Button>
             </Link>
           </h1>
 

@@ -21,7 +21,7 @@ export default async function MoviesPage({
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const { title, genre, sort, page: pageParam } = await searchParams;
+  const { search, genre, sort, page: pageParam } = await searchParams;
 
   const currentPage = Math.max(1, parseInt(String(pageParam ?? "1"), 10) || 1);
   const skip = (currentPage - 1) * PAGE_SIZE;
@@ -46,22 +46,22 @@ export default async function MoviesPage({
   const where =
     typeof genre === "string"
       ? { genres: { some: { name: genre } } }
-      : typeof title === "string"
+      : typeof search === "string"
         ? {
             deletedAt: { equals: null },
             OR: [
-              { title: { contains: title, mode: "insensitive" as const } },
+              { title: { contains: search, mode: "insensitive" as const } },
               {
                 actors: {
                   some: {
-                    name: { contains: title, mode: "insensitive" as const },
+                    name: { contains: search, mode: "insensitive" as const },
                   },
                 },
               },
               {
                 directors: {
                   some: {
-                    name: { contains: title, mode: "insensitive" as const },
+                    name: { contains: search, mode: "insensitive" as const },
                   },
                 },
               },
@@ -132,7 +132,7 @@ export default async function MoviesPage({
             className="pt-25 rounded-tl-2xl!"
           >
             <SidebarHeader className="h-14 justify-center border-b border-border px-4 bg-background">
-              <p className="text-md font-semibold tracking-widest text-(--gold) ">
+              <p className="text-lg font-semibold tracking-widest text-(--gold) dark:text-(--gold)/80 ">
                 GENRES
               </p>
             </SidebarHeader>

@@ -12,14 +12,14 @@ export function SearchBar() {
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
     if (!query.trim()) return;
-    router.push(`/movies?title=${(query)}`);
+    router.push(`/movies?search=${(query)}`);
   }
 
   return (
     <form onSubmit={handleSearch}>
       <InputGroup className="bg-secondary/70 dark:text-white text-black rounded-2xl">
         <InputGroupInput
-          placeholder="Find by title or actor"
+          placeholder="Title, actor or director"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
