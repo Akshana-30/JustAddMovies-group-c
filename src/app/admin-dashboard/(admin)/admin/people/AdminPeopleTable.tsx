@@ -1,8 +1,8 @@
 // src/app/admin-dashboard/(admin)/admin/people/AdminPeopleTable.tsx
 "use client";
 
-import { useState, useTransition } from "react";
-import { Trash2 } from "lucide-react";
+import { useState, useTransition, useEffect } from "react";
+import { Trash2, Search } from "lucide-react";
 import Link from "next/link";
 import { deleteDirector, deleteActor } from "@/app/admin-dashboard/_actions/people-actions";
 import {
@@ -32,9 +32,18 @@ function PersonTable({
   onDelete: (id: string) => void;
   isPending: boolean;
 }) {
+  const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(people.length / PAGE_SIZE);
-  const paginated  = people.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+
+  // Reset page when search changes
+  useEffect(() => { setCurrentPage(1); }, [search]);
+
+  const filtered = search.trim()
+    ? people.filter(p => p.name.toLowerCase().includes(search.trim().toLowerCase()))
+    : people;
+
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  const paginated  = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
   function getPageItems(): (number | "ellipsis")[] {
     if (totalPages <= 7) return Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -57,9 +66,22 @@ function PersonTable({
     // doesn't stretch uncomfortably across a wide viewport.
     <div style={{ maxWidth: "600px" }}>
       <div className="rounded-xl border overflow-hidden mb-6">
-        <div className=" border border-(--gold)/40 bg-sidebar-accent/40! dark:bg-sidebar-accent/30!" style={{ padding:"14px 16px", borderBottom:"1px solid var(--border)", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+        <div className="border border-(--gold)/40 bg-sidebar-accent/40! dark:bg-sidebar-accent/30!" style={{ padding:"14px 16px", borderBottom:"1px solid var(--border)", display:"flex", alignItems:"center", justifyContent:"space-between", gap:"12px" }}>
           <h2 className="font-display text-lg tracking-wide" style={{ color:"var(--gold)" }}>{title.toUpperCase()}</h2>
-
+          <div style={{ position:"relative", flex:1, maxWidth:"280px" }}>
+            <Search size={13} style={{ position:"absolute", left:"9px", top:"50%", transform:"translateY(-50%)", color:"var(--text-muted)", pointerEvents:"none" }} />
+            <input
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder={`Search ${title.toLowerCase()}…`}
+              style={{ width:"100%", background:"var(--surface2)", border:"1px solid var(--border)", borderRadius:"6px", color:"var(--text)", fontSize:"13px", padding:"6px 10px 6px 28px", outline:"none" }}
+            />
+          </div>
+          {search && (
+            <span style={{ fontSize:"12px", color:"var(--text-dim)", whiteSpace:"nowrap" }}>
+              {filtered.length} of {people.length}
+            </span>
+          )}
         </div>
 
         {/* ── Fixed column widths ───────────────────────────────── */}
@@ -168,6 +190,7 @@ function PersonTable({
 export function AdminPeopleTable({ directors, actors }: { directors: Person[]; actors: Person[] }) {
   const [isPending, startTransition] = useTransition();
   const [tab, setTab] = useState<"directors" | "actors">("directors");
+  const [tabKey, setTabKey] = useState(0); // forces PersonTable remount on tab switch, resetting search
 
 const removeDirector = (id: string) => startTransition(async () => { await deleteDirector(id); window.location.reload(); });
  const removeActor = (id: string) => startTransition(async () => { await deleteActor(id); window.location.reload(); });
@@ -180,7 +203,7 @@ const removeDirector = (id: string) => startTransition(async () => { await delet
           const active = tab === t;
           const count  = t === "directors" ? directors.length : actors.length;
           return (
-            <button key={t} onClick={() => setTab(t)}
+            <button key={t} onClick={() => { setTab(t); setTabKey(k => k + 1); }}
               style={{ padding:"8px 20px", borderRadius:"8px", fontSize:"13px", fontWeight: active ? 600 : 400, cursor:"pointer", border:`1px solid ${active ? "var(--gold)" : "var(--border)"}`, background: active ? "rgba(232,160,48,0.12)" : "var(--surface)", color: active ? "var(--gold)" : "var(--text-muted)", transition:"all 0.15s", display:"flex", alignItems:"center", gap:"6px" }}>
               {t === "directors" ? "🎬" : "🎭"} {t.charAt(0).toUpperCase() + t.slice(1)}
               <span style={{ fontSize:"11px", padding:"1px 6px", borderRadius:"20px", background: active ? "rgba(232,160,48,0.2)" : "var(--surface2)", color: active ? "var(--gold)" : "var(--text-dim)" }}>{count}</span>
@@ -190,10 +213,10 @@ const removeDirector = (id: string) => startTransition(async () => { await delet
       </div>
 
       {tab === "directors" && (
-        <PersonTable title="Directors" type="director" people={directors} onDelete={removeDirector} isPending={isPending} />
+        <PersonTable key={`directors-${tabKey}`} title="Directors" type="director" people={directors} onDelete={removeDirector} isPending={isPending} />
       )}
       {tab === "actors" && (
-        <PersonTable title="Actors" type="actor" people={actors} onDelete={removeActor} isPending={isPending} />
+        <PersonTable key={`actors-${tabKey}`} title="Actors" type="actor" people={actors} onDelete={removeActor} isPending={isPending} />
       )}
     </>
   );
