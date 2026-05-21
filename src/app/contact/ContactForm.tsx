@@ -54,8 +54,8 @@ export function ContactForm() {
     }
   })
 
-  const inputStyle = "bg-popover border-(--border-strong) text-(--text) focus-visible:ring-(--gold) focus-visible:ring-2 focus-visible:border-(--gold)/50"
-  const inputCls = "w-full rounded border px-3 py-2.5 text-sm outline-none transition-colors focus:border-gold";
+  const inputStyle = "bg-sidebar-accent/40 border-(--gold)/30 text-(--text) focus-visible:ring-(--gold)/30 focus-visible:ring-2 focus-visible:border-(--gold)/50"
+  const inputCls = "w-full rounded-2xl border px-3 py-2.5 text-sm outline-none transition-colors focus:border-gold";
   const labelCls = "block text-xs tracking-wide mb-1.5";
 
   if (sent) {

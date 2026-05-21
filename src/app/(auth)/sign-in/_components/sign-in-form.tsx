@@ -156,7 +156,7 @@ export function SignInForm() {
 
                             <Field>
                                 <Button
-                                    className="w-full bg-[var(--gold)] text-black hover:bg-[var(--gold)]/85 hover:text-black"
+                                    className="w-full bg-(--gold) text-black hover:bg-(--gold)/85 hover:text-black"
                                     disabled={loading}
                                     type="submit"
                                 >

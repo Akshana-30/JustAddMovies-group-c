@@ -39,12 +39,12 @@ export function VerifyEmailForm() {
         toast.success("Verification link sent successfully", {
             description: `Please check your email (including the spam folder).
             The link will expire in 30 minutes.`,
-            duration: 10000,
+            duration: 7000,
             position: "top-center",
         })
 
         setCooldown();
-        setCountdown(60);
+        setCountdown(30);
     }
 
     return (

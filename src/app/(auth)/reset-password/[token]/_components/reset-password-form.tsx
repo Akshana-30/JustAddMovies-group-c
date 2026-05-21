@@ -55,7 +55,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
             toast.success("Password was reset successfully", {
                 description: "You will be sent back to the sign-in page",
                 position: "top-center",
-                duration: 10000,
+                duration: 7000,
                 onAutoClose: () => {
                     router.push("/sign-in");
                 },
