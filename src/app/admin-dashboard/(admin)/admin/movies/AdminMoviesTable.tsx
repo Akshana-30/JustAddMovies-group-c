@@ -1,7 +1,16 @@
 // src/app/admin-dashboard/(admin)/admin/movies/AdminMoviesTable.tsx
 "use client";
 
-import { useState, useTransition, useMemo } from "react";
+import { useState, useTransition, useMemo, useEffect } from "react";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { formatPrice } from "@/lib/format";
 import Image from "next/image";
 import {
@@ -42,6 +51,8 @@ interface Props {
 }
 
 
+const PAGE_SIZE = 20;
+
 export function AdminMoviesTable({ movies, archived, genres }: Props) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter()
@@ -52,6 +63,9 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
   // Search/filter state
   const [search, setSearch] = useState("");
   const [genreFilter, setGenreFilter] = useState("");
+
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Sort state
   const [sortCol, setSortCol] = useState<"title" | "price" | "stock">("title");
@@ -64,6 +78,9 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
       setSortDir("asc");
     }
   }
+
+  // Reset to page 1 whenever filters or tab change
+  useEffect(() => { setCurrentPage(1); }, [search, genreFilter, sortCol, sortDir, tab]);
 
   const source = tab === "active" ? movies : archived;
 
@@ -88,6 +105,9 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
     });
   }, [source, search, genreFilter, sortCol, sortDir]);
 
+  const totalPages = Math.ceil(visible.length / PAGE_SIZE);
+  const paginated = visible.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+
   // Genres that appear in at least one movie in the current tab (for filter buttons)
   const activeGenres = useMemo(() => {
     const ids = new Set(source.flatMap((m) => m.genres.map((g) => g.id)));
@@ -100,7 +120,7 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
   const [bulkError, setBulkError] = useState("");
   const [bulkSuccess, setBulkSuccess] = useState("");
 
-  const allIds = visible.map((m) => m.id);
+  const allIds = paginated.map((m) => m.id);
   const allChecked =
     allIds.length > 0 && allIds.every((id) => selected.has(id));
 
@@ -547,7 +567,7 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
                 </td>
               </tr>
             )}
-            {visible.map((movie) => {
+            {paginated.map((movie) => {
               const isChecked = selected.has(movie.id);
               return (
                 <tr
@@ -676,6 +696,68 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
           </tbody>
         </table>
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="mt-4 mb-2">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  href="#"
+                  onClick={(e) => { e.preventDefault(); if (currentPage > 1) setCurrentPage(p => p - 1); }}
+                  aria-disabled={currentPage === 1}
+                  className={currentPage === 1 ? "pointer-events-none opacity-40" : "cursor-pointer"}
+                />
+              </PaginationItem>
+
+              {(() => {
+                const items: (number | "ellipsis")[] = [];
+                if (totalPages <= 7) {
+                  for (let i = 1; i <= totalPages; i++) items.push(i);
+                } else {
+                  const around = new Set(
+                    [1, totalPages, currentPage - 1, currentPage, currentPage + 1]
+                      .filter(n => n >= 1 && n <= totalPages)
+                  );
+                  let prev = 0;
+                  for (const n of [...around].sort((a, b) => a - b)) {
+                    if (n - prev > 1) items.push("ellipsis");
+                    items.push(n);
+                    prev = n;
+                  }
+                }
+                return items.map((item, i) =>
+                  item === "ellipsis" ? (
+                    <PaginationItem key={`e-${i}`}><PaginationEllipsis /></PaginationItem>
+                  ) : (
+                    <PaginationItem key={item}>
+                      <PaginationLink
+                        href="#"
+                        onClick={(e) => { e.preventDefault(); setCurrentPage(item); }}
+                        isActive={item === currentPage}
+                        className="cursor-pointer"
+                        style={item === currentPage ? { borderColor: "var(--gold)", color: "var(--gold)" } : undefined}
+                      >
+                        {item}
+                      </PaginationLink>
+                    </PaginationItem>
+                  )
+                );
+              })()}
+
+              <PaginationItem>
+                <PaginationNext
+                  href="#"
+                  onClick={(e) => { e.preventDefault(); if (currentPage < totalPages) setCurrentPage(p => p + 1); }}
+                  aria-disabled={currentPage === totalPages}
+                  className={currentPage === totalPages ? "pointer-events-none opacity-40" : "cursor-pointer"}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
+      )}
     </>
   );
 }
