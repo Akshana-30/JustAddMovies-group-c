@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/sidebar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-const PAGE_SIZE = 15; // 3 rows × 5 columns
+const PAGE_SIZE = 12; // 3 rows × 5 columns
 
 export default async function MoviesPage({
   searchParams,
