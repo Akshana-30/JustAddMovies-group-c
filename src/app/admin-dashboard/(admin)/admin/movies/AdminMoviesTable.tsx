@@ -1,7 +1,7 @@
 // src/app/admin-dashboard/(admin)/admin/movies/AdminMoviesTable.tsx
 "use client";
 
-import { useState, useTransition, useMemo, useEffect } from "react";
+import { useState, useTransition, useMemo } from "react";
 import {
   Pagination,
   PaginationContent,
@@ -72,15 +72,13 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
 
   function handleSort(col: "title" | "price" | "stock") {
+    setCurrentPage(1);
     if (sortCol === col) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
     else {
       setSortCol(col);
       setSortDir("asc");
     }
   }
-
-  // Reset to page 1 whenever filters or tab change
-  useEffect(() => { setCurrentPage(1); }, [search, genreFilter, sortCol, sortDir, tab]);
 
   const source = tab === "active" ? movies : archived;
 
@@ -183,6 +181,7 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
                 setSearch("");
                 setGenreFilter("");
                 setSelected(new Set());
+                setCurrentPage(1);
               }}
               style={{
                 padding: "7px 18px",
@@ -268,7 +267,7 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
             />
             <input
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
               placeholder="Search by title or year…"
               style={{
                 width: "100%",
@@ -311,7 +310,7 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
               Genre:
             </span>
             <button
-              onClick={() => setGenreFilter("")}
+              onClick={() => { setGenreFilter(""); setCurrentPage(1); }}
               style={{
                 padding: "3px 12px",
                 borderRadius: "20px",
@@ -332,7 +331,7 @@ export function AdminMoviesTable({ movies, archived, genres }: Props) {
               return (
                 <button
                   key={g.id}
-                  onClick={() => setGenreFilter(active ? "" : g.id)}
+                  onClick={() => { setGenreFilter(active ? "" : g.id); setCurrentPage(1); }}
                   style={{
                     padding: "3px 12px",
                     borderRadius: "20px",
