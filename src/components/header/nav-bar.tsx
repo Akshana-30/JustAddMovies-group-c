@@ -129,7 +129,7 @@ export async function NavBar() {
           <Button
             asChild
             variant="outline"
-            className=" dark:text-foreground h-[clamp(0.5rem,6vw,2.3rem)]! w-[clamp(0.5rem,6vw,2.3rem)]! text-chart-5"
+            className=" dark:text-foreground  text-chart-5"
             size="icon-lg"
           >
             <Link href="/cart" className="px-0 items-center relative">
