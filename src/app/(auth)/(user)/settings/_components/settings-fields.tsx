@@ -143,7 +143,7 @@ export function SettingsFields() {
 
         toast.success("Changes applied successfully. If you changed your email, check the mail we sent to proceed.", {
             position: "top-center",
-            duration: 10000,
+            duration: 7000,
         });
     }
 

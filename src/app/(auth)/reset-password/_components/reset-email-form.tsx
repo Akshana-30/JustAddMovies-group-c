@@ -51,11 +51,11 @@ export function ResetEmailForm() {
 
             toast.info("Check your email", {
                 description: `If an account exists for that email, we've sent a reset link`,
-                duration: 10000,
+                duration: 7000,
                 position: "top-center",
             });
             setCooldown();
-            setCountdown(60);
+            setCountdown(30);
         },
     });
 

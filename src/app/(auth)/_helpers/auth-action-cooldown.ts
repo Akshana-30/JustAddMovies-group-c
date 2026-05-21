@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 export const setCooldown = () => {
-	const expiry = Date.now() + 60000;
+	const expiry = Date.now() + 30000;
 	localStorage.setItem("auth_action_cooldown", expiry.toString());
 };
 

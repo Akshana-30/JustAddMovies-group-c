@@ -59,7 +59,7 @@ export function RegisterForm() {
             toast.info("Check your email", {
                 description: `We sent a verification link to provided email.
                 The link will expire in 30 minutes.`,
-                duration: 10000,
+                duration: 7000,
                 position: "top-center",
             });
         },
@@ -136,7 +136,7 @@ export function RegisterForm() {
 
                             <Field>
                                 <Button
-                                    className="w-full bg-[var(--gold)] text-black hover:bg-[var(--gold)]/85 hover:text-black"
+                                    className="w-full bg-(--gold) text-black hover:bg-(--gold)/85 hover:text-black"
                                     disabled={loading}
                                     type="submit"
                                 >
