@@ -5,6 +5,17 @@ import { useState, useTransition } from "react";
 import { Trash2 } from "lucide-react";
 import Link from "next/link";
 import { deleteDirector, deleteActor } from "@/app/admin-dashboard/_actions/people-actions";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+
+const PAGE_SIZE = 20;
 
 interface Person { id: string; name: string; _count: { movies: number } }
 
@@ -13,7 +24,7 @@ interface Person { id: string; name: string; _count: { movies: number } }
 // which URL query param is used when linking the movie count to the
 // filtered admin movies page.
 function PersonTable({
-  title, type, people,  onDelete, isPending,
+  title, type, people, onDelete, isPending,
 }: {
   title: string;
   type: "director" | "actor";
@@ -21,6 +32,24 @@ function PersonTable({
   onDelete: (id: string) => void;
   isPending: boolean;
 }) {
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(people.length / PAGE_SIZE);
+  const paginated  = people.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+
+  function getPageItems(): (number | "ellipsis")[] {
+    if (totalPages <= 7) return Array.from({ length: totalPages }, (_, i) => i + 1);
+    const items: (number | "ellipsis")[] = [];
+    const around = new Set(
+      [1, totalPages, currentPage - 1, currentPage, currentPage + 1].filter(n => n >= 1 && n <= totalPages)
+    );
+    let prev = 0;
+    for (const n of [...around].sort((a, b) => a - b)) {
+      if (n - prev > 1) items.push("ellipsis");
+      items.push(n);
+      prev = n;
+    }
+    return items;
+  }
 
   return (
     // ── Width constraint ───────────────────────────────────────────
@@ -54,7 +83,7 @@ function PersonTable({
             </tr>
           </thead>
           <tbody>
-            {people.map((p) => (
+            {paginated.map((p) => (
               <tr key={p.id} style={{ borderBottom:"1px solid var(--border)" }}>
                 <td style={{ padding:"10px 14px", fontSize:"13px", color:"var(--text)" }}>{p.name}</td>
 
@@ -88,6 +117,50 @@ function PersonTable({
           </tbody>
         </table>
       </div>
+
+      {totalPages > 1 && (
+        <div className="mt-4 mb-2">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  href="#"
+                  onClick={(e) => { e.preventDefault(); if (currentPage > 1) setCurrentPage(p => p - 1); }}
+                  aria-disabled={currentPage === 1}
+                  className={currentPage === 1 ? "pointer-events-none opacity-40" : "cursor-pointer"}
+                />
+              </PaginationItem>
+
+              {getPageItems().map((item, i) =>
+                item === "ellipsis" ? (
+                  <PaginationItem key={`e-${i}`}><PaginationEllipsis /></PaginationItem>
+                ) : (
+                  <PaginationItem key={item}>
+                    <PaginationLink
+                      href="#"
+                      onClick={(e) => { e.preventDefault(); setCurrentPage(item); }}
+                      isActive={item === currentPage}
+                      className="cursor-pointer"
+                      style={item === currentPage ? { borderColor: "var(--gold)", color: "var(--gold)" } : undefined}
+                    >
+                      {item}
+                    </PaginationLink>
+                  </PaginationItem>
+                )
+              )}
+
+              <PaginationItem>
+                <PaginationNext
+                  href="#"
+                  onClick={(e) => { e.preventDefault(); if (currentPage < totalPages) setCurrentPage(p => p + 1); }}
+                  aria-disabled={currentPage === totalPages}
+                  className={currentPage === totalPages ? "pointer-events-none opacity-40" : "cursor-pointer"}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
+      )}
     </div>
   );
 }
