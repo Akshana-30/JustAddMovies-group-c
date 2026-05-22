@@ -60,11 +60,11 @@ export default async function AccountPage() {
             {[
               { label: "Email", value: user.email },
             ].map((f) => (
-              <div key={f.label} className="flex gap-3">
-                <span className="w-36 shrink-0 text-xs uppercase tracking-wide mt-0.5" style={{ color: "var(--text-dim)" }}>
+              <div key={f.label} className="flex flex-col sm:flex-row gap-1 sm:gap-3">
+                <span className="sm:w-36 sm:shrink-0 text-xs uppercase tracking-wide sm:mt-0.5" style={{ color: "var(--text-dim)" }}>
                   {f.label}
                 </span>
-                <span className="text-sm" style={{ color: "var(--text)" }}>{f.value}</span>
+                <span className="text-sm break-all" style={{ color: "var(--text)" }}>{f.value}</span>
               </div>
             ))}
           </div>
