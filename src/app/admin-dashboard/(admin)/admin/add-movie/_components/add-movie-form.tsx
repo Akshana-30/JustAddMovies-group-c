@@ -33,6 +33,8 @@ import React, { useState } from "react";
 import { genreArray } from "@/lib/genres";
 import { toast } from "sonner";
 
+//zod validation schema
+
 const formSchema = z.object({
   title: z.string().min(1).max(128),
   description: z.string().min(1).max(500),

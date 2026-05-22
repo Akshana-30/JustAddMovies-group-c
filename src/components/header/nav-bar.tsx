@@ -125,7 +125,10 @@ export async function NavBar() {
             </li>
           </ul>
         </div>
-        <div>
+        <div className="flex">
+          <div className="ml-auto pr-10 items-center mr-2 max-[768px]:hidden">
+              <SearchBar />
+            </div>
           <Button
             asChild
             variant="outline"
@@ -156,7 +159,7 @@ export async function NavBar() {
       <div className="flex items-center">
         <HamburgerButton>
           <ul className="flex flex-col gap-4">
-            <li className="ml-auto flex items-center mr-2">
+            <li className="ml-auto flex items-center mr-2 min-[768px]:hidden">
               <SearchBar />
             </li>
             <li className="min-[425px]:hidden">

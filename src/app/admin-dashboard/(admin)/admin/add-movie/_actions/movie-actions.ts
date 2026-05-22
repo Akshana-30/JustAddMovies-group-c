@@ -27,6 +27,8 @@ const addMovieSchema = z.object({
 
 type AddMovieValues = z.infer<typeof addMovieSchema>;
 
+//adds movie with parsed data to database
+
 export async function addMovie(values: AddMovieValues) {
   const data = addMovieSchema.parse(values);
   try {

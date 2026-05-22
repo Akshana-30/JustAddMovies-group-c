@@ -32,7 +32,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
-
+// props for orders
 type OrderType = ({
   orderItem: ({
     movies: {
@@ -67,12 +67,15 @@ export type Props = {
   data: OrderType;
 };
 
+//Datatable
+
 export default function OrderTable({ data }: Props) {
   const [isPending, startTransition] = useTransition();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState([]);
   const router = useRouter();
 
+  // Datatable columns
   const columns: ColumnDef<Order>[] = [
     {
       accessorKey: "id",
