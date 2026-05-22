@@ -143,7 +143,7 @@ async function LandingPage({
         {/* New Releases */}
         {/* top ten newest */}
         <Carousel
-          opts={{ align: "start", loop: true }}
+          opts={{ align: "start", loop: true, dragThreshold: 20 }}
           className="max-w-full px-8 sm:px-12 md:px-15"
         >
           <Link href="http://localhost:3000/movies?sort=New+to+old">
@@ -189,7 +189,7 @@ async function LandingPage({
 
         {/* Crowd Favorites */}
         <Carousel
-          opts={{ align: "start", loop: true }}
+          opts={{ align: "start", loop: true, dragThreshold: 20}}
           className="max-w-full px-8 sm:px-12 md:px-15"
         >
           <Link href="http://localhost:3000/movies?sort=Popularity">
@@ -235,7 +235,7 @@ async function LandingPage({
         </Carousel>
 
         <Carousel
-          opts={{ align: "start", loop: true }}
+          opts={{ align: "start", loop: true, dragThreshold: 20}}
           className="max-w-full px-8 sm:px-12 md:px-15"
         >
           <Link href="http://localhost:3000/movies?sort=Old+to+new">
@@ -282,7 +282,7 @@ async function LandingPage({
 
         {/* Happy Wallet */}
         <Carousel
-          opts={{ align: "start", loop: true }}
+          opts={{ align: "start", loop: true, dragThreshold: 20}}
           className="max-w-full px-8 sm:px-12 md:px-15"
         >
           <Link href="http://localhost:3000/movies?sort=Price-low+to+high">

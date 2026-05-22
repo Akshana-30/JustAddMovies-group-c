@@ -21,7 +21,7 @@ export default function BannerCarousel({ children }: Props) {
   return (
     <Carousel
       plugins={[Autoplay({delay:4500, stopOnInteraction:true })]}
-      opts={{ loop: true }}
+      opts={{ loop: true, dragThreshold: 15 }}
       className="w-full border-amber-300/50 border rounded-2xl"
       onMouseEnter={()=> plugin.current.stop()}
       onMouseLeave={()=>plugin.current.reset()}
