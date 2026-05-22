@@ -42,7 +42,6 @@ export function AccountEditForm({ userId, initialName, defaultAddress }: Props) 
   const [street,     setStreet]     = useState(defaultAddress?.street   ?? "");
   const [postalCode, setPostalCode] = useState(defaultAddress?.zipCode  ?? "");
   const [city,       setCity]       = useState(defaultAddress?.city     ?? "");
-  const [state,      setState]      = useState(defaultAddress?.state    ?? "");
   const [country,    setCountry]    = useState(defaultAddress?.country  ?? "");
 
   // Change password
@@ -92,7 +91,7 @@ export function AccountEditForm({ userId, initialName, defaultAddress }: Props) 
         const addrResult = await saveDefaultAddress({
           street:  street.trim(),
           city:    city.trim(),
-          state:   state.trim() || null,
+          state:   null,
           zipCode: postalCode.trim(),
           country: country.trim(),
         });
@@ -146,15 +145,9 @@ export function AccountEditForm({ userId, initialName, defaultAddress }: Props) 
                 <input style={IS} value={city} onChange={(e) => setCity(e.target.value)} placeholder="Stockholm" />
               </div>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
-              <div>
-                <label style={LS}>State / Region <span style={{ color: "var(--text-dim)" }}>(optional)</span></label>
-                <input style={IS} value={state} onChange={(e) => setState(e.target.value)} placeholder="Optional" />
-              </div>
-              <div>
-                <label style={LS}>Country</label>
-                <input style={IS} value={country} onChange={(e) => setCountry(e.target.value)} placeholder="Sweden" />
-              </div>
+            <div>
+              <label style={LS}>Country</label>
+              <input style={IS} value={country} onChange={(e) => setCountry(e.target.value)} placeholder="Sweden" />
             </div>
           </div>
           <p style={{ fontSize: "11px", color: "var(--text-dim)", marginTop: "6px" }}>

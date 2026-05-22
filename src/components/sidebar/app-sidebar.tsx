@@ -27,11 +27,18 @@ type AppSidebarProps = {
 };
 
 export function AppSidebar({ items, title, subtitle }: AppSidebarProps) {
+  // Start collapsed on mobile (< 640 px) after mount so the toggle button
+  // remains visible and the user can expand the sidebar by clicking >.
   const [collapsed, setCollapsed] = React.useState(false);
   const pathname = usePathname();
 
+  React.useEffect(() => {
+    if (window.innerWidth < 640) setCollapsed(true);
+  }, []);
+
   return (
     <aside
+      suppressHydrationWarning
       className={`relative flex flex-col transition-all duration-300 ${
         collapsed ? "w-16" : "w-60"
       }`}
