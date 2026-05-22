@@ -146,19 +146,18 @@ async function LandingPage({
           opts={{ align: "start", loop: true }}
           className="max-w-full px-8 sm:px-12 md:px-15"
         >
-          <h1 className="px-5 pt-2 text-xl sm:text-2xl">
-            New Releases
-            <Link href="http://localhost:3000/movies?sort=New+to+old">
+          <Link href="http://localhost:3000/movies?sort=New+to+old">
+            <h1 className="px-5 pt-2 text-xl sm:text-2xl">
+              New Releases
               <Button
                 variant="ghost"
-                className="hover:bg-blue-200/10!"
+                className="hover:bg-blue-200/10! cursor-pointer"
                 size="icon-lg"
               >
                 <ArrowBigRight />
               </Button>
-            </Link>
-          </h1>
-
+            </h1>
+          </Link>
           <CarouselContent className="  pt-10 sm:pt-4 pb-10 sm:pb-4 h-[clamp(12rem,20vw,40rem)]! -ml-2 md:-ml-4">
             {latestMovie.map((movies) => (
               <CarouselItem
@@ -193,18 +192,18 @@ async function LandingPage({
           opts={{ align: "start", loop: true }}
           className="max-w-full px-8 sm:px-12 md:px-15"
         >
-          <h1 className="px-5 pt-2 text-xl sm:text-2xl">
-            Crowd Favorites
-            <Link href="http://localhost:3000/movies?sort=Popularity">
+          <Link href="http://localhost:3000/movies?sort=Popularity">
+            <h1 className="px-5 pt-2 text-xl sm:text-2xl">
+              Crowd Favorites
               <Button
                 variant="ghost"
-                className="hover:bg-blue-200/10!"
+                className="hover:bg-blue-200/10! cursor-pointer"
                 size="icon-lg"
               >
                 <ArrowBigRight />
               </Button>
-            </Link>
-          </h1>
+            </h1>
+          </Link>
 
           <CarouselContent className="  pt-10 sm:pt-4 pb-10 sm:pb-4 h-[clamp(12rem,20vw,40rem)]! -ml-2 md:-ml-4">
             {mostPurchased.map((movies) => (
@@ -239,18 +238,18 @@ async function LandingPage({
           opts={{ align: "start", loop: true }}
           className="max-w-full px-8 sm:px-12 md:px-15"
         >
-          <h1 className="px-5 pt-2 text-xl sm:text-2xl">
-            Timeless Classics
-            <Link href="http://localhost:3000/movies?sort=Old+to+new">
+          <Link href="http://localhost:3000/movies?sort=Old+to+new">
+            <h1 className="px-5 pt-2 text-xl sm:text-2xl">
+              Timeless Classics
               <Button
                 variant="ghost"
-                className="hover:bg-blue-200/10!"
+                className="hover:bg-blue-200/10! cursor-pointer"
                 size="icon-lg"
               >
                 <ArrowBigRight />
               </Button>
-            </Link>
-          </h1>
+            </h1>
+          </Link>
 
           <CarouselContent className="  pt-10 sm:pt-4 pb-10 sm:pb-4 h-[clamp(12rem,20vw,40rem)]! -ml-2 md:-ml-4">
             {oldMovies.map((movies) => (
@@ -286,18 +285,18 @@ async function LandingPage({
           opts={{ align: "start", loop: true }}
           className="max-w-full px-8 sm:px-12 md:px-15"
         >
-          <h1 className="px-5 pt-2 text-xl sm:text-2xl">
-            Happy Wallet
-            <Link href="http://localhost:3000/movies?sort=Price-low+to+high">
+          <Link href="http://localhost:3000/movies?sort=Price-low+to+high">
+            <h1 className="px-5 pt-2 text-xl sm:text-2xl">
+              Happy Wallet
               <Button
                 variant="ghost"
-                className="hover:bg-blue-200/10!"
+                className="hover:bg-blue-200/10! cursor-pointer"
                 size="icon-lg"
               >
                 <ArrowBigRight />
               </Button>
-            </Link>
-          </h1>
+            </h1>
+          </Link>
 
           <CarouselContent className="pt-10 sm:pt-4 pb-10 sm:pb-4 h-[clamp(12rem,20vw,40rem)]! -ml-2 md:-ml-4">
             {cheapestMovies.map((movies) => (
