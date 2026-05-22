@@ -81,31 +81,38 @@ export default async function WishlistPage() {
                 </div>
 
                 {/* Actions */}
-                <div style={{ display: "flex", gap: "8px" }}>
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <span><WishlistButton movieId={movie.id} /></span>
-                      </TooltipTrigger>
-                      <TooltipContent>Remove from wishlist</TooltipContent>
-                    </Tooltip>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <span><ShareButton movieId={movie.id}/></span>
-                      </TooltipTrigger>
-                      <TooltipContent>Share</TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                  {inStock && (
-                    <Link href={`/movies/${movie.id}`} className="jam-btn-gold"
-                      style={{ fontSize: "12px", padding: "6px 14px" }}>
-                      Buy Now
+                <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                  {/* Heart + Share stacked vertically */}
+                  <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span><WishlistButton movieId={movie.id} /></span>
+                        </TooltipTrigger>
+                        <TooltipContent>Remove from wishlist</TooltipContent>
+                      </Tooltip>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span><ShareButton movieId={movie.id}/></span>
+                        </TooltipTrigger>
+                        <TooltipContent>Share</TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
+
+                  {/* Buy Now + View stacked vertically */}
+                  <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                    {inStock && (
+                      <Link href={`/movies/${movie.id}`} className="jam-btn-gold"
+                        style={{ fontSize: "12px", padding: "6px 14px", textAlign: "center" }}>
+                        Buy Now
+                      </Link>
+                    )}
+                    <Link href={`/movies/${movie.id}`} className="jam-btn-outline"
+                      style={{ fontSize: "12px", padding: "6px 14px", textAlign: "center" }}>
+                      View
                     </Link>
-                  )}
-                  <Link href={`/movies/${movie.id}`} className="jam-btn-outline"
-                    style={{ fontSize: "12px", padding: "6px 14px" }}>
-                    View
-                  </Link>
+                  </div>
                 </div>
               </div>
             );

@@ -65,12 +65,12 @@ export function AppSidebar({ items, title, subtitle }: AppSidebarProps) {
       {/* Title and email are hidden when collapsed to save space.     */}
       <div className="flex h-14 shrink-0 items-center border-b border-border px-4">
         {!collapsed && (
-          <div className="overflow-hidden">
+          <div className="min-w-0 overflow-hidden">
             <p className="truncate text-sm font-semibold tracking-widest text-primary">
               {title}
             </p>
             {subtitle && (
-              <p className="mt-0.5 truncate text-[10px] text-muted-foreground">
+              <p className="mt-0.5 break-all text-[10px] text-muted-foreground leading-tight">
                 {subtitle}
               </p>
             )}
