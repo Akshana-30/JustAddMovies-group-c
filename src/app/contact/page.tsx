@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: "Contact Us" };
 
 export default function ContactPage() {
   return (
-    <div className="mx-auto w-full max-w-5xl px-6 py-14">
+    <div className="h-screen  flex flex-col mx-auto w-full max-w-5xl px-6 pt-14">
       <div className="mb-10">
         <h1 className="font-display text-4xl text-(--text) tracking-wide">
           Get in <span className="text-(--gold)">Touch</span>
@@ -17,7 +17,7 @@ export default function ContactPage() {
         </p>
       </div>
 
-      <div className="grid gap-10 md:grid-cols-[1fr_280px]">
+      <div className="h-full grid gap-10 md:grid-cols-[1fr_280px]">
         <ContactForm />
 
         <aside className="space-y-4">

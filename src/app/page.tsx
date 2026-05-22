@@ -64,10 +64,10 @@ async function LandingPage({
   const genres = await prisma.genre.findMany({
     select: { id: true, name: true },
   });
-   const actors = await prisma.actor.findMany({
+  const actors = await prisma.actor.findMany({
     take: 10,
-    orderBy: {movies: {_count : 'desc'}} ,
-    select: { name:true, id:true },
+    orderBy: { movies: { _count: "desc" } },
+    select: { name: true, id: true },
   });
 
   https: if (!latestMovie) {
@@ -107,19 +107,28 @@ async function LandingPage({
         {/* Genre Card Panel */}
         <div className="max-md:hidden w-full xl:w-[40%] sticky top-4 self-start">
           <Card className="mr-1.5 border-amber-300/50 hover:border-(--gold)/70 border bg-sidebar-accent/50! overflow-y-auto h-50 xl:h-150 ">
-          <div className="flex flex-col ">
-            <CardHeader className="text-(--gold) pb-0! border-b border-(--gold)/30 dark:text-(--gold)/80 text-lg font-semibold font-lg"> GENRES </CardHeader>
-            <CardContent className="flex flex-row! pt-1 pb-5 flex-wrap content-start gap-2 overflow-y-auto">
-              {genres.map((genre) => (
-                <GenreCard key={genre.id} id={genre.id} name={genre.name} />
-              ))}
-            </CardContent>
-            <CardHeader className=" rounded-t-none! pb-0! border-b border-(--gold)/30 text-(--gold) dark:text-(--gold)/80 text-lg font-semibold font-lg">POPULAR ACTORS </CardHeader>
-            <CardContent className="flex flex-row! pt-1 flex-wrap content-start gap-2 overflow-y-auto">
-              {actors.map((actor) => (
-                <ActorCard key={actor.id} id={actor.id} name={actor.name} />
-              ))}
-            </CardContent>
+            <div className="flex flex-row xl:flex-col! ">
+              <div>
+                <CardHeader className="text-(--gold) pb-0! border-b border-(--gold)/30 dark:text-(--gold)/80 text-lg font-semibold font-lg">
+                  {" "}
+                  GENRES{" "}
+                </CardHeader>
+                <CardContent className="flex flex-row! pt-1 pb-5 flex-wrap content-start gap-2 overflow-y-auto">
+                  {genres.map((genre) => (
+                    <GenreCard key={genre.id} id={genre.id} name={genre.name} />
+                  ))}
+                </CardContent>
+              </div>
+              <div>
+                <CardHeader className=" rounded-t-none! pb-0! border-b border-(--gold)/30 text-(--gold) dark:text-(--gold)/80 text-lg font-semibold font-lg">
+                  POPULAR ACTORS{" "}
+                </CardHeader>
+                <CardContent className="flex flex-row! pt-1 flex-wrap content-start gap-2 overflow-y-auto">
+                  {actors.map((actor) => (
+                    <ActorCard key={actor.id} id={actor.id} name={actor.name} />
+                  ))}
+                </CardContent>
+              </div>
             </div>
           </Card>
         </div>
