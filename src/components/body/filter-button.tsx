@@ -63,7 +63,7 @@ export default function FilterButton() {
         </Button>
       </div>
 
-      <div className="min-[1250]:hidden flex justify-start bg-amber-700 gap-2">
+      <div className="min-[1250]:hidden flex justify-start">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="destructive" size='sm' className="border-2 border-(--gold)/50 text-(--gold)/80 bg-background!"> <ArrowDownUp />Sort by</Button>
