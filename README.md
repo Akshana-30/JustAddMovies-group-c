@@ -1,53 +1,82 @@
-# Just Add Movies - Group C
+#  JustAddMovies
+
+An e-commerce movie shop where users can browse, search, and purchase movies. Built as a group project using a modern full-stack TypeScript setup.
 
 
+---
 
+## Features
 
+- 🛒 Browse and purchase movies
+- 🔍 Search and filter the movie catalogue
+- 🧾 Shopping cart and checkout flow
+- 🔐 User authentication
 
+---
 
+## Tech Stack
 
+| Layer | Technology |
+|-------|------------|
+| Framework | [Next.js](https://nextjs.org/) (App Router) |
+| Language | TypeScript |
+| Styling | Tailwind CSS |
+| Database ORM | Prisma |
+| Package Manager | pnpm |
 
-### Prisma
+---
 
+## Getting Started
 
+### Prerequisites
 
-You need to add your own credentials to both the auth secret and the database url.
+- Node.js 18+
+- pnpm (`npm install -g pnpm`)
+- A PostgreSQL database
 
+### Installation
 
+```bash
+# Clone the repo
+git clone https://github.com/gr-26-18/JustAddMovies-group-c.git
+cd JustAddMovies-group-c
 
+# Install dependencies
+pnpm install
 
+# Set up environment variables
+cp .env.example .env
+# Add your DATABASE_URL and AUTH_SECRET to .env
 
+# Run database migrations
+pnpm dlx prisma migrate dev
+pnpm dlx prisma generate
 
+# Start the dev server
+pnpm dev
+```
 
-### Pnpm
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
+---
 
-Using npm like normal is fine, but it can eventually cause problems when it comes to updating packages as it creates its own package-lock.json file.
+## My Contribution
 
+I was responsible for the **frontend and UI** of the project, including:
 
+- Building and styling the core page layouts and components
+- Implementing the movie catalogue browse and search UI
+- Ensuring a responsive, accessible design across screen sizes
+- Integrating frontend components with backend data and API routes
 
-If you want to try out pnpm:
+---
 
+## Team
 
-npm install -g pnpm (to install it if it's not already working)
+Built by Group C as part of a collaborative course project.
 
+---
 
-pnpm add - to install packages (instead of npm install), has worked with every package I have tried so far
+## License
 
-
-pnpm dlx - equivalent to npx
-
-
-When installing from package.json you can use the pnpm install to automatically install the packages
-
-
-
-It's a really fast bundler that warns you of potential malicious code, unlike npm, which adds everything at installation.
-
-
-
-
-
-
-
-###### Note: if you get errors after installing packages - try pressing ctrl + shift + P and type "restart ts server" and hit enter. It will tell VS Code to look at the new files
+This project is for educational purposes.
