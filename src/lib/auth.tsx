@@ -14,6 +14,7 @@ import ResetPasswordEmail from "@/components/emails/reset-password-email";
 const appName = process.env.NEXT_PUBLIC_APP_NAME;
 
 export const auth = betterAuth({
+    trustedOrigins: ["https://just-add-movies-group-c-woad.vercel.app"],
     rateLimit: {
         enabled: true,
         customRules: {
