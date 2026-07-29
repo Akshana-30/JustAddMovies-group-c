@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "postinstall": "prisma generate",
-    "build": "next build",
+    "build": " prisma generate && prisma migrate deploy dev && next build",
     "start": "next start",
     "lint": "eslint",
     "email:dev": "email dev --port 3001 --dir src/components/emails"
