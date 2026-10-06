@@ -211,6 +211,14 @@ model StockAlert {
   @@map("stock_alerts")
 }
 
+model EmailPreview {
+  email      String   @id
+  previewUrl String   @map("preview_url")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@map("email_previews")
+}
+
 model ContactMessage {
   id String @id @default(cuid(2))
 

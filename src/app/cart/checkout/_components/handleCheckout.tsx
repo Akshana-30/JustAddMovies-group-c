@@ -8,6 +8,7 @@ import prisma from "@/lib/prisma";
 import { sendOrderConfirmation } from "@/lib/send-order-confirmation";
 import { headers } from "next/headers";
 import z from "zod";
+import { CAPS, capError } from "@/lib/caps";
 
 type PaymentValues = z.infer<typeof formSchema>;
 
@@ -18,6 +19,9 @@ export default async function handleCheckout(values: PaymentValues) {
     headers: await headers(),
   });
   if (!session) throw new Error("Not authenticated");
+
+  const orderCap = await capError(() => prisma.order.count(), CAPS.orders, "orders");
+  if (orderCap) throw new Error(orderCap);
 
   const cart = await getCart();
   const products = await getCartProducts(cart);

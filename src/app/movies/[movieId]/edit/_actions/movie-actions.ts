@@ -2,6 +2,14 @@
 
 import prisma from "@/lib/prisma";
 import z from "zod";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { CAPS, capError } from "@/lib/caps";
+
+async function requireAdmin() {
+  const session = await auth.api.getSession({ headers: await headers() });
+  return session?.user?.role === "ADMIN" ? session : null;
+}
 
 const formSchema = z.object({
   title: z.string().min(1).max(128),
@@ -28,7 +36,19 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export async function editMovie(id: string, input: FormValues) {
+  if (!await requireAdmin()) throw new Error("Unauthorized");
+
   const data = formSchema.parse(input);
+
+  const genreCap = await capError(() => prisma.genre.count(), CAPS.genres, "genres");
+  if (genreCap) throw new Error(genreCap);
+
+  const directorCap = await capError(() => prisma.director.count(), CAPS.directors, "directors");
+  if (directorCap) throw new Error(directorCap);
+
+  const actorCap = await capError(() => prisma.actor.count(), CAPS.actors, "actors");
+  if (actorCap) throw new Error(actorCap);
+
   const existing = await prisma.movie.findUnique({
     where: { id: id },
     include: { genres: true },

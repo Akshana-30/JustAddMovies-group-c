@@ -10,6 +10,7 @@ import { actionError, actionSuccess } from "@/lib/utils";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { CAPS, capError } from "@/lib/caps";
 
 async function requireAdmin() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -105,6 +106,9 @@ export async function previewTmdbMovie(tmdbId: number) {
 // ── Import a single movie ─────────────────────────────────────────
 export async function importFromTmdb(tmdbId: number, priceOre: number, force = false) {
   if (!await requireAdmin()) return actionError("Unauthorized");
+
+  const movieCap = await capError(() => prisma.movie.count(), CAPS.movies, "movies");
+  if (movieCap) return actionError(movieCap);
 
   try {
     const tmdb  = await getTmdbMovie(tmdbId);

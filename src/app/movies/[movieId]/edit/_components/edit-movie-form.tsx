@@ -100,11 +100,17 @@ export default function EditMovieForm({ movie }: Props) {
       onSubmit: formSchema,
     },
     onSubmit: async ({ value }) => {
-      await editMovie(movie.id, { ...value, price: toOre(value.price) });
-      toast.success("Movie was successfully updated.", {
-        position: "bottom-right",
-      });
-      router.push(`/admin-dashboard/admin/movies`);
+      try {
+        await editMovie(movie.id, { ...value, price: toOre(value.price) });
+        toast.success("Movie was successfully updated.", {
+          position: "bottom-right",
+        });
+        router.push(`/admin-dashboard/admin/movies`);
+      } catch (err) {
+        toast.error(err instanceof Error ? err.message : "Failed to update movie.", {
+          position: "bottom-right",
+        });
+      }
     },
   });
   return (

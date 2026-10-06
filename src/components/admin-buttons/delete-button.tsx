@@ -26,9 +26,13 @@ export default function DeleteMovieButton({
     if (!shouldDelete) {
       return;
     }
-    await deleteMovie(movieId);
-    onSuccess?.();
-    toast.success("Archived movie.", { position: "bottom-right" });
+    try {
+      await deleteMovie(movieId);
+      onSuccess?.();
+      toast.success("Archived movie.", { position: "bottom-right" });
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to archive movie.", { position: "bottom-right" });
+    }
   }
   return (
     <Button
@@ -46,9 +50,13 @@ export default function DeleteMovieButton({
 export function RestoreMovieButton({ movieId, onSuccess, ...props }: Props) {
   const [isPending, startTransition] = useTransition();
   async function handleClick() {
-    await restoreMovie(movieId);
-    onSuccess?.();
-    toast.success("Movie restored.", { position: "bottom-right" });
+    try {
+      await restoreMovie(movieId);
+      onSuccess?.();
+      toast.success("Movie restored.", { position: "bottom-right" });
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to restore movie.", { position: "bottom-right" });
+    }
   }
   return (
     <Button

@@ -6,6 +6,7 @@ import prisma from "@/lib/prisma";
 import { actionError, actionSuccess } from "@/lib/utils";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { CAPS, capError } from "@/lib/caps";
 
 async function requireSession() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -16,6 +17,14 @@ async function requireSession() {
 export async function addToWishlist(movieId: string) {
   const session = await requireSession();
   if (!session) return actionError("Sign in to add to wishlist");
+
+  const cap = await capError(
+    () => prisma.wishlistItem.count({ where: { userId: session.user.id } }),
+    CAPS.wishlistPerUser,
+    "wishlist items per account"
+  );
+  if (cap) return actionError(cap);
+
   try {
     await prisma.wishlistItem.create({ data: { userId: session.user.id, movieId } });
     revalidatePath("/admin-dashboard/dashboard/wishlist");
@@ -56,6 +65,14 @@ export async function isInWishlist(movieId: string): Promise<boolean> {
 export async function registerStockAlert(movieId: string) {
   const session = await requireSession();
   if (!session) return actionError("Sign in to register interest");
+
+  const cap = await capError(
+    () => prisma.stockAlert.count({ where: { userId: session.user.id } }),
+    CAPS.stockAlertsPerUser,
+    "stock alerts per account"
+  );
+  if (cap) return actionError(cap);
+
   try {
     await prisma.stockAlert.create({ data: { userId: session.user.id, movieId } });
     revalidatePath(`/movies/${movieId}`);

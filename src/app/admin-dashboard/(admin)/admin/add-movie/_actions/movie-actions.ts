@@ -2,6 +2,14 @@
 
 import z from "zod";
 import prisma from "@/lib/prisma";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { CAPS, capError } from "@/lib/caps";
+
+async function requireAdmin() {
+  const session = await auth.api.getSession({ headers: await headers() });
+  return session?.user?.role === "ADMIN" ? session : null;
+}
 
 const addMovieSchema = z.object({
   title: z.string().min(1).max(128),
@@ -30,7 +38,22 @@ type AddMovieValues = z.infer<typeof addMovieSchema>;
 //adds movie with parsed data to database
 
 export async function addMovie(values: AddMovieValues) {
+  if (!await requireAdmin()) return { error: "Unauthorized", movieId: null };
+
   const data = addMovieSchema.parse(values);
+
+  const movieCap = await capError(() => prisma.movie.count(), CAPS.movies, "movies");
+  if (movieCap) return { error: movieCap, movieId: null };
+
+  const genreCap = await capError(() => prisma.genre.count(), CAPS.genres, "genres");
+  if (genreCap) return { error: genreCap, movieId: null };
+
+  const directorCap = await capError(() => prisma.director.count(), CAPS.directors, "directors");
+  if (directorCap) return { error: directorCap, movieId: null };
+
+  const actorCap = await capError(() => prisma.actor.count(), CAPS.actors, "actors");
+  if (actorCap) return { error: actorCap, movieId: null };
+
   try {
     const newMovie = await prisma.movie.create({
       data: {

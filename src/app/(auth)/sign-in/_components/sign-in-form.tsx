@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
+    CardDescription,
     CardHeader,
     CardTitle
 } from "@/components/ui/card";
@@ -21,11 +22,38 @@ import { setEmail } from "../../_helpers/session-email-storage";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { Spinner } from "@/components/ui/spinner";
+import {
+    DEMO_ADMIN_EMAIL,
+    DEMO_ADMIN_PASSWORD,
+    DEMO_USER_EMAIL,
+    DEMO_USER_PASSWORD,
+} from "@/lib/demo-accounts";
 
 export function SignInForm() {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
+    const [demoLoading, setDemoLoading] = useState<"admin" | "customer" | null>(null);
     const [showPassword, setShowPassword] = useState(false);
+
+    async function signInAsDemo(kind: "admin" | "customer") {
+        setDemoLoading(kind);
+
+        const { error } = await authClient.signIn.email({
+            email: kind === "admin" ? DEMO_ADMIN_EMAIL : DEMO_USER_EMAIL,
+            password: kind === "admin" ? DEMO_ADMIN_PASSWORD : DEMO_USER_PASSWORD,
+            callbackURL: kind === "admin" ? "/admin-dashboard/admin" : "/",
+        });
+
+        setDemoLoading(null);
+
+        if (error) {
+            toast.error(error.message || "Demo login failed", { position: "top-center" });
+            return;
+        }
+
+        router.push(kind === "admin" ? "/admin-dashboard/admin" : "/");
+        router.refresh();
+    }
 
     const form = useForm({
         defaultValues: {
@@ -177,6 +205,57 @@ export function SignInForm() {
                             </Field>
                         </FieldGroup>
                     </form>
+                </CardContent>
+            </Card>
+
+            <Card className="mb-6">
+                <CardHeader className="text-center">
+                    <CardTitle className="text-base">Just here to look around?</CardTitle>
+                    <CardDescription>
+                        Skip registration — jump straight into the demo as an admin or a customer.
+                    </CardDescription>
+                </CardHeader>
+
+                <CardContent className="flex flex-col gap-3">
+                    <Button
+                        type="button"
+                        variant="outline"
+                        className="w-full"
+                        disabled={demoLoading !== null}
+                        onClick={() => signInAsDemo("admin")}
+                    >
+                        {demoLoading === "admin" ? (
+                            <>
+                                <Spinner data-icon="inline-start" />
+                                Loading
+                            </>
+                        ) : (
+                            "View as Admin"
+                        )}
+                    </Button>
+
+                    <Button
+                        type="button"
+                        variant="outline"
+                        className="w-full"
+                        disabled={demoLoading !== null}
+                        onClick={() => signInAsDemo("customer")}
+                    >
+                        {demoLoading === "customer" ? (
+                            <>
+                                <Spinner data-icon="inline-start" />
+                                Loading
+                            </>
+                        ) : (
+                            "View as Customer"
+                        )}
+                    </Button>
+
+                    <FieldDescription className="text-center">
+                        Admin: {DEMO_ADMIN_EMAIL} / {DEMO_ADMIN_PASSWORD}
+                        <br />
+                        Customer: {DEMO_USER_EMAIL} / {DEMO_USER_PASSWORD}
+                    </FieldDescription>
                 </CardContent>
             </Card>
 
