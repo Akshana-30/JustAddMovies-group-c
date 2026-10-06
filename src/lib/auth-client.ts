@@ -6,7 +6,7 @@ import { adminClient } from "better-auth/client/plugins";
 // without hardcoding either. (Hardcoding the prod URL here previously meant
 // every auth call from a local dev browser was a cross-origin request to
 // production, which CORS silently killed as "Failed to fetch".)
-export const authClient = createAuthClient({
+export const authClient = createAuthClient({    
     plugins: [
         adminClient(),
     ]
