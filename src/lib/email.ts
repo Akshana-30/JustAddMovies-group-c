@@ -9,3 +9,9 @@ export const transport = nodemailer.createTransport({
         pass: process.env.SMTP_PASS,
     }
 })
+
+// Ethereal is a fake SMTP catcher (no real inbox receives the mail), so in
+// demo mode we surface the Ethereal preview link in the UI instead.
+export function isEtherealTransport() {
+    return (process.env.SMTP_HOST ?? "").includes("ethereal");
+}

@@ -87,7 +87,7 @@ export default function AddMovieForm() {
         price: Math.round(value.price * 100),
       });
       if (result.error) {
-        console.log(result.error);
+        toast.error(result.error, { position: "bottom-right" });
         return;
       } else {
         toast.success("Movie was added to the database.", {

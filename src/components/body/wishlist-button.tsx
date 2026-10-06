@@ -5,6 +5,7 @@ import { Button } from "../ui/button";
 import { useEffect, useState, useTransition } from "react";
 import { addToWishlist, isInWishlist, removeFromWishlist } from "@/app/admin-dashboard/_actions/wishlist-actions";
 import { authClient } from "@/lib/auth-client";
+import { toast } from "sonner";
 
 type ButtonProps = React.ComponentProps<typeof Button> & {
     movieId: string;
@@ -41,11 +42,15 @@ export function WishlistButton({
         setIsEnabled(nextState);
 
         startTransition(async () => {
-            if (nextState)
-                await addToWishlist(movieId);
-                
-            else
+            if (nextState) {
+                const result = await addToWishlist(movieId);
+                if (!result.success) {
+                    setIsEnabled(false);
+                    toast.error(result.error, { position: "top-center" });
+                }
+            } else {
                 await removeFromWishlist(movieId);
+            }
         });
     }
 

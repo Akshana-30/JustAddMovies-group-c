@@ -56,12 +56,37 @@ export function RegisterForm() {
                 });
             }
 
-            toast.info("Check your email", {
-                description: `We sent a verification link to provided email.
-                The link will expire in 30 minutes.`,
-                duration: 7000,
-                position: "top-center",
-            });
+            // Demo mode: SMTP is Ethereal (no real inbox), so surface the
+            // preview link directly instead of relying on an email arriving.
+            let previewUrl: string | null = null;
+            try {
+                const res = await fetch(`/api/email-preview?email=${encodeURIComponent(value.email)}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    previewUrl = data.previewUrl ?? null;
+                }
+            } catch {
+                // ignore — falls back to the generic message below
+            }
+
+            if (previewUrl) {
+                toast.info("Demo mode — verify your email", {
+                    description: "This demo doesn't send real email. Click below to open your verification link.",
+                    duration: 15000,
+                    position: "top-center",
+                    action: {
+                        label: "Open verification link",
+                        onClick: () => window.open(previewUrl!, "_blank"),
+                    },
+                });
+            } else {
+                toast.info("Check your email", {
+                    description: `We sent a verification link to provided email.
+                    The link will expire in 30 minutes.`,
+                    duration: 7000,
+                    position: "top-center",
+                });
+            }
         },
     });
 

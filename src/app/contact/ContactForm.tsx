@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 type ContactInput = z.infer<typeof contactSchema>;
 
@@ -41,7 +42,7 @@ export function ContactForm() {
         });
 
         if (create.error) {
-          console.error(create.error);
+          toast.error(create.error, { position: "top-center" });
           return;
         }
 

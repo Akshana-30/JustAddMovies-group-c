@@ -49,11 +49,36 @@ export function ResetEmailForm() {
                 return;
             }
 
-            toast.info("Check your email", {
-                description: `If an account exists for that email, we've sent a reset link`,
-                duration: 7000,
-                position: "top-center",
-            });
+            // Demo mode: SMTP is Ethereal (no real inbox), so surface the
+            // preview link directly instead of relying on an email arriving.
+            let previewUrl: string | null = null;
+            try {
+                const res = await fetch(`/api/email-preview?email=${encodeURIComponent(value.email)}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    previewUrl = data.previewUrl ?? null;
+                }
+            } catch {
+                // ignore — falls back to the generic message below
+            }
+
+            if (previewUrl) {
+                toast.info("Demo mode — reset your password", {
+                    description: "This demo doesn't send real email. Click below to open your reset link.",
+                    duration: 15000,
+                    position: "top-center",
+                    action: {
+                        label: "Open reset link",
+                        onClick: () => window.open(previewUrl!, "_blank"),
+                    },
+                });
+            } else {
+                toast.info("Check your email", {
+                    description: `If an account exists for that email, we've sent a reset link`,
+                    duration: 7000,
+                    position: "top-center",
+                });
+            }
             setCooldown();
             setCountdown(30);
         },
