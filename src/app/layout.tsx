@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/header/theme-provider";
 import Footer from "@/components/footer";
 import { CookieBanner } from "@/components/cookie-banner";
 import { getConsentStatus } from "@/lib/consent";
+import { Analytics } from "@vercel/analytics/next";
 
 const fontSans = Poppins({
   subsets: ["latin"],
@@ -60,6 +61,7 @@ export default async function RootLayout({
           {/* Show the GDPR cookie banner until the visitor has made a choice */}
           {consent === null && <CookieBanner />}
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
